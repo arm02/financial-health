@@ -4,9 +4,12 @@ YELLOW=\033[1;33m
 RESET=\033[0m
 
 # Development commands
-install: 
+install:
 	@echo "$(GREEN)Installing backend dependencies...$(RESET)"
 	cd backend && go mod download && go mod tidy
+
+	@echo "$(GREEN)Installing frontend dependencies...$(RESET)"
+	cd frontend && npm install
 
 dev:
 	@echo "$(GREEN)Starting development servers...$(RESET)"
