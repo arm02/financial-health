@@ -1,20 +1,24 @@
 package routes
 
 import (
-	userhttp "financial-health/internal/delivery/http"
+	"financial-health/internal/delivery/http"
 	"financial-health/internal/domain"
 
 	"github.com/gin-gonic/gin"
 )
 
 type RouteConfig struct {
-	Router         *gin.Engine
-	UserUsecase    domain.UserUseCase
-	AuthMiddleware gin.HandlerFunc
+	Router             *gin.Engine
+	UserUsecase        domain.UserUseCase
+	LoanUseCase        domain.LoanUseCase
+	TransactionUseCase domain.TransactionUseCase
+	AuthMiddleware     gin.HandlerFunc
 }
 
 func RegisterRoutes(cfg *RouteConfig) {
-	userHandler := userhttp.NewUserHandler(cfg.UserUsecase)
+	userHandler := http.NewUserHandler(cfg.UserUsecase)
+	loanHandler := http.NewLoanHandler(cfg.LoanUseCase)
+	transactionHandler := http.NewTransactionHandler(cfg.TransactionUseCase)
 
 	api := cfg.Router.Group("/api/v1")
 	{
@@ -23,9 +27,19 @@ func RegisterRoutes(cfg *RouteConfig) {
 		api.POST("/logout", userHandler.Logout)
 	}
 
-	protected := api.Group("/users")
+	protected := api.Group("/")
 	protected.Use(cfg.AuthMiddleware)
 	{
-		protected.GET("/profile", userHandler.Profile)
+		usersGroup := protected.Group("/users")
+		usersGroup.GET("/profile", userHandler.Profile)
+
+		loansGroup := protected.Group("/loans")
+		loansGroup.GET("/all", loanHandler.GetAllLoans)
+		loansGroup.POST("/create", loanHandler.CreateLoan)
+		loansGroup.GET("/:id", loanHandler.GetLoan)
+		loansGroup.GET("/details/:id", loanHandler.GetDetails)
+
+		transactionsGroup := protected.Group("/transactions")
+		transactionsGroup.POST("/create", transactionHandler.Create)
 	}
 }

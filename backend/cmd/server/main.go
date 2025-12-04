@@ -3,11 +3,8 @@ package main
 import (
 	"context"
 	"database/sql"
+	"financial-health/internal/bootstrap"
 	"financial-health/internal/config"
-	"financial-health/internal/delivery/routes"
-	"financial-health/internal/middleware"
-	"financial-health/internal/repository"
-	"financial-health/internal/usecase"
 	"financial-health/internal/utils"
 	"log"
 	"net/http"
@@ -16,7 +13,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -32,27 +28,11 @@ func main() {
 		log.Fatalf("Failed to ping db: %v", err)
 	}
 
-	userRepo := repository.NewUserRepository(db)
-	userUsecase := usecase.NewUserUseCase(userRepo, os.Getenv("JWT_SECRET"))
-
-	gin.SetMode(utils.GetEnv("GIN_MODE", "debug"))
-	logger, _ := config.NewLogger()
-	router := gin.New()
-	router.Use(middleware.Recovery(logger))
-	router.Use(gin.Logger())
-	router.Use(middleware.RequestID())
-	router.Use(middleware.ResponseTime())
-	router.Use(middleware.CORS())
-	router.Use(middleware.AuditMiddleware(logger))
-	routes.RegisterRoutes(&routes.RouteConfig{
-		Router:         router,
-		UserUsecase:    userUsecase,
-		AuthMiddleware: middleware.JWTMiddleware(),
-	})
+	app := bootstrap.InitializeApp(db)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
-		Handler: router,
+		Handler: app.Router,
 	}
 
 	go func() {

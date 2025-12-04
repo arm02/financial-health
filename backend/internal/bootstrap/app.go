@@ -1,0 +1,54 @@
+package bootstrap
+
+import (
+	"financial-health/internal/config"
+	"financial-health/internal/delivery/routes"
+	"financial-health/internal/middleware"
+	"financial-health/internal/repository"
+	"financial-health/internal/usecase"
+
+	"database/sql"
+	"os"
+
+	"github.com/gin-gonic/gin"
+)
+
+type App struct {
+	Router *gin.Engine
+	DB     *sql.DB
+}
+
+func InitializeApp(db *sql.DB) *App {
+	logger, _ := config.NewLogger()
+	gin.SetMode(os.Getenv("GIN_MODE"))
+
+	router := gin.New()
+	router.Use(middleware.Recovery(logger))
+	router.Use(gin.Logger())
+	router.Use(middleware.RequestID())
+	router.Use(middleware.ResponseTime())
+	router.Use(middleware.CORS())
+	router.Use(middleware.AuditMiddleware(logger))
+
+	userRepo := repository.NewUserRepository(db)
+	userUseCase := usecase.NewUserUseCase(userRepo, os.Getenv("JWT_SECRET"))
+
+	loanRepo := repository.NewLoanRepository(db)
+	loanUseCase := usecase.NewLoanUseCase(loanRepo)
+
+	transactionRepo := repository.NewTransactionRepository(db)
+	transactionUseCase := usecase.NewTransactionUseCase(transactionRepo, loanRepo)
+
+	routes.RegisterRoutes(&routes.RouteConfig{
+		Router:             router,
+		UserUsecase:        userUseCase,
+		LoanUseCase:        loanUseCase,
+		TransactionUseCase: transactionUseCase,
+		AuthMiddleware:     middleware.JWTMiddleware(),
+	})
+
+	return &App{
+		Router: router,
+		DB:     db,
+	}
+}

@@ -6,23 +6,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SuccessResponse(c *gin.Context, data interface{}, message string) {
-	c.JSON(http.StatusOK, gin.H{
-		"code":    http.StatusOK,
-		"status":  "success",
-		"message": message,
-		"error":   nil,
-		"data":    data,
-	})
+type ResponseSuccess struct {
+	Code    int         `json:"code"`
+	Status  bool        `json:"status"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
-func SuccessResponseList(c *gin.Context, data interface{}, message string) {
-	c.JSON(http.StatusOK, gin.H{
-		"code":    http.StatusOK,
-		"status":  "success",
-		"message": message,
-		"error":   nil,
-		"data":    data,
+func SuccessResponse(c *gin.Context, data interface{}, message string) {
+	c.JSON(http.StatusOK, ResponseSuccess{
+		Code:    http.StatusOK,
+		Status:  true,
+		Message: message,
+		Data:    data,
 	})
 }
 
@@ -51,11 +47,10 @@ func ErrorResponse(c *gin.Context, err error) {
 
 	c.JSON(code, &ResponseError{
 		Code:      code,
-		Status:    "error",
+		Status:    false,
 		Type:      errorType,
 		Message:   message,
 		Error:     errorDetail,
 		ErrorCode: ErrorCode[errorType],
-		Data:      nil,
 	})
 }

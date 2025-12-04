@@ -25,7 +25,7 @@ func NewUserUseCase(repo domain.UserRepository, secret string) domain.UserUseCas
 }
 
 func (u *UserUseCase) Register(ctx context.Context, fullname, email, password string) error {
-	hashedPass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hashedPass, err := bcrypt.GenerateFromPassword([]byte(password), 8)
 	if err != nil {
 		return err
 	}

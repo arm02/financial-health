@@ -27,13 +27,12 @@ type AppError struct {
 }
 
 type ResponseError struct {
-	Code      int         `json:"code"`
-	Status    string      `json:"status"`
-	Type      ErrorType   `json:"type"`
-	Message   string      `json:"message"`
-	ErrorCode string      `json:"error_code"`
-	Error     string      `json:"error"`
-	Data      interface{} `json:"data"`
+	Code      int       `json:"code"`
+	Status    bool      `json:"status"`
+	Type      ErrorType `json:"type"`
+	Message   string    `json:"message"`
+	ErrorCode string    `json:"error_code"`
+	Error     string    `json:"error"`
 }
 
 func (e *AppError) Error() string {
