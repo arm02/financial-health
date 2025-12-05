@@ -38,10 +38,13 @@ export class LoginComponent {
       this.registerUseCase.execute(this.authModel).subscribe({
         next: (res: RegisterResponse) => {
           this.successMessage = 'Berhasil daftar akun! Silahkan login untuk masuk ke financial health!';
+          this.authModel = {
+            email: '',
+            password: '',
+          };
           this.action = 'login';
         },
         error: (err: HttpErrorResponse) => {
-          console.log(err);
           this.errorMessage = err?.error?.message || 'Login failed';
         },
       });
@@ -56,7 +59,6 @@ export class LoginComponent {
         }
       },
       error: (err: HttpErrorResponse) => {
-        console.log(err);
         this.errorMessage = err?.error?.message || 'Login failed';
       },
     });
