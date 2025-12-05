@@ -1,5 +1,9 @@
 .navbar {
     &-section {
+        @media screen and (max-width: 768px) {
+            width: calc(100vw - 2.5rem);
+        }
+
         width: calc(100vw - (250px + 5rem));
         height: 72px;
         background-color: #ffffff;
@@ -14,11 +18,16 @@
             align-items: center;
             gap: 20px;
 
-            .user-indentity {
+            .user-identity {
                 display: flex;
                 align-items: center;
                 gap: 12px;
                 cursor: pointer;
+
+                @media screen and (max-width: 768px) {
+                    display: block;
+                }
+
                 .user-icon {
                     width: 40px;
                     height: 40px;
@@ -35,11 +44,19 @@
                     font-size: 16px;
                     font-weight: 500;
                     color: #111827;
+
+                    @media screen and (max-width: 768px) {
+                        display: none;
+                    }
                 }
 
                 .user-email {
                     font-size: 14px;
                     color: #6B7280;
+
+                    @media screen and (max-width: 768px) {
+                        display: none;
+                    }
                 }
             }
 
@@ -52,7 +69,7 @@
                 width: 12rem;
                 background-color: #ffffff;
                 border: 1px solid #e2e8f0;
-                border-radius: 12px;    
+                border-radius: 12px;
                 box-shadow: 0 10px 15px -3px #bedbff, 0 4px 6px -4px #bedbff;
                 color: #364153;
 
@@ -68,6 +85,7 @@
                     border-radius: 8px;
                     font-weight: 400;
                     cursor: pointer;
+
                     &:hover {
                         background-color: #f3f4f6;
                     }

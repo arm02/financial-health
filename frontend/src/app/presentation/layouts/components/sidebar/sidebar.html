@@ -14,3 +14,14 @@
         }
     </div>
 </nav>
+
+<nav class="sidebar-responsive">
+    <div class="menu-list">
+        @for (item of sidebarList; track item) {
+        <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
+            <mat-icon>{{item.icon}}</mat-icon>
+            <div class="menu-name">{{ item.title }}</div>
+        </a>
+        }
+    </div>
+</nav>
