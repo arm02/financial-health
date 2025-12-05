@@ -47,9 +47,13 @@ export class LoginComponent {
       });
       return;
     }
+
     this.authUseCase.execute(this.authModel).subscribe({
       next: (res: LoginResponse) => {
-        this.router.navigateByUrl('/');
+        if (res.data.token) {
+          localStorage.setItem('auth_token', res.data.token);
+          this.router.navigateByUrl('/');
+        }
       },
       error: (err: HttpErrorResponse) => {
         console.log(err);
