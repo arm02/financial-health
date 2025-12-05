@@ -59,15 +59,11 @@ export class LoansComponent implements OnInit, OnDestroy {
     this.GetAllLoan();
   }
 
-  onRow($event: any) {
-    console.log($event);
-  }
+  onRow($event: any) {}
 
   onCreate() {
-    this.dialogService.Open(LoansForm, { title: 'Create New Loan', width: '500px' }).subscribe({
-      next: (res) => {
-        console.log(res);
-      },
+    this.dialogService.Open(LoansForm, { title: 'Create New Loan', width: '800px', height: '500px' }).subscribe({
+      next: (res) => {},
     });
   }
 

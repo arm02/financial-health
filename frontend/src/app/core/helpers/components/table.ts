@@ -84,7 +84,7 @@ import { debounceTime } from 'rxjs';
             }
           </tbody>
         </table>
-        @if (data.length === 0) {
+        @if (!data || data.length === 0) {
         <div class="empty">
           <div>No data</div>
         </div>
