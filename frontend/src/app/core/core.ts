@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
+import { Provider } from '@angular/core';
 import { HttpProvider } from './helpers/provider/repository.provider';
 
 // const DATA_SERVICES: Provider[] = MockHttpProvider;

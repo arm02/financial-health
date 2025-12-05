@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthUseCase } from '../../core/usecase/auth.usecase';
 import { LoginDTO } from '../../core/domain/dto/auth.dto';
+import { LoginResponse } from '../../core/domain/entities/auth.collection';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -13,12 +15,18 @@ import { LoginDTO } from '../../core/domain/dto/auth.dto';
     <h2>Login</h2>
 
     <form (ngSubmit)="onSubmit()" class="login-form">
-      <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
+      <input
+        type="email"
+        placeholder="Email"
+        [(ngModel)]="loginModel.email"
+        name="email"
+        required
+      />
 
       <input
         type="password"
         placeholder="Password"
-        [(ngModel)]="password"
+        [(ngModel)]="loginModel.password"
         name="password"
         required
       />
@@ -30,24 +38,23 @@ import { LoginDTO } from '../../core/domain/dto/auth.dto';
   `,
 })
 export class LoginComponent {
-  email = '';
-  password = '';
-  errorMessage = '';
-
   private authUseCase = inject(AuthUseCase);
   private router = inject(Router);
 
+  loginModel: LoginDTO = {
+    email: '',
+    password: '',
+  };
+  errorMessage = '';
+
   onSubmit() {
     this.errorMessage = '';
-    const payload: LoginDTO = {
-      email: this.email,
-      password: this.password,
-    };
-    this.authUseCase.execute(payload).subscribe({
-      next: () => {
+    this.authUseCase.execute(this.loginModel).subscribe({
+      next: (res: LoginResponse) => {
         this.router.navigateByUrl('/');
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
+        console.log(err);
         this.errorMessage = err?.error?.message || 'Login failed';
       },
     });
