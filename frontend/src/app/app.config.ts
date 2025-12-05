@@ -7,11 +7,14 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { CORE_PROVIDERS } from './core/core';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthInterceptor } from './presentation/auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors([AuthInterceptor])
+    ),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
