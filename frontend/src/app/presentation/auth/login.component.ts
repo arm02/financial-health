@@ -11,31 +11,33 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    <h2>Login</h2>
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  // template: `
+  //   <h2>Login</h2>
 
-    <form (ngSubmit)="onSubmit()" class="login-form">
-      <input
-        type="email"
-        placeholder="Email"
-        [(ngModel)]="loginModel.email"
-        name="email"
-        required
-      />
+  //   <form (ngSubmit)="onSubmit()" class="login-form">
+  //     <input
+  //       type="email"
+  //       placeholder="Email"
+  //       [(ngModel)]="loginModel.email"
+  //       name="email"
+  //       required
+  //     />
 
-      <input
-        type="password"
-        placeholder="Password"
-        [(ngModel)]="loginModel.password"
-        name="password"
-        required
-      />
+  //     <input
+  //       type="password"
+  //       placeholder="Password"
+  //       [(ngModel)]="loginModel.password"
+  //       name="password"
+  //       required
+  //     />
 
-      <button type="submit">Login</button>
-    </form>
+  //     <button type="submit">Login</button>
+  //   </form>
 
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-  `,
+  //   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  // `,
 })
 export class LoginComponent {
   private authUseCase = inject(AuthUseCase);
@@ -47,6 +49,7 @@ export class LoginComponent {
   };
   errorMessage = '';
 
+  showPassword = false;
   onSubmit() {
     this.errorMessage = '';
     this.authUseCase.execute(this.loginModel).subscribe({
@@ -58,5 +61,9 @@ export class LoginComponent {
         this.errorMessage = err?.error?.message || 'Login failed';
       },
     });
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 }
