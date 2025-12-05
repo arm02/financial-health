@@ -71,7 +71,7 @@ func (u *LoanUseCase) CreateLoan(ctx context.Context, loan *domain.Loan) error {
 	return nil
 }
 
-func (u *LoanUseCase) GetAllLoans(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*domain.LoanList, error) {
+func (u *LoanUseCase) GetAllLoans(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*domain.RowsList[domain.Loan], error) {
 	if page <= 0 {
 		page = 1
 	}
@@ -86,7 +86,7 @@ func (u *LoanUseCase) GetAllLoans(ctx context.Context, userID int64, page, limit
 
 	totalPages := (total + int64(limit) - 1) / int64(limit)
 
-	return &domain.LoanList{
+	return &domain.RowsList[domain.Loan]{
 		Rows:       loans,
 		Page:       page,
 		Limit:      limit,

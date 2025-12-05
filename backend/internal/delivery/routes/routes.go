@@ -37,9 +37,12 @@ func RegisterRoutes(cfg *RouteConfig) {
 		loansGroup.GET("/all", loanHandler.GetAllLoans)
 		loansGroup.POST("/create", loanHandler.CreateLoan)
 		loansGroup.GET("/:id", loanHandler.GetLoan)
-		loansGroup.GET("/details/:id", loanHandler.GetDetails)
+		loansGroup.GET("/details/:id", loanHandler.GetLoanDetails)
 
 		transactionsGroup := protected.Group("/transactions")
-		transactionsGroup.POST("/create", transactionHandler.Create)
+		transactionsGroup.POST("/create", transactionHandler.CreateTransaction)
+		transactionsGroup.GET("/all", transactionHandler.GetAllTransaction)
+		transactionsGroup.DELETE("/:id", transactionHandler.DeleteTransaction)
+		transactionsGroup.PUT("/:id", transactionHandler.UpdateTransaction)
 	}
 }

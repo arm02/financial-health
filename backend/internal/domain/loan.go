@@ -28,17 +28,9 @@ type LoanDetail struct {
 	Status      string  `json:"status"`
 }
 
-type LoanList struct {
-	Rows       []Loan `json:"rows"`
-	Page       int    `json:"page"`
-	Limit      int    `json:"limit"`
-	Total      int64  `json:"total"`
-	TotalPages int64  `json:"total_pages"`
-}
-
 type LoanUseCase interface {
 	CreateLoan(ctx context.Context, loan *Loan) error
-	GetAllLoans(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*LoanList, error)
+	GetAllLoans(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*RowsList[Loan], error)
 	GetLoan(ctx context.Context, loanID int64) (*Loan, error)
 	GetLoanDetails(ctx context.Context, loanID int64) ([]LoanDetail, error)
 }

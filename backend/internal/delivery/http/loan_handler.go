@@ -83,7 +83,7 @@ func (h *LoanHandler) GetLoan(c *gin.Context) {
 	utils.SuccessResponse(c, loanDetail, constants.SUCCESS)
 }
 
-func (h *LoanHandler) GetDetails(c *gin.Context) {
+func (h *LoanHandler) GetLoanDetails(c *gin.Context) {
 	loanIDStr := c.Param("id")
 	loanID, _ := strconv.ParseInt(loanIDStr, 10, 64)
 
