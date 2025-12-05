@@ -71,7 +71,7 @@ func (u *LoanUseCase) CreateLoan(ctx context.Context, loan *domain.Loan) error {
 	return nil
 }
 
-func (u *LoanUseCase) GetAllLoans(ctx context.Context, userID int64, page, limit int) (*domain.LoanList, error) {
+func (u *LoanUseCase) GetAllLoans(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*domain.LoanList, error) {
 	if page <= 0 {
 		page = 1
 	}
@@ -79,7 +79,7 @@ func (u *LoanUseCase) GetAllLoans(ctx context.Context, userID int64, page, limit
 		limit = 10
 	}
 
-	loans, total, err := u.loanRepo.GetAll(ctx, userID, page, limit)
+	loans, total, err := u.loanRepo.GetAll(ctx, userID, page, limit, sortBy, sortType, query)
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"financial-health/internal/domain"
 	"financial-health/internal/utils"
+	"fmt"
+	"strings"
 )
 
 type LoanRepositoryImpl struct {
@@ -31,29 +33,71 @@ func (r *LoanRepositoryImpl) CreateDetail(ctx context.Context, detail *domain.Lo
 	return err
 }
 
-func (r *LoanRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int) ([]domain.Loan, int64, error) {
+func (r *LoanRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle string) ([]domain.Loan, int64, error) {
 	offset := (page - 1) * limit
-	query := `SELECT id, user_id, title, tenor, tenor_type, amount, amount_due, total_amount, start_date, status FROM loans WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?`
 
-	rows, err := r.db.QueryContext(ctx, query, userID, limit, offset)
+	allowedSortColumns := map[string]bool{
+		"created_at": true,
+		"amount":     true,
+		"amount_due": true,
+		"tenor":      true,
+		"start_date": true,
+		"title":      true,
+		"status":     true,
+	}
+	if !allowedSortColumns[sortBy] {
+		sortBy = "created_at"
+	}
+
+	sortType = strings.ToUpper(sortType)
+	if sortType != "ASC" && sortType != "DESC" {
+		sortType = "DESC"
+	}
+
+	query := `
+        SELECT id, user_id, title, tenor, tenor_type, amount, amount_due, total_amount, start_date, status
+        FROM loans
+        WHERE user_id = ?`
+
+	args := []interface{}{userID}
+
+	if searchTitle != "" {
+		query += " AND title LIKE ?"
+		args = append(args, "%"+searchTitle+"%")
+	}
+
+	query += fmt.Sprintf(" ORDER BY %s %s LIMIT ? OFFSET ?", sortBy, sortType)
+	args = append(args, limit, offset)
+
+	rows, err := r.db.QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil, 0, utils.NewSystemError("Database error", err)
+		return nil, 0, err
 	}
 	defer rows.Close()
 
 	var loans []domain.Loan
 	for rows.Next() {
 		var l domain.Loan
-		if err := rows.Scan(&l.ID, &l.UserID, &l.Title, &l.Tenor, &l.TenorType, &l.Amount, &l.AmountDue, &l.TotalAmount, &l.StartDate, &l.Status); err != nil {
-			return nil, 0, utils.NewSystemError("Database error", err)
+		if err := rows.Scan(
+			&l.ID, &l.UserID, &l.Title, &l.Tenor, &l.TenorType,
+			&l.Amount, &l.AmountDue, &l.TotalAmount, &l.StartDate, &l.Status,
+		); err != nil {
+			return nil, 0, err
 		}
 		loans = append(loans, l)
 	}
 
+	countQuery := "SELECT COUNT(*) FROM loans WHERE user_id = ?"
+	countArgs := []interface{}{userID}
+	if searchTitle != "" {
+		countQuery += " AND title LIKE ?"
+		countArgs = append(countArgs, "%"+searchTitle+"%")
+	}
+
 	var total int64
-	countQuery := `SELECT COUNT(*) FROM loans WHERE user_id = ?`
-	if err := r.db.QueryRowContext(ctx, countQuery, userID).Scan(&total); err != nil {
-		return nil, 0, utils.NewSystemError("Database error", err)
+	err = r.db.QueryRowContext(ctx, countQuery, countArgs...).Scan(&total)
+	if err != nil {
+		return nil, 0, err
 	}
 
 	return loans, total, nil

@@ -24,3 +24,7 @@ CREATE TABLE IF NOT EXISTS loan_details (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (loan_id) REFERENCES loans(id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_loans_title ON loans(title);
+CREATE INDEX idx_loans_user_id ON loans(user_id);
+EXPLAIN SELECT COUNT(*) FROM loans WHERE user_id = 123 AND title LIKE 'A%';

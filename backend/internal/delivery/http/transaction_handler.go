@@ -18,10 +18,10 @@ func NewTransactionHandler(us domain.TransactionUseCase) *TransactionHandler {
 
 func (h *TransactionHandler) Create(c *gin.Context) {
 	var input struct {
-		Title       string  `json:"title"`
+		Title       string  `json:"title" binding:"required"`
 		Type        string  `json:"type" binding:"required"`
 		ReferenceID int64   `json:"reference_id"`
-		Amount      float64 `json:"amount"`
+		Amount      float64 `json:"amount" binding:"gte=0"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -29,7 +29,11 @@ func (h *TransactionHandler) Create(c *gin.Context) {
 		return
 	}
 
+	userIDVal, _ := c.Get("user_id")
+	userID := int64(userIDVal.(float64))
+
 	trx := &domain.Transaction{
+		UserID:      userID,
 		Title:       input.Title,
 		Type:        input.Type,
 		ReferenceID: input.ReferenceID,

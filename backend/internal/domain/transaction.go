@@ -7,6 +7,7 @@ import (
 
 type Transaction struct {
 	ID              int64     `json:"id"`
+	UserID          int64     `json:"user_id"`
 	Title           string    `json:"title"`
 	Type            string    `json:"type"` // debit, credit, loan_payment
 	ReferenceID     int64     `json:"reference_id"`

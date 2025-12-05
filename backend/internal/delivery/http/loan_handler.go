@@ -58,8 +58,11 @@ func (h *LoanHandler) GetAllLoans(c *gin.Context) {
 
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	sortBy := c.DefaultQuery("sort_by", "created_at")
+	sortType := c.DefaultQuery("sort_type", "DESC")
+	query := c.DefaultQuery("query", "")
 
-	result, err := h.LoanUseCase.GetAllLoans(c.Request.Context(), userID, page, limit)
+	result, err := h.LoanUseCase.GetAllLoans(c.Request.Context(), userID, page, limit, sortBy, sortType, query)
 	if err != nil {
 		utils.ErrorResponse(c, err)
 		return
