@@ -6,3 +6,12 @@ export interface LoginData {
 }
 
 export type LoginResponse = HttpResponse<LoginData>;
+
+
+export interface RegisterData {
+  email: string;
+  fullname: string;
+  password: string;
+}
+
+export type RegisterResponse = HttpResponse<RegisterData>;

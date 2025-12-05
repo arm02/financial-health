@@ -8,28 +8,39 @@
         <p class="login-subtitle">Kelola keuangan Anda dengan mudah</p>
 
         <div class="login-card">
-            <h3 class="login-card-title">Selamat Datang</h3>
-            <p class="login-card-subtitle">Silakan masuk ke akun Anda</p>
+            @if (successMessage) {
+                <div class="login-card-message success">{{ successMessage }}</div>
+            }
+            <h3 class="login-card-title">{{action === 'login' ? 'Selamat Datang' : 'Daftar Sekarang'}}</h3>
+            <p class="login-card-subtitle">{{action == 'login' ? 'Silahkan masuk ke akun Anda' : 'Silahkan isi data
+                lengkap anda'}}</p>
 
             <form class="login-card-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+                @if (action === 'register') {
+                <div class="form-group">
+                    <label class="form-label" for="fullname">Nama Lengkap</label>
+                    <input class="form-control" type="text" id="fullname" name="fullname"
+                        [(ngModel)]="authModel.fullname" placeholder="John Doe" required />
+                </div>
+                }
                 <div class="form-group">
                     <label class="form-label" for="email">Email</label>
-                    <input class="form-control" type="email" id="email" name="email" [(ngModel)]="loginModel.email"
+                    <input class="form-control" type="email" id="email" name="email" [(ngModel)]="authModel.email"
                         placeholder="nama@email.com" required />
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Password</label>
                     <div class="form-control-password">
                         <input class="form-control" [type]="showPassword ? 'text' : 'password'" id="password"
-                            name="password" [(ngModel)]="loginModel.password" placeholder="Masukkan kata sandi"
+                            name="password" [(ngModel)]="authModel.password" placeholder="Masukkan kata sandi"
                             required />
                         <div class="icon-password" (click)="togglePassword()"><img
-                                [src]="`./assets/svg/ic-eye-${showPassword ? 'close' : 'open'}.svg`"
-                                alt="Eye Icon" /></div>
+                                [src]="`./assets/svg/ic-eye-${showPassword ? 'close' : 'open'}.svg`" alt="Eye Icon" />
+                        </div>
                     </div>
                 </div>
 
-                <button class="form-button" type="submit">Masuk</button>
+                <button class="form-button" type="submit">{{action === 'login' ? 'Masuk' : 'Daftar'}}</button>
 
                 @if (errorMessage) {
                 <div class="form-error">
@@ -37,13 +48,19 @@
                 </div>
                 }
             </form>
-            <div class="register-or-option">
+            <div class="switch-or-option">
                 <div class="divider"></div>
-                <div class="register-option-text">atau</div>
+                <div class="switch-option-text">atau</div>
             </div>
 
-            <div class="register-container">
-                <span class="register-text">Belum punya akun? <a class="register-action-text">Daftar Sekarang</a></span>
+            <div class="switch-container">
+                @if (action === 'register') {
+                <span class="switch-text">Sudah punya akun? <a class="switch-action-text"
+                        (click)="switchAction('login')">Masuk Sekarang</a></span>
+                } @else {
+                <span class="switch-text">Belum punya akun? <a class="switch-action-text"
+                        (click)="switchAction('register')">Daftar Sekarang</a></span>
+                }
             </div>
         </div>
     </div>

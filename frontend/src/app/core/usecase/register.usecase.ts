@@ -3,15 +3,15 @@ import { UseCase } from '../base/usecase';
 import { AuthRepository } from '../repository/auth.repository';
 import { Observable } from 'rxjs';
 import { AuthDTO } from '../domain/dto/auth.dto';
-import { LoginResponse } from '../domain/entities/auth.collection';
+import { RegisterResponse } from '../domain/entities/auth.collection';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthUseCase implements UseCase<AuthDTO, LoginResponse> {
+export class RegisterUseCase implements UseCase<AuthDTO, RegisterResponse> {
   private repository = inject(AuthRepository);
 
-  execute(params: AuthDTO): Observable<LoginResponse> {
-    return this.repository.Login(params);
+  execute(params: AuthDTO): Observable<RegisterResponse> {
+    return this.repository.Register(params);
   }
 }

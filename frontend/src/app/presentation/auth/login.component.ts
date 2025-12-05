@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthUseCase } from '../../core/usecase/auth.usecase';
-import { LoginDTO } from '../../core/domain/dto/auth.dto';
-import { LoginResponse } from '../../core/domain/entities/auth.collection';
+import { AuthDTO } from '../../core/domain/dto/auth.dto';
+import { LoginResponse, RegisterResponse } from '../../core/domain/entities/auth.collection';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RegisterUseCase } from '../../core/usecase/register.usecase';
 
 @Component({
   selector: 'app-login',
@@ -13,46 +14,40 @@ import { HttpErrorResponse } from '@angular/common/http';
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  // template: `
-  //   <h2>Login</h2>
-
-  //   <form (ngSubmit)="onSubmit()" class="login-form">
-  //     <input
-  //       type="email"
-  //       placeholder="Email"
-  //       [(ngModel)]="loginModel.email"
-  //       name="email"
-  //       required
-  //     />
-
-  //     <input
-  //       type="password"
-  //       placeholder="Password"
-  //       [(ngModel)]="loginModel.password"
-  //       name="password"
-  //       required
-  //     />
-
-  //     <button type="submit">Login</button>
-  //   </form>
-
-  //   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-  // `,
 })
 export class LoginComponent {
   private authUseCase = inject(AuthUseCase);
+  private registerUseCase = inject(RegisterUseCase);
   private router = inject(Router);
 
-  loginModel: LoginDTO = {
+  action: 'login' | 'register' = 'login';
+
+  authModel: AuthDTO = {
     email: '',
     password: '',
   };
+  successMessage = '';
   errorMessage = '';
 
   showPassword = false;
+
   onSubmit() {
     this.errorMessage = '';
-    this.authUseCase.execute(this.loginModel).subscribe({
+
+    if (this.action === 'register') {
+      this.registerUseCase.execute(this.authModel).subscribe({
+        next: (res: RegisterResponse) => {
+          this.successMessage = 'Berhasil daftar akun! Silahkan login untuk masuk ke financial health!';
+          this.action = 'login';
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+          this.errorMessage = err?.error?.message || 'Login failed';
+        },
+      });
+      return;
+    }
+    this.authUseCase.execute(this.authModel).subscribe({
       next: (res: LoginResponse) => {
         this.router.navigateByUrl('/');
       },
@@ -65,5 +60,9 @@ export class LoginComponent {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  switchAction(action: 'login' | 'register') {
+    this.action = action;
   }
 }
