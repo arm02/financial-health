@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule],
-  template: ``,
+  template: ` <div>Ini Dari Button Component</div> `,
   styles: [``],
 })
 export class ButtonComponent {}

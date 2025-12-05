@@ -3,6 +3,15 @@ import { Routes } from '@angular/router';
 export const PAGES_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./testing/testing').then((m) => m.TestingComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./dashboard/dashboard').then((m) => m.DashboardComponent),
+      },
+      {
+        path: 'loans',
+        loadComponent: () => import('./loans/loans').then((m) => m.LoansComponent),
+      },
+    ],
   },
 ];

@@ -13,7 +13,9 @@ import { Sidebar } from './components/sidebar/sidebar';
       <app-sidebar></app-sidebar>
       <div class="body-layout">
         <app-navbar></app-navbar>
-        <router-outlet></router-outlet>
+        <div class="container">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
   `,
