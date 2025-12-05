@@ -22,6 +22,29 @@ $app-hover: #fafafa;
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 8px;
+    gap: 10px;
+
+    button {
+      padding: 8px 12px;
+      border: 1px solid #50A2FF;
+      background: #fff;
+      color: #50A2FF;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.15s ease;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      }
+
+      &:disabled {
+        border-color: #999;
+        color: #999;
+        cursor: not-allowed;
+      }
+    }
 
     .title {
       flex: 1;
@@ -125,6 +148,38 @@ $app-hover: #fafafa;
       text-align: center;
       padding: 28px;
       color: $app-muted;
+    }
+  }
+}
+
+.pagination {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #111;
+
+  button {
+    padding: 6px 12px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background 0.15s ease;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+    &:disabled {
+      border-color: #999;
+      color: #999;
+      cursor: not-allowed;
     }
   }
 }

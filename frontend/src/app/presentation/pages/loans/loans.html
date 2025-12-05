@@ -3,8 +3,13 @@
   [data]="rows"
   [showSearch]="true"
   placeholder="Search Loans..."
+  [total]="totalRows"
+  [page]="params.page || 1"
+  [limit]="params.limit || 10"
   (onClick)="onRow($event)"
-  (onSort)="onSort($event)"
-  (onSearch)="onSearch($event)"
+  (onSort)="OnTableChange('sort', $event)"
+  (onSearch)="OnTableChange('search', $event)"
+  (onPageChange)="OnTableChange('page', $event)"
+  (onCreate)="OnTableChange('create', $event)"
 >
 </app-table>

@@ -5,6 +5,14 @@ export interface HttpResponse<T> {
   status: true;
 }
 
+export interface ListResponse<T> {
+  page: number;
+  limit: number;
+  rows: T,
+  total: number;
+  total_pages: number;
+}
+
 export interface ErrorResponse {
   code: number;
   error: string;

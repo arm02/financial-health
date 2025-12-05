@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { LoginService } from '../../../auth/login.service';
+import { AuthService } from '../../../auth/auth.service';
+import { LoginData } from '../../../../core/domain/entities/auth.entities';
 
 @Component({
   selector: 'app-navbar',
@@ -9,13 +10,15 @@ import { LoginService } from '../../../auth/login.service';
   styleUrl: './navbar.scss',
 })
 export class Navbar {
-  private loginService = inject(LoginService);
+  private authService = inject(AuthService);
   dropdownOpen = false;
+  user: LoginData = this.authService.getUserData();
+
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
   logout() {
-    this.loginService.logout();
+    this.authService.logout();
   }
 }

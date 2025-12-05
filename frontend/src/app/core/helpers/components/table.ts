@@ -11,6 +11,9 @@ import { debounceTime } from 'rxjs';
   template: `
     <div class="app-table">
       <div class="table-header">
+        <div class="table-action">
+          <button (click)="onCreate.emit()">Create New</button>
+        </div>
         @if (showSearch) {
         <div class="search">
           <input
@@ -66,7 +69,15 @@ import { debounceTime } from 'rxjs';
             <tr role="row" (click)="onRowClick(row)" tabindex="0">
               @for (col of columns; track col.key) {
               <td role="cell">
+                @if (col.type === 'capitalize') {
+                <span class="text-capitalize"> {{ row[col.key] }}</span>
+                } @else if(col.type === 'currency') {
+                {{ row[col.key] | currency : 'IDR' : 'symbol' : '1.0-0' : 'id-ID' }}
+                } @else if(col.type ==='short_date') {
+                {{ row[col.key] | date : 'd MMM y' }}
+                } @else {
                 {{ row[col.key] }}
+                }
               </td>
               }
             </tr>
@@ -78,6 +89,13 @@ import { debounceTime } from 'rxjs';
           <div>No data</div>
         </div>
         }
+        <div class="pagination">
+          <button (click)="prevPage()" [disabled]="page === 1">Prev</button>
+
+          <span>{{ page }} / {{ totalPages }}</span>
+
+          <button (click)="nextPage()" [disabled]="page >= totalPages">Next</button>
+        </div>
       </div>
     </div>
   `,
@@ -88,10 +106,15 @@ export class TableComponent implements AfterViewInit {
   @Input() data: any[] = [];
   @Input() showSearch = false;
   @Input() placeholder = 'Search...';
+  @Input() total: number = 0;
+  @Input() page: number = 1;
+  @Input() limit: number = 10;
 
   @Output() onClick = new EventEmitter<any>();
   @Output() onSort = new EventEmitter<SortTable>();
   @Output() onSearch = new EventEmitter<string>();
+  @Output() onPageChange = new EventEmitter<number>();
+  @Output() onCreate = new EventEmitter<any>();
 
   query = new FormControl('');
   sortKey: string | null = null;
@@ -100,7 +123,7 @@ export class TableComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.query.valueChanges.pipe(debounceTime(500)).subscribe({
       next: (value) => {
-        if (value) this.onSearch.emit(value);
+        this.onSearch.emit(value || '');
       },
     });
   }
@@ -119,5 +142,23 @@ export class TableComponent implements AfterViewInit {
 
   onRowClick(row: any) {
     this.onClick.emit(row);
+  }
+
+  nextPage() {
+    if (this.page * this.limit < this.total) {
+      this.page++;
+      this.onPageChange.emit(this.page);
+    }
+  }
+
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.onPageChange.emit(this.page);
+    }
+  }
+
+  get totalPages() {
+    return Math.ceil(this.total / this.limit);
   }
 }

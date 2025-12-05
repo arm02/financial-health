@@ -3,7 +3,7 @@ import { UseCase } from '../base/usecase';
 import { AuthRepository } from '../repository/auth.repository';
 import { Observable } from 'rxjs';
 import { AuthDTO } from '../domain/dto/auth.dto';
-import { RegisterResponse } from '../domain/entities/auth.collection';
+import { RegisterResponse } from '../domain/entities/auth.entities';
 
 @Injectable({
   providedIn: 'root',

@@ -1,8 +1,8 @@
-import { HttpResponse } from './http.collection';
+import { HttpResponse } from './http.entities';
 export interface LoginData {
   email: string;
   fullname: string;
-  token: string;
+  token?: string;
 }
 
 export type LoginResponse = HttpResponse<LoginData>;

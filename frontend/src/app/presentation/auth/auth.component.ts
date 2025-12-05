@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthUseCase } from '../../core/usecase/auth.usecase';
 import { AuthDTO } from '../../core/domain/dto/auth.dto';
-import { LoginResponse, RegisterResponse } from '../../core/domain/entities/auth.collection';
+import { LoginResponse, RegisterResponse } from '../../core/domain/entities/auth.entities';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RegisterUseCase } from '../../core/usecase/register.usecase';
 
@@ -12,10 +12,10 @@ import { RegisterUseCase } from '../../core/usecase/register.usecase';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './auth.component.html',
+  styleUrl: './auth.component.scss',
 })
-export class LoginComponent {
+export class AuthComponent {
   private authUseCase = inject(AuthUseCase);
   private registerUseCase = inject(RegisterUseCase);
   private router = inject(Router);
@@ -36,8 +36,9 @@ export class LoginComponent {
 
     if (this.action === 'register') {
       this.registerUseCase.execute(this.authModel).subscribe({
-        next: (res: RegisterResponse) => {
-          this.successMessage = 'Berhasil daftar akun! Silahkan login untuk masuk ke financial health!';
+        next: () => {
+          this.successMessage =
+            'Berhasil daftar akun! Silahkan login untuk masuk ke financial health!';
           this.authModel = {
             email: '',
             password: '',
@@ -53,8 +54,8 @@ export class LoginComponent {
 
     this.authUseCase.execute(this.authModel).subscribe({
       next: (res: LoginResponse) => {
-        if (res.data.token) {
-          localStorage.setItem('auth_token', res.data.token);
+        if (res.data) {
+          localStorage.setItem('auth_data', JSON.stringify(res.data));
           this.router.navigateByUrl('/');
         }
       },

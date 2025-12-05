@@ -5,6 +5,6 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'login',
     canActivate: [GuestGuard],
-    loadComponent: () => import('./login.component').then((m) => m.LoginComponent),
+    loadComponent: () => import('./auth.component').then((m) => m.AuthComponent),
   },
 ];

@@ -27,18 +27,21 @@ export class HttpService {
     return this.http.get<T>(`${this.API_URL}/${url}`, {
       headers: this.getHeaders(headers),
       params: new HttpParams({ fromObject: params || {} }),
+      withCredentials: true,
     });
   }
 
   Post<T>(url: string, body: any, headers?: Record<string, string>): Observable<T> {
     return this.http.post<T>(`${this.API_URL}/${url}`, body, {
       headers: this.getHeaders(headers),
+      withCredentials: true,
     });
   }
 
   Put<T>(url: string, body: any, headers?: Record<string, string>): Observable<T> {
     return this.http.put<T>(`${this.API_URL}/${url}`, body, {
       headers: this.getHeaders(headers),
+      withCredentials: true,
     });
   }
 
@@ -50,6 +53,7 @@ export class HttpService {
     return this.http.delete<T>(`${this.API_URL}/${url}`, {
       headers: this.getHeaders(headers),
       params: new HttpParams({ fromObject: params || {} }),
+      withCredentials: true,
     });
   }
 }
