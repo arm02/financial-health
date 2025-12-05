@@ -1,1 +1,10 @@
-<div>loans works!</div>
+<app-table
+  [columns]="cols"
+  [data]="rows"
+  [showSearch]="true"
+  placeholder="Search Loans..."
+  (onClick)="onRow($event)"
+  (onSort)="onSort($event)"
+  (onSearch)="onSearch($event)"
+>
+</app-table>
