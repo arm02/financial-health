@@ -1,0 +1,27 @@
+<nav class="navbar-section">
+    <div class="right-side">
+        <div class="profile-information" (click)="toggleDropdown()">
+            <div class="user-indentity">
+                <mat-icon class="user-icon">person</mat-icon>
+                <div class="name-and-email">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-email">kelvinfebriango@gmail.com</div>
+                </div>
+            </div>
+
+            @if (dropdownOpen) {
+            <div class="menu-list">
+                <a routerLink="/profile" class="menu-item">
+                    Profile
+                </a>
+                <a routerLink="/settings" class="menu-item">
+                    Settings
+                </a>
+                <a (click)="logout()" class="menu-item">
+                    Logout
+                </a>
+            </div>
+            }
+        </div>
+    </div>
+</nav>

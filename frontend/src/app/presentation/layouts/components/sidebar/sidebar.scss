@@ -1,0 +1,68 @@
+.sidebar {
+    &-section {
+        width: 249px;
+        height: calc(100vh - 2.5rem);
+        background-color: #ffffff;
+        border-right-style: solid;
+        border-right-color: #e2e8f0;
+        border-right-width: 1px;
+        display: flex;
+        flex-direction: column;
+        padding: 14px 20px;
+
+        .identity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+
+            .identity-initial {
+                width: 35px;
+                height: 35px;
+                background-color: #3b82f6;
+                color: #ffffff;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                font-size: 16px;
+            }
+
+            .identity-name {
+                font-size: 18px;
+                font-weight: 500;
+                color: #111827;
+            }
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 12px;
+
+            .menu-item {
+                color: #4A5565;
+                text-decoration: none;
+                padding: 12px 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                &.active {
+                    color: white;
+                    background-color: #50A2FF;
+                    border-radius: 12px;
+                    box-shadow: 0 10px 15px -3px #bedbff, 0 4px 6px -4px #bedbff;
+                }
+            }
+        }
+    }
+}
+
+.divider {
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 10px 0;
+}

@@ -1,0 +1,16 @@
+<nav class="sidebar-section">
+    <div class="identity">
+        <div class="identity-initial">FH</div>
+        <div class="identity-name">Financial Health</div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="menu-list">
+        @for (item of sidebarList; track item) {
+        <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
+            <mat-icon>{{item.icon}}</mat-icon>
+            <div class="menu-name">{{ item.title }}</div>
+        </a>
+        }
+    </div>
+</nav>
