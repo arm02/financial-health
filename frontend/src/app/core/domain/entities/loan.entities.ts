@@ -14,4 +14,15 @@ export interface Loan {
   created_at: string;
 }
 
+export interface LoanDetail {
+  id: number;
+  loan_id: number;
+  cycle_number: number;
+  amount: number;
+  due_date: string;
+  status: string;
+}
+
 export type LoanResponse = HttpResponse<ListResponse<Loan[]>>;
+export type LoanCreateResponse = HttpResponse<Loan>;
+export type LoanDetailResponse = HttpResponse<LoanDetail[]>;

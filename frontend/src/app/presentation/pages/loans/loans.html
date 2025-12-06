@@ -7,7 +7,7 @@
   [total]="totalRows"
   [page]="params.page || 1"
   [limit]="params.limit || 10"
-  (onClick)="onRow($event)"
+  (onClick)="OnTableChange('detail', $event)"
   (onSort)="OnTableChange('sort', $event)"
   (onSearch)="OnTableChange('search', $event)"
   (onPageChange)="OnTableChange('page', $event)"

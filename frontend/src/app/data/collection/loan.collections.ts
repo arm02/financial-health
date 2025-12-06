@@ -9,3 +9,10 @@ export const LOAN_TABLE_COLUMN: TableColumn[] = [
   { key: 'total_amount', label: 'Total Amount', type: 'currency', sortable: true },
   { key: 'start_date', label: 'Start Date', type: 'short_date', sortable: true },
 ];
+
+export const LOAN_DETAIL_TABLE_COLUMN: TableColumn[] = [
+  { key: 'cycle_number', label: 'Cycle', sortable: false },
+  { key: 'amount', label: 'Amount', type: 'currency', sortable: false },
+  { key: 'due_date', label: 'Due Date', type: 'short_date', sortable: false },
+  { key: 'status', label: 'Status', sortable: false },
+];

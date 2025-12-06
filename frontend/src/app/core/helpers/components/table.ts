@@ -12,10 +12,12 @@ import { LoaderBarLocal } from './loader';
   template: `
     <div class="app-table">
       <div class="table-header">
+        @if (create) {
         <div class="table-action">
-          <button (click)="onCreate.emit()">Create New</button>
+          <button class="btn-primary" (click)="onCreate.emit()">Create New</button>
         </div>
-        @if (showSearch) {
+
+        } @if (showSearch) {
         <div class="search">
           <input
             type="text"
@@ -91,7 +93,7 @@ import { LoaderBarLocal } from './loader';
         <div class="empty">
           <div>No data</div>
         </div>
-        }
+        } @if (pagination) {
         <div class="pagination">
           <button (click)="prevPage()" [disabled]="page === 1">Prev</button>
 
@@ -99,6 +101,7 @@ import { LoaderBarLocal } from './loader';
 
           <button (click)="nextPage()" [disabled]="page >= totalPages">Next</button>
         </div>
+        }
       </div>
     </div>
   `,
@@ -113,6 +116,8 @@ export class TableLocal implements AfterViewInit {
   @Input() page: number = 1;
   @Input() limit: number = 10;
   @Input() loader: boolean = true;
+  @Input() create: boolean = true;
+  @Input() pagination: boolean = true;
 
   @Output() onClick = new EventEmitter<any>();
   @Output() onSort = new EventEmitter<SortTable>();

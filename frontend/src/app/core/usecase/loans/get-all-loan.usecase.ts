@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class LoanUseCase implements UseCase<DefaultParams, LoanResponse> {
+export class GetAllLoanUseCase implements UseCase<DefaultParams, LoanResponse> {
   private repository = inject(LoanRepository);
 
   execute(params: DefaultParams): Observable<LoanResponse> {

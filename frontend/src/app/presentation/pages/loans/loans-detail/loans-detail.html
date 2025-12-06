@@ -1,0 +1,36 @@
+<div class="loan-detail">
+  <div class="card info-card">
+    <h3>Loan Information</h3>
+    <div class="info-grid">
+      <div>
+        <label>Title</label>
+        <p>{{ loan.data.data.title }}</p>
+      </div>
+      <div>
+        <label>Tenor</label>
+        <p>{{ loan.data.data.tenor }} {{ loan.data.data.tenor_type }}</p>
+      </div>
+      <div>
+        <label>Amount</label>
+        <p>{{ loan.data.data.amount | currency : 'IDR' : 'symbol' : '1.0-0' : 'id-ID' }}</p>
+      </div>
+      <div>
+        <label>Start Date</label>
+        <p>{{ loan.data.data.start_date | date : 'dd MMM yyyy' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card table-card">
+    <h3>Installments</h3>
+    <app-table
+      [columns]="cols"
+      [data]="rows"
+      [loader]="loader()"
+      [create]="false"
+      [pagination]="false"
+      placeholder="Search Loans..."
+    >
+    </app-table>
+  </div>
+</div>

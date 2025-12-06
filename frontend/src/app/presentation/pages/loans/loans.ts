@@ -1,13 +1,16 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { TableLocal } from '../../../core/helpers/components/table';
 import { SortTable, TableColumn } from '../../../data/collection/table.collection';
-import { LoanUseCase } from '../../../core/usecase/loans/get-all-loan.usecase';
+import { GetAllLoanUseCase } from '../../../core/usecase/loans/get-all-loan.usecase';
 import { DefaultParams } from '../../../core/domain/dto/base.dto';
 import { Subject, takeUntil } from 'rxjs';
 import { Loan, LoanResponse } from '../../../core/domain/entities/loan.entities';
 import { DialogService } from '../../../core/helpers/services/dialog.service';
 import { LoansForm } from './loans-form/loans-form';
 import { LOAN_TABLE_COLUMN } from '../../../data/collection/loan.collections';
+import { CreateLoanDTO } from '../../../core/domain/dto/loan.dto';
+import { CreateLoanUseCase } from '../../../core/usecase/loans/create-loan.usecase';
+import { LoansDetail } from './loans-detail/loans-detail';
 
 @Component({
   selector: 'app-loans',
@@ -18,7 +21,8 @@ import { LOAN_TABLE_COLUMN } from '../../../data/collection/loan.collections';
 })
 export class LoansComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  private loanUseCase = inject(LoanUseCase);
+  private getAllLoanUseCase = inject(GetAllLoanUseCase);
+  private createLoanUseCase = inject(CreateLoanUseCase);
   private dialogService = inject(DialogService);
   protected loader = signal(true);
   params: DefaultParams = {
@@ -41,7 +45,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   }
 
   GetAllLoan() {
-    this.loanUseCase
+    this.getAllLoanUseCase
       .execute(this.params)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -53,21 +57,50 @@ export class LoansComponent implements OnInit, OnDestroy {
       });
   }
 
-  OnTableChange(event: string, $event: any) {
-    if (event === 'sort') this.onSort($event);
-    if (event === 'search') this.onSearch($event);
-    if (event === 'page') this.onPageChange($event);
-    if (event === 'create') this.onCreate();
-    this.GetAllLoan();
+  OnTableChange(type: string, payload: any) {
+    const handler = {
+      sort: () => this.onSort(payload),
+      search: () => this.onSearch(payload),
+      page: () => this.onPageChange(payload),
+      create: () => this.onCreate(),
+      detail: () => this.onDetail(payload),
+    }[type];
+
+    if (handler) handler();
+    if (type !== 'create') this.GetAllLoan();
   }
 
   onRow($event: any) {}
 
   onCreate() {
     this.dialogService
-      .Open(LoansForm, { title: 'Create New Loan', width: '800px', height: '500px' })
+      .Open(LoansForm, { title: 'Create New Loan', width: '550px' })
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res) => {},
+        next: (res: CreateLoanDTO) => {
+          if (res) this.onCreateAction(res);
+        },
+      });
+  }
+
+  onCreateAction(body: CreateLoanDTO) {
+    this.loader.set(true);
+    this.createLoanUseCase
+      .execute(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.GetAllLoan();
+        },
+      });
+  }
+
+  onDetail(params: Loan) {
+    this.dialogService
+      .Open(LoansDetail, { title: 'Detail Loan', data: params, width: '1000px' })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {},
       });
   }
 

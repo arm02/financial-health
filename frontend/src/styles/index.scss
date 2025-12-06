@@ -1,2 +1,9 @@
 @use './dialog';
-@use './utils.scss';
+@use './utils';
+@use './form';
+
+:host {
+  display: block;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: #111;
+}

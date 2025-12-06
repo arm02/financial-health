@@ -23,6 +23,7 @@ export class DialogService {
         title: params?.title,
         data: params,
       },
+      maxWidth: 'none',
       panelClass: 'global-dialog-padding',
     };
 

@@ -1,1 +1,51 @@
-<div>loans-form works!</div>
+<form [formGroup]="loanForm" (ngSubmit)="onSubmit()" class="form">
+  <div class="form-group">
+    <label>Title</label>
+    <input type="text" placeholder="Insert Title" formControlName="title" />
+    @if (loanForm.get('title')?.touched && loanForm.get('title')?.invalid) {
+    <small class="error">Title is required (max 50 chars)</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Tenor</label>
+    <input type="number" placeholder="Insert Tenor" formControlName="tenor" />
+    @if (loanForm.get('tenor')?.touched && loanForm.get('tenor')?.invalid) {
+    <small class="error">Tenor must be at least 1</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Tenor Type</label>
+    <select formControlName="tenor_type" required>
+      <option value="" disabled hidden>Choose your Tenor Type</option>
+      <option>Daily</option>
+      <option>Monthly</option>
+      <option>Yearly</option>
+    </select>
+    @if(loanForm.get('tenor_type')?.touched && loanForm.get('tenor_type')?.invalid) {
+    <small class="error">Tenor Type is required</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Amount</label>
+    <input type="number" placeholder="Insert Amount" formControlName="amount" />
+    @if (loanForm.get('amount')?.touched && loanForm.get('amount')?.invalid) {
+    <small class="error">Minimum amount is 1000</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Start Date</label>
+    <input type="date" formControlName="start_date" />
+    @if (loanForm.get('start_date')?.touched && loanForm.get('start_date')?.invalid) {
+    <small class="error"> Start Date is required </small>
+    }
+  </div>
+
+  <div class="form-action">
+    <button class="btn-primary" type="submit">Save Loan</button>
+    <button class="btn-danger" type="button" (click)="onCloseDialog()">Cancel</button>
+  </div>
+</form>
