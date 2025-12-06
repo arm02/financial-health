@@ -12,6 +12,10 @@ export const PAGES_ROUTES: Routes = [
         path: 'loans',
         loadComponent: () => import('./loans/loans').then((m) => m.LoansComponent),
       },
+      {
+        path: 'transactions',
+        loadComponent: () => import('./transactions/transactions').then((m) => m.TransactionsComponent),
+      },
     ],
   },
 ];

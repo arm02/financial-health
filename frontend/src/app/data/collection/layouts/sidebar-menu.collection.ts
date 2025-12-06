@@ -11,4 +11,10 @@ export const SIDEBAR_MENU = [
     icon: 'assignment',
     route: '/loans',
   },
+  {
+    id: 2,
+    title: 'Transaction',
+    icon: 'collections_bookmark',
+    route: '/transactions',
+  },
 ];

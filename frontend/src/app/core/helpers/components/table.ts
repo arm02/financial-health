@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
-import { SortTable, TableColumn } from '../../../data/collection/table.collection';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { LoaderBarLocal } from './loader';
+import { ContextAction, SortTable, TableColumn } from '../../domain/entities/table.entities';
 
 @Component({
   selector: 'app-table',
@@ -16,7 +16,10 @@ import { LoaderBarLocal } from './loader';
         <div class="table-action">
           <button class="btn-primary" (click)="onCreate.emit()">Create New</button>
         </div>
-
+        }@if (simpleCreate) {
+        <div class="table-action">
+          <button class="btn-primary" (click)="onSimpleCreate.emit()">Simple Create</button>
+        </div>
         } @if (showSearch) {
         <div class="search">
           <input
@@ -69,7 +72,7 @@ import { LoaderBarLocal } from './loader';
 
           <tbody>
             @for (row of data; track $index) {
-            <tr role="row" (click)="onRowClick(row)" tabindex="0">
+            <tr role="row" (click)="openContextMenu($event, row)" tabindex="0">
               @for (col of columns; track col.key) {
               <td role="cell">
                 @if (col.type === 'capitalize') {
@@ -81,6 +84,10 @@ import { LoaderBarLocal } from './loader';
                 } @else if(col.type === 'payment_status') {
                 <button class="text-capitalize status-payment {{ row[col.key] }}">
                   {{ row[col.key] }}
+                </button>
+                } @else if(col.type === 'transaction_type') {
+                <button class="text-capitalize status-transaction {{ row[col.key] }}">
+                  {{ row[col.key].replace('_', ' ') }}
                 </button>
                 } @else {
                 {{ row[col.key] }}
@@ -105,6 +112,12 @@ import { LoaderBarLocal } from './loader';
 
           <button (click)="nextPage()" [disabled]="page >= totalPages">Next</button>
         </div>
+        } @if(contextMenu.visible && showContextMenu) {
+        <div class="context-menu" [style.top.px]="contextMenu.y" [style.left.px]="contextMenu.x">
+          @for (context of contextMenuData; track context.key) {
+          <button (click)="selectContext(context.key)">{{ context.label }}</button>
+          }
+        </div>
         }
       </div>
     </div>
@@ -121,17 +134,34 @@ export class TableLocal implements AfterViewInit {
   @Input() limit: number = 10;
   @Input() loader: boolean = true;
   @Input() create: boolean = true;
+  @Input() simpleCreate: boolean = false;
   @Input() pagination: boolean = true;
+  @Input() contextMenuData: ContextAction[] = [];
+  @Input() showContextMenu: boolean = false;
 
-  @Output() onClick = new EventEmitter<any>();
   @Output() onSort = new EventEmitter<SortTable>();
   @Output() onSearch = new EventEmitter<string>();
   @Output() onPageChange = new EventEmitter<number>();
   @Output() onCreate = new EventEmitter<any>();
+  @Output() onSimpleCreate = new EventEmitter<any>();
+  @Output() onContextAction = new EventEmitter<{ action: string; row: any }>();
 
   query = new FormControl('');
   sortKey: string | null = null;
   sortDir: 'asc' | 'desc' = 'asc';
+
+  contextMenu = {
+    visible: false,
+    x: 0,
+    y: 0,
+    row: null as any,
+  };
+
+  constructor() {
+    document.addEventListener('click', () => {
+      this.contextMenu.visible = false;
+    });
+  }
 
   ngAfterViewInit(): void {
     this.query.valueChanges.pipe(debounceTime(500)).subscribe({
@@ -153,10 +183,6 @@ export class TableLocal implements AfterViewInit {
     this.onSort.emit({ sortBy: this.sortKey, sortType: this.sortDir });
   }
 
-  onRowClick(row: any) {
-    this.onClick.emit(row);
-  }
-
   nextPage() {
     if (this.page * this.limit < this.total) {
       this.page++;
@@ -169,6 +195,24 @@ export class TableLocal implements AfterViewInit {
       this.page--;
       this.onPageChange.emit(this.page);
     }
+  }
+
+  openContextMenu(event: MouseEvent, row: any) {
+    event.stopPropagation();
+    this.contextMenu = {
+      visible: true,
+      x: event.clientX,
+      y: event.clientY,
+      row,
+    };
+  }
+
+  selectContext(action: string) {
+    this.onContextAction.emit({
+      action,
+      row: this.contextMenu.row,
+    });
+    this.contextMenu.visible = false;
   }
 
   get totalPages() {

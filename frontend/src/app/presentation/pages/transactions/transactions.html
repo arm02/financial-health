@@ -3,7 +3,8 @@
   [data]="rows"
   [loader]="loader()"
   [showSearch]="true"
-  placeholder="Search Loans..."
+  [simpleCreate]="true"
+  placeholder="Search Transactions..."
   [total]="totalRows"
   [page]="params.page || 1"
   [limit]="params.limit || 10"
@@ -13,6 +14,7 @@
   (onSearch)="OnTableChange('search', $event)"
   (onPageChange)="OnTableChange('page', $event)"
   (onCreate)="OnTableChange('create', $event)"
+  (onSimpleCreate)="OnTableChange('simplecreate', $event)"
   (onContextAction)="OnHandleContext($event)"
 >
 </app-table>

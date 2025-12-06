@@ -13,7 +13,8 @@ $app-ink: #0b0b0b;
       font-size: 14px;
     }
 
-    & input {
+    & input,
+    textarea {
       padding: 8px 12px;
       border-radius: 8px;
       border: 1px solid $app-border;
@@ -51,6 +52,12 @@ $app-ink: #0b0b0b;
         font-size: 10px;
         color: #EF4444;
         margin-left: 14px;
+      }
+
+      &.hint {
+        font-size: 10px;
+        color: #666;
+        margin-top: -5px;
       }
     }
   }

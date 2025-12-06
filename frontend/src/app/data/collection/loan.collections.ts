@@ -1,4 +1,4 @@
-import { TableColumn } from './table.collection';
+import { ContextAction, TableColumn } from "../../core/domain/entities/table.entities";
 
 export const LOAN_TABLE_COLUMN: TableColumn[] = [
   { key: 'title', label: 'Title', sortable: true },
@@ -16,3 +16,5 @@ export const LOAN_DETAIL_TABLE_COLUMN: TableColumn[] = [
   { key: 'due_date', label: 'Due Date', type: 'short_date', sortable: true },
   { key: 'status', label: 'Status', type: 'payment_status', sortable: true },
 ];
+
+export const LOAN_CONTEXT_MENU: ContextAction[] = [{ key: 'detail', label: 'Detail' }];

@@ -1,4 +1,25 @@
 .status {
+  &-transaction {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    border: none;
+
+    &.debit {
+      background: #16a34a;
+    }
+
+    &.credit {
+      background: #dc2626;
+    }
+
+    &.loan_payment {
+      background: #f59e0b;
+    }
+  }
+
   &-payment {
     padding: 4px 10px;
     border-radius: 6px;

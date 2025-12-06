@@ -19,9 +19,9 @@
     <label>Tenor Type</label>
     <select formControlName="tenor_type" required>
       <option value="" disabled hidden>Choose your Tenor Type</option>
-      <option>Daily</option>
-      <option>Monthly</option>
-      <option>Yearly</option>
+      <option value="daily">Daily</option>
+      <option value="monthly">Monthly</option>
+      <option value="yearly">Yearly</option>
     </select>
     @if(loanForm.get('tenor_type')?.touched && loanForm.get('tenor_type')?.invalid) {
     <small class="error">Tenor Type is required</small>

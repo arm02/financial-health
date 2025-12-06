@@ -17,11 +17,12 @@
         .identity {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             margin-bottom: 12px;
 
             img {
-                width: 100%;
+                width: 80%;
             }
 
             .identity-initial {
@@ -89,7 +90,7 @@
             align-items: center;
             width: 100%;
             padding: 0 24px;
-            
+
             .menu-item {
                 display: flex;
                 flex-direction: column;
@@ -115,12 +116,12 @@
                     font-size: 24px;
                 }
             }
-        }   
+        }
     }
 }
 
 .divider {
     height: 1px;
     background-color: #e5e7eb;
-    margin: 10px 0;
+    margin: 5px 0;
 }

@@ -10,3 +10,8 @@ export interface SortTable {
   sortBy: string;
   sortType: string;
 }
+
+export interface ContextAction {
+  key: string;
+  label: string;
+}

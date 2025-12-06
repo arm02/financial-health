@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TableLocal } from '../../../../core/helpers/components/table';
-import { SortTable, TableColumn } from '../../../../data/collection/table.collection';
 import { LOAN_DETAIL_TABLE_COLUMN } from '../../../../data/collection/loan.collections';
 import { Subject, takeUntil } from 'rxjs';
 import { LoanDetail, LoanDetailResponse } from '../../../../core/domain/entities/loan.entities';
 import { GetDetailLoanUseCase } from '../../../../core/usecase/loans/get-loan-detail.usecase';
 import { DefaultParams } from '../../../../core/domain/dto/base.dto';
+import { SortTable, TableColumn } from '../../../../core/domain/entities/table.entities';
 
 @Component({
   selector: 'app-loans-detail',
@@ -75,6 +75,7 @@ export class LoansDetail implements OnInit, OnDestroy {
   }
 
   onPageChange($event: number) {
+    this.rows = [];
     this.params.page = $event;
   }
 }
