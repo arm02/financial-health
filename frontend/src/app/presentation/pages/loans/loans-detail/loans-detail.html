@@ -23,14 +23,16 @@
 
   <div class="card table-card">
     <h3>Installments</h3>
-    <app-table
-      [columns]="cols"
-      [data]="rows"
-      [loader]="loader()"
-      [create]="false"
-      [pagination]="false"
-      placeholder="Search Loans..."
-    >
-    </app-table>
+    <div class="table">
+      <app-table
+        [columns]="cols"
+        [data]="rows"
+        [loader]="loader()"
+        [create]="false"
+        [pagination]="false"
+        placeholder="Search Loans..."
+      >
+      </app-table>
+    </div>
   </div>
 </div>
