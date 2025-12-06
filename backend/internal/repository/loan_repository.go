@@ -137,21 +137,56 @@ func (r *LoanRepositoryImpl) UpdateDetailStatus(ctx context.Context, detailID in
 	return err
 }
 
-func (r *LoanRepositoryImpl) GetDetailsByLoanID(ctx context.Context, loanID int64) ([]domain.LoanDetail, error) {
+func (r *LoanRepositoryImpl) GetDetailsByLoanID(ctx context.Context, loanID int64, page, limit int, sortBy, sortType string) ([]domain.LoanDetail, int64, error) {
+	offset := (page - 1) * limit
+
+	allowedSortColumns := map[string]bool{
+		"cycle_number": true,
+		"amount":       true,
+		"due_date":     true,
+		"status":       true,
+	}
+	if !allowedSortColumns[sortBy] {
+		sortBy = "cycle_number"
+	}
+
+	sortType = strings.ToUpper(sortType)
+	if sortType != "ASC" && sortType != "DESC" {
+		sortType = "DESC"
+	}
+
 	query := `SELECT id, loan_id, cycle_number, amount, due_date, status FROM loan_details WHERE loan_id = ?`
-	rows, err := r.db.QueryContext(ctx, query, loanID)
+
+	args := []interface{}{loanID}
+
+	query += fmt.Sprintf(" ORDER BY %s %s LIMIT ? OFFSET ?", sortBy, sortType)
+	args = append(args, limit, offset)
+
+	rows, err := r.db.QueryContext(ctx, query, args...)
 	if err != nil {
-		return nil, utils.NewSystemError("Database error", err)
+		return nil, 0, err
 	}
 	defer rows.Close()
 
-	var details []domain.LoanDetail
+	var loans []domain.LoanDetail
 	for rows.Next() {
-		var d domain.LoanDetail
-		if err := rows.Scan(&d.ID, &d.LoanID, &d.CycleNumber, &d.Amount, &d.DueDate, &d.Status); err != nil {
-			return nil, utils.NewBusinessError(err.Error(), err)
+		var l domain.LoanDetail
+		if err := rows.Scan(
+			&l.ID, &l.LoanID, &l.CycleNumber, &l.Amount, &l.DueDate, &l.Status,
+		); err != nil {
+			return nil, 0, err
 		}
-		details = append(details, d)
+		loans = append(loans, l)
 	}
-	return details, nil
+
+	countQuery := "SELECT COUNT(*) FROM loan_details WHERE loan_id = ?"
+	countArgs := []interface{}{loanID}
+
+	var total int64
+	err = r.db.QueryRowContext(ctx, countQuery, countArgs...).Scan(&total)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return loans, total, nil
 }

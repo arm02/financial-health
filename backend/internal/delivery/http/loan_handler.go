@@ -86,10 +86,17 @@ func (h *LoanHandler) GetLoan(c *gin.Context) {
 func (h *LoanHandler) GetLoanDetails(c *gin.Context) {
 	loanIDStr := c.Param("id")
 	loanID, _ := strconv.ParseInt(loanIDStr, 10, 64)
+	userIDVal, _ := c.Get("user_id")
+	userID := int64(userIDVal.(float64))
 
-	details, err := h.LoanUseCase.GetLoanDetails(c.Request.Context(), loanID)
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	sortBy := c.DefaultQuery("sort_by", "cycle_number")
+	sortType := c.DefaultQuery("sort_type", "ASC")
+
+	details, err := h.LoanUseCase.GetLoanDetails(c.Request.Context(), userID, loanID, page, limit, sortBy, sortType)
 	if err != nil {
-		utils.ErrorResponse(c, utils.NewSystemError(err.Error(), err))
+		utils.ErrorResponse(c, utils.NewBusinessError(err.Error(), err))
 		return
 	}
 	utils.SuccessResponse(c, details, constants.SUCCESS)

@@ -10,5 +10,5 @@ import { CreateLoanDTO } from '../domain/dto/loan.dto';
 export abstract class LoanRepository {
   abstract GetAll(params: DefaultParams): Observable<LoanResponse>;
   abstract Create(body: CreateLoanDTO): Observable<LoanCreateResponse>;
-  abstract GetDetailLoan(params: number): Observable<LoanDetailResponse>;
+  abstract GetDetailLoan(loanID: number, params: DefaultParams): Observable<LoanDetailResponse>;
 }

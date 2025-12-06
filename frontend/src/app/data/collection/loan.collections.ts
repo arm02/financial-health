@@ -11,8 +11,8 @@ export const LOAN_TABLE_COLUMN: TableColumn[] = [
 ];
 
 export const LOAN_DETAIL_TABLE_COLUMN: TableColumn[] = [
-  { key: 'cycle_number', label: 'Cycle', sortable: false },
-  { key: 'amount', label: 'Amount', type: 'currency', sortable: false },
-  { key: 'due_date', label: 'Due Date', type: 'short_date', sortable: false },
-  { key: 'status', label: 'Status', sortable: false },
+  { key: 'cycle_number', label: 'Cycle', sortable: true },
+  { key: 'amount', label: 'Amount', type: 'currency', sortable: true },
+  { key: 'due_date', label: 'Due Date', type: 'short_date', sortable: true },
+  { key: 'status', label: 'Status', type: 'payment_status', sortable: true },
 ];

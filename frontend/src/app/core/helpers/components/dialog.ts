@@ -18,12 +18,16 @@ import { MatIconModule } from '@angular/material/icon';
       .dialog-header {
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #666;
+        border-bottom: 1px solid #ececec;
         padding-bottom: 10px;
         margin-bottom: 18px;
       }
       mat-icon {
         cursor: pointer;
+        transition: background 0.15s ease;
+        &:hover {
+          transform: translateY(-1px);
+        }
       }
     `,
   ],
@@ -42,6 +46,6 @@ export class DialogLocal {
   }
 
   close() {
-    this.dialogRef.close('closed');
+    this.dialogRef.close();
   }
 }

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"financial-health/internal/domain"
 	"fmt"
 	"log"
@@ -99,6 +100,35 @@ func (u *LoanUseCase) GetLoan(ctx context.Context, loanID int64) (*domain.Loan, 
 	return u.loanRepo.GetLoanByID(ctx, loanID)
 }
 
-func (u *LoanUseCase) GetLoanDetails(ctx context.Context, loanID int64) ([]domain.LoanDetail, error) {
-	return u.loanRepo.GetDetailsByLoanID(ctx, loanID)
+func (u *LoanUseCase) GetLoanDetails(ctx context.Context, userID, loanID int64, page, limit int, sortBy, sortType string) (*domain.RowsList[domain.LoanDetail], error) {
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 10
+	}
+
+	parentLoan, err := u.loanRepo.GetLoanByID(ctx, loanID)
+	if err != nil {
+		return nil, err
+	}
+
+	if userID != parentLoan.UserID {
+		return nil, errors.New("installment not found")
+	}
+
+	loans, total, err := u.loanRepo.GetDetailsByLoanID(ctx, loanID, page, limit, sortBy, sortType)
+	if err != nil {
+		return nil, err
+	}
+
+	totalPages := (total + int64(limit) - 1) / int64(limit)
+
+	return &domain.RowsList[domain.LoanDetail]{
+		Rows:       loans,
+		Page:       page,
+		Limit:      limit,
+		Total:      total,
+		TotalPages: totalPages,
+	}, nil
 }

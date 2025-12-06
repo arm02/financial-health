@@ -32,7 +32,7 @@ type LoanUseCase interface {
 	CreateLoan(ctx context.Context, loan *Loan) error
 	GetAllLoans(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*RowsList[Loan], error)
 	GetLoan(ctx context.Context, loanID int64) (*Loan, error)
-	GetLoanDetails(ctx context.Context, loanID int64) ([]LoanDetail, error)
+	GetLoanDetails(ctx context.Context, userID, loanID int64, page, limit int, sortBy, sortType string) (*RowsList[LoanDetail], error)
 }
 
 type LoanRepository interface {
@@ -43,5 +43,5 @@ type LoanRepository interface {
 	GetDetailByID(ctx context.Context, id int64) (*LoanDetail, error)
 	UpdateLoanStatusAndDue(ctx context.Context, loanID int64, amountPaid float64, status string) error
 	UpdateDetailStatus(ctx context.Context, detailID int64, status string) error
-	GetDetailsByLoanID(ctx context.Context, loanID int64) ([]LoanDetail, error)
+	GetDetailsByLoanID(ctx context.Context, loanID int64, page, limit int, sortBy, sortType string) ([]LoanDetail, int64, error)
 }

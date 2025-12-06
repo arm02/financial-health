@@ -54,23 +54,26 @@ export class LoansComponent implements OnInit, OnDestroy {
           this.totalRows = res.data.total;
           this.loader.set(false);
         },
+        error: () => {
+          this.loader.set(false);
+        },
       });
   }
 
   OnTableChange(type: string, payload: any) {
-    const handler = {
-      sort: () => this.onSort(payload),
-      search: () => this.onSearch(payload),
-      page: () => this.onPageChange(payload),
-      create: () => this.onCreate(),
-      detail: () => this.onDetail(payload),
-    }[type];
-
-    if (handler) handler();
-    if (type !== 'create') this.GetAllLoan();
+    const handlers: Record<string, { fn: () => void; reload: boolean }> = {
+      sort: { fn: () => this.onSort(payload), reload: true },
+      search: { fn: () => this.onSearch(payload), reload: true },
+      page: { fn: () => this.onPageChange(payload), reload: true },
+      create: { fn: () => this.onCreate(), reload: false },
+      detail: { fn: () => this.onDetail(payload), reload: false },
+    };
+    const handler = handlers[type];
+    if (handler) {
+      handler.fn();
+      if (handler.reload) this.GetAllLoan();
+    }
   }
-
-  onRow($event: any) {}
 
   onCreate() {
     this.dialogService

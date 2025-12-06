@@ -20,7 +20,6 @@
       </div>
     </div>
   </div>
-
   <div class="card table-card">
     <h3>Installments</h3>
     <div class="table">
@@ -29,8 +28,12 @@
         [data]="rows"
         [loader]="loader()"
         [create]="false"
-        [pagination]="false"
-        placeholder="Search Loans..."
+        [pagination]="true"
+        [total]="totalRows"
+        [page]="params.page || 1"
+        [limit]="params.limit || 10"
+        (onSort)="OnTableChange('sort', $event)"
+        (onPageChange)="OnTableChange('page', $event)"
       >
       </app-table>
     </div>

@@ -25,4 +25,4 @@ export interface LoanDetail {
 
 export type LoanResponse = HttpResponse<ListResponse<Loan[]>>;
 export type LoanCreateResponse = HttpResponse<Loan>;
-export type LoanDetailResponse = HttpResponse<LoanDetail[]>;
+export type LoanDetailResponse = HttpResponse<ListResponse<LoanDetail[]>>;

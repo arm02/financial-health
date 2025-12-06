@@ -22,7 +22,7 @@ export class HttpLoanRepository implements LoanRepository {
     return this.http.Post(`loans/create`, body);
   }
 
-  GetDetailLoan(params: number): Observable<LoanDetailResponse> {
-    return this.http.Get(`loans/details/${params}`);
+  GetDetailLoan(loanID: number, params: DefaultParams): Observable<LoanDetailResponse> {
+    return this.http.Get(`loans/details/${loanID}`, params);
   }
 }
