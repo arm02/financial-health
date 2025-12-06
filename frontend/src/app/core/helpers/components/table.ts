@@ -4,11 +4,12 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { LoaderBarLocal } from './loader';
 import { ContextAction, SortTable, TableColumn } from '../../domain/entities/table.entities';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderBarLocal],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderBarLocal, MatIconModule],
   template: `
     <div class="app-table">
       <div class="table-header">
@@ -85,7 +86,7 @@ import { ContextAction, SortTable, TableColumn } from '../../domain/entities/tab
                 {{ row[col.key] | date : 'd MMM y HH:mm' : 'UTC' }}
                 } @else if(col.type === 'loan_status') {
                 <button class="text-capitalize status-loan {{ row[col.key] }}">
-                   {{ row[col.key].replace('_', ' ') }}
+                  {{ row[col.key].replace('_', ' ') }}
                 </button>
                 }@else if(col.type === 'payment_status') {
                 <button class="text-capitalize status-payment {{ row[col.key] }}">
@@ -121,7 +122,11 @@ import { ContextAction, SortTable, TableColumn } from '../../domain/entities/tab
         } @if(contextMenu.visible && showContextMenu) {
         <div class="context-menu" [style.top.px]="contextMenu.y" [style.left.px]="contextMenu.x">
           @for (context of contextMenuData; track context.key) {
-          <button (click)="selectContext(context.key)">{{ context.label }}</button>
+          <button (click)="selectContext(context.key)">
+            @if (context.icon) {
+            <mat-icon>{{ context.icon }}</mat-icon>
+            } {{ context.label }}
+          </button>
           }
         </div>
         }

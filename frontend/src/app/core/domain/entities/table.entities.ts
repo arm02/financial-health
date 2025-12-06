@@ -14,4 +14,5 @@ export interface SortTable {
 export interface ContextAction {
   key: string;
   label: string;
+  icon?: string;
 }

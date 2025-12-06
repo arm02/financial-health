@@ -1,4 +1,4 @@
-import { ContextAction, TableColumn } from "../../core/domain/entities/table.entities";
+import { ContextAction, TableColumn } from '../../core/domain/entities/table.entities';
 
 export const TRANSACTION_TABLE_COLUMN: TableColumn[] = [
   { key: 'title', label: 'Title', sortable: true },
@@ -8,7 +8,19 @@ export const TRANSACTION_TABLE_COLUMN: TableColumn[] = [
 ];
 
 export const TRANSACTION_CONTEXT_MENU: ContextAction[] = [
-  { key: 'detail', label: 'Detail' },
-  { key: 'edit', label: 'Edit' },
-  { key: 'delete', label: 'Delete' },
+  {
+    key: 'detail',
+    icon: 'info',
+    label: 'Detail Transaction',
+  },
+  {
+    key: 'edit',
+    icon: 'edit',
+    label: 'Edit Transaction',
+  },
+  {
+    key: 'delete',
+    icon: 'delete',
+    label: 'Delete Transaction',
+  },
 ];
