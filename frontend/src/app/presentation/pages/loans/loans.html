@@ -1,6 +1,7 @@
 <app-table
   [columns]="cols"
   [data]="rows"
+  [loader]="loader()"
   [showSearch]="true"
   placeholder="Search Loans..."
   [total]="totalRows"

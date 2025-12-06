@@ -7,6 +7,7 @@ import { AuthDTO } from '../../core/domain/dto/auth.dto';
 import { LoginResponse, RegisterResponse } from '../../core/domain/entities/auth.entities';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RegisterUseCase } from '../../core/usecase/register.usecase';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -55,7 +56,10 @@ export class AuthComponent {
     this.authUseCase.execute(this.authModel).subscribe({
       next: (res: LoginResponse) => {
         if (res.data) {
-          localStorage.setItem('auth_data', JSON.stringify(res.data));
+          localStorage.setItem(
+            environment.storage.authData || 'auth_data',
+            JSON.stringify(res.data)
+          );
           this.router.navigateByUrl('/');
         }
       },

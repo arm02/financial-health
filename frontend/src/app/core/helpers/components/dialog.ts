@@ -26,13 +26,13 @@ import { MatIconModule } from '@angular/material/icon';
     `,
   ],
 })
-export class DialogComponent {
+export class DialogLocal {
   componentRef!: ComponentRef<any>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public payload: any,
     private vcr: ViewContainerRef,
-    private dialogRef: MatDialogRef<DialogComponent>
+    private dialogRef: MatDialogRef<DialogLocal>
   ) {
     const childComponent = payload.component;
     this.componentRef = this.vcr.createComponent(childComponent);

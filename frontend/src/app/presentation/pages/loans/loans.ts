@@ -1,5 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { TableComponent } from '../../../core/helpers/components/table';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { TableLocal } from '../../../core/helpers/components/table';
 import { SortTable, TableColumn } from '../../../data/collection/table.collection';
 import { LoanUseCase } from '../../../core/usecase/loans/get-all-loan.usecase';
 import { DefaultParams } from '../../../core/domain/dto/base.dto';
@@ -12,7 +12,7 @@ import { LOAN_TABLE_COLUMN } from '../../../data/collection/loan.collections';
 @Component({
   selector: 'app-loans',
   standalone: true,
-  imports: [TableComponent],
+  imports: [TableLocal],
   templateUrl: './loans.html',
   styleUrl: './loans.scss',
 })
@@ -20,6 +20,7 @@ export class LoansComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private loanUseCase = inject(LoanUseCase);
   private dialogService = inject(DialogService);
+  protected loader = signal(true);
   params: DefaultParams = {
     page: 1,
     limit: 10,
@@ -47,6 +48,7 @@ export class LoansComponent implements OnInit, OnDestroy {
         next: (res: LoanResponse) => {
           this.rows = res.data.rows;
           this.totalRows = res.data.total;
+          this.loader.set(false);
         },
       });
   }
@@ -62,9 +64,11 @@ export class LoansComponent implements OnInit, OnDestroy {
   onRow($event: any) {}
 
   onCreate() {
-    this.dialogService.Open(LoansForm, { title: 'Create New Loan', width: '800px', height: '500px' }).subscribe({
-      next: (res) => {},
-    });
+    this.dialogService
+      .Open(LoansForm, { title: 'Create New Loan', width: '800px', height: '500px' })
+      .subscribe({
+        next: (res) => {},
+      });
   }
 
   onSort($event: SortTable) {

@@ -184,6 +184,13 @@ $app-hover: #fafafa;
   }
 }
 
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
 @media (max-width: 640px) {
   .app-table {
     padding: 8px;

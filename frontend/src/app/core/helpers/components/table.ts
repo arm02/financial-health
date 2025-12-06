@@ -3,11 +3,12 @@ import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/
 import { SortTable, TableColumn } from '../../../data/collection/table.collection';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { LoaderBarLocal } from './loader';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderBarLocal],
   template: `
     <div class="app-table">
       <div class="table-header">
@@ -84,7 +85,9 @@ import { debounceTime } from 'rxjs';
             }
           </tbody>
         </table>
-        @if (!data || data.length === 0) {
+        @if (loader) {
+        <loader class="loader" [visibility]="loader"></loader>
+        } @if (!data || data.length === 0 && !loader) {
         <div class="empty">
           <div>No data</div>
         </div>
@@ -101,7 +104,7 @@ import { debounceTime } from 'rxjs';
   `,
   styleUrls: ['../../../../styles/table.scss'],
 })
-export class TableComponent implements AfterViewInit {
+export class TableLocal implements AfterViewInit {
   @Input() columns: TableColumn[] = [];
   @Input() data: any[] = [];
   @Input() showSearch = false;
@@ -109,6 +112,7 @@ export class TableComponent implements AfterViewInit {
   @Input() total: number = 0;
   @Input() page: number = 1;
   @Input() limit: number = 10;
+  @Input() loader: boolean = true;
 
   @Output() onClick = new EventEmitter<any>();
   @Output() onSort = new EventEmitter<SortTable>();

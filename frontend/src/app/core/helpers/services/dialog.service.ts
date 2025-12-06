@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { DialogComponent } from '../components/dialog';
+import { DialogLocal } from '../components/dialog';
 
 export interface DialogParams {
   title?: string;
@@ -34,7 +34,7 @@ export class DialogService {
       dialogConfig.height = params.height;
     }
 
-    const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(DialogLocal, dialogConfig);
     return dialogRef.afterClosed();
   }
 }

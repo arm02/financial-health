@@ -8,4 +8,4 @@ import { Component } from '@angular/core';
   template: ` <div>Ini Dari Button Component</div> `,
   styles: [``],
 })
-export class ButtonComponent {}
+export class ButtonLocal {}
