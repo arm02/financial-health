@@ -32,8 +32,11 @@
         [total]="totalRows"
         [page]="params.page || 1"
         [limit]="params.limit || 10"
+        [showContextMenu]="true"
+        [contextMenuData]="contextMenu"
         (onSort)="OnTableChange('sort', $event)"
         (onPageChange)="OnTableChange('page', $event)"
+        (onContextAction)="OnHandleContext($event)"
       >
       </app-table>
     </div>

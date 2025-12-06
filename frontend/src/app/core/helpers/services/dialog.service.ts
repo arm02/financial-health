@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { DialogLocal } from '../components/dialog';
+import { ConfirmationLocal } from '../components/confirmation';
 
 export interface DialogParams {
   title?: string;
@@ -36,6 +37,15 @@ export class DialogService {
     }
 
     const dialogRef = this.dialog.open(DialogLocal, dialogConfig);
+    return dialogRef.afterClosed();
+  }
+
+  Confirmation(): Observable<any> {
+    const dialogRef = this.dialog.open(ConfirmationLocal, {
+      data: {},
+      width: '400px',
+      panelClass: 'global-dialog-padding',
+    });
     return dialogRef.afterClosed();
   }
 }

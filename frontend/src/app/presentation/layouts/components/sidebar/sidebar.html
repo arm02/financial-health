@@ -24,7 +24,12 @@
 <nav class="sidebar-responsive">
   <div class="menu-list">
     @for (item of sidebarList; track item) {
-    <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
+    <a
+      class="menu-item"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       <mat-icon>{{ item.icon }}</mat-icon>
       <div class="menu-name">{{ item.title }}</div>
     </a>

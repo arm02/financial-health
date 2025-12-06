@@ -83,7 +83,11 @@ import { ContextAction, SortTable, TableColumn } from '../../domain/entities/tab
                 {{ row[col.key] | date : 'd MMM y' : 'UTC' }}
                 } @else if(col.type ==='long_date') {
                 {{ row[col.key] | date : 'd MMM y HH:mm' : 'UTC' }}
-                } @else if(col.type === 'payment_status') {
+                } @else if(col.type === 'loan_status') {
+                <button class="text-capitalize status-loan {{ row[col.key] }}">
+                   {{ row[col.key].replace('_', ' ') }}
+                </button>
+                }@else if(col.type === 'payment_status') {
                 <button class="text-capitalize status-payment {{ row[col.key] }}">
                   {{ row[col.key] }}
                 </button>

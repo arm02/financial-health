@@ -12,9 +12,15 @@ export const SIDEBAR_MENU = [
     route: '/loans',
   },
   {
-    id: 2,
+    id: 3,
     title: 'Transaction',
     icon: 'collections_bookmark',
     route: '/transactions',
+  },
+  {
+    id: 3,
+    title: 'Expenses',
+    icon: 'monetization_on',
+    route: '/expenses',
   },
 ];

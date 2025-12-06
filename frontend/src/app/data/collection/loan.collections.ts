@@ -2,6 +2,7 @@ import { ContextAction, TableColumn } from "../../core/domain/entities/table.ent
 
 export const LOAN_TABLE_COLUMN: TableColumn[] = [
   { key: 'title', label: 'Title', sortable: true },
+  { key: 'status', label: 'Status', type: 'loan_status',  sortable: true },
   { key: 'tenor', label: 'Tenor', sortable: true },
   { key: 'tenor_type', label: 'Tenor Type', type: 'capitalize', sortable: false },
   { key: 'amount', label: 'Amount', type: 'currency', sortable: true },
@@ -18,3 +19,4 @@ export const LOAN_DETAIL_TABLE_COLUMN: TableColumn[] = [
 ];
 
 export const LOAN_CONTEXT_MENU: ContextAction[] = [{ key: 'detail', label: 'Detail' }];
+export const LOAN_DETAIL_CONTEXT_MENU: ContextAction[] = [{ key: 'pay', label: 'Pay Installment' }];
