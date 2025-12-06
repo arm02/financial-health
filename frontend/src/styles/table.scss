@@ -167,10 +167,13 @@ $app-hover: #fafafa;
   position: fixed;
   background: #fff;
   border: 1px solid #ddd;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
   z-index: 9999;
   min-width: 140px;
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
 
   button {
     width: 100%;

@@ -41,7 +41,7 @@ func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, pa
 	}
 
 	query := `
-        SELECT id, user_id, title, type, reference_id, amount, transaction_date
+        SELECT id, user_id, title, type, reference_id, amount, transaction_date, created_at
         FROM transactions
         WHERE user_id = ?`
 
@@ -66,7 +66,7 @@ func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, pa
 		var t domain.Transaction
 		if err := rows.Scan(
 			&t.ID, &t.UserID, &t.Title, &t.Type, &t.ReferenceID,
-			&t.Amount, &t.TransactionDate,
+			&t.Amount, &t.TransactionDate, &t.CreatedAt,
 		); err != nil {
 			return nil, 0, err
 		}

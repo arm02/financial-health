@@ -80,7 +80,9 @@ import { ContextAction, SortTable, TableColumn } from '../../domain/entities/tab
                 } @else if(col.type === 'currency') {
                 {{ row[col.key] | currency : 'IDR' : 'symbol' : '1.0-0' : 'id-ID' }}
                 } @else if(col.type ==='short_date') {
-                {{ row[col.key] | date : 'd MMM y' }}
+                {{ row[col.key] | date : 'd MMM y' : 'UTC' }}
+                } @else if(col.type ==='long_date') {
+                {{ row[col.key] | date : 'd MMM y HH:mm' : 'UTC' }}
                 } @else if(col.type === 'payment_status') {
                 <button class="text-capitalize status-payment {{ row[col.key] }}">
                   {{ row[col.key] }}

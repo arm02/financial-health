@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     type ENUM('debit', 'credit', 'loan_payment') NOT NULL,
     reference_id INT,
     amount DECIMAL(15, 2) NOT NULL,
-    transaction_date DATE NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
