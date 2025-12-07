@@ -18,6 +18,7 @@ const (
 	BusinessError   ErrorType = "BUSINESS_ERROR"
 	SystemError     ErrorType = "SYSTEM_ERROR"
 	AuthError       ErrorType = "AUTH_ERROR"
+	NotFoundError   ErrorType = "NOT_FOUND_ERROR"
 )
 
 type AppError struct {
@@ -80,4 +81,12 @@ func IsAppError(err error) (*AppError, bool) {
 		return appErr, true
 	}
 	return nil, false
+}
+
+func NewNotFoundError(msg string, err error) *AppError {
+	return &AppError{
+		Type:    NotFoundError,
+		Message: msg,
+		Err:     err,
+	}
 }

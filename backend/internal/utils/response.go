@@ -42,6 +42,8 @@ func ErrorResponse(c *gin.Context, err error) {
 			code = http.StatusInternalServerError
 		case AuthError:
 			code = http.StatusUnauthorized
+		case NotFoundError:
+			code = http.StatusNotFound
 		}
 	}
 

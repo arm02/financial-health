@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"financial-health/internal/constants"
 	"financial-health/internal/domain"
+	"financial-health/internal/utils"
 )
 
 type ExpensesUseCase struct {
@@ -59,7 +61,14 @@ func (u *ExpensesUseCase) GetAllExpenses(ctx context.Context, userID int64, page
 func (u *ExpensesUseCase) GetDetailExpenses(ctx context.Context, userID int64, expId int64) (*domain.Expenses, error) {
 	expenses, err := u.expRepo.GetByID(ctx, expId)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, utils.NewNotFoundError(constants.EXPENSES_NOT_FOUND, err)
+		}
 		return nil, err
+	}
+
+	if expenses == nil || expenses.UserID != userID {
+		return nil, errors.New(constants.EXPENSES_NOT_FOUND)
 	}
 
 	return &domain.Expenses{
@@ -75,10 +84,13 @@ func (u *ExpensesUseCase) GetDetailExpenses(ctx context.Context, userID int64, e
 func (u *ExpensesUseCase) DeleteExpenses(ctx context.Context, userID, expID int64) (string, error) {
 	detail, err := u.expRepo.GetByID(ctx, expID)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return "", utils.NewNotFoundError(constants.EXPENSES_NOT_FOUND, err)
+		}
 		return "", err
 	}
-	if detail.UserID != userID {
-		return "", errors.New(constants.EXPENSES_NOT_FOUND)
+	if detail == nil || detail.UserID != userID {
+		return "", utils.NewNotFoundError(constants.EXPENSES_NOT_FOUND, nil)
 	}
 	return u.expRepo.Delete(ctx, expID)
 }
