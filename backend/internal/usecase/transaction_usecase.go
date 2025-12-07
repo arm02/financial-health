@@ -61,7 +61,7 @@ func (u *TransactionUseCase) CreateTransaction(ctx context.Context, trx *domain.
 			return err
 		}
 	}
-	if trx.Type == "debit" || trx.Type == "credit" {
+	if trx.Type == "debit" || trx.Type == "credit" || trx.Type == "saving" {
 		if trx.ReferenceID != 0 {
 			return errors.New(constants.REFERENCE_ID_NONREQUIRED)
 		}
@@ -72,7 +72,7 @@ func (u *TransactionUseCase) CreateTransaction(ctx context.Context, trx *domain.
 	return u.trxRepo.Create(ctx, trx)
 }
 
-func (u *TransactionUseCase) GetAllTransaction(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*domain.RowsList[domain.Transaction], error) {
+func (u *TransactionUseCase) GetAllTransaction(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string, tipe string) (*domain.RowsList[domain.Transaction], error) {
 	if page <= 0 {
 		page = 1
 	}
@@ -80,7 +80,7 @@ func (u *TransactionUseCase) GetAllTransaction(ctx context.Context, userID int64
 		limit = 10
 	}
 
-	transactions, total, err := u.trxRepo.GetAll(ctx, userID, page, limit, sortBy, sortType, query)
+	transactions, total, err := u.trxRepo.GetAll(ctx, userID, page, limit, sortBy, sortType, query, tipe)
 	if err != nil {
 		return nil, err
 	}

@@ -22,7 +22,7 @@ func (r *TransactionRepositoryImpl) Create(ctx context.Context, trx *domain.Tran
 	return err
 }
 
-func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle string) ([]domain.Transaction, int64, error) {
+func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle string, tipe string) ([]domain.Transaction, int64, error) {
 	offset := (page - 1) * limit
 
 	allowedSortColumns := map[string]bool{
@@ -46,6 +46,16 @@ func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, pa
         WHERE user_id = ?`
 
 	args := []interface{}{userID}
+
+	if tipe != "" {
+		tipeArr := strings.Split(tipe, ",")
+		placeholders := strings.Repeat("?,", len(tipeArr))
+		placeholders = placeholders[:len(placeholders)-1] // buang koma terakhir
+		query += fmt.Sprintf(" AND type IN (%s)", placeholders)
+		for _, t := range tipeArr {
+			args = append(args, t)
+		}
+	}
 
 	if searchTitle != "" {
 		query += " AND title LIKE ?"
