@@ -2,6 +2,7 @@
 @use './utils';
 @use './form';
 @use './status';
+@use './snackbar';
 
 :host {
   display: block;

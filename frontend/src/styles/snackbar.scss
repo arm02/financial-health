@@ -1,0 +1,33 @@
+.snackbar {
+    border-radius: 12px;
+    box-shadow: none;
+    font-size: 14px;
+
+    &-success {
+        background-color: #32d362;
+        color: white;
+    }
+    
+    &-warning {
+        background-color: #ecd363;
+        color: white;
+    }
+    
+    &-danger {
+        background-color: #ec6363;
+        color: white;
+    }
+
+    &-secondary {
+        background-color: #c4c3c3;
+        color: rgb(87, 83, 83);
+    }
+}
+
+.mat-mdc-snack-bar-container,
+.mat-mdc-snackbar-surface,
+.mdc-snackbar__surface {
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  font-family: 'Poppins', sans-serif !important;
+}
