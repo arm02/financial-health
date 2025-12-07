@@ -16,7 +16,6 @@ RUN npm run build --prod
 FROM nginx:alpine
 # Copy hasil build Angular ke Nginx html
 COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Optional: ganti default port Nginx jika 80 sudah dipakai
 EXPOSE 3000
