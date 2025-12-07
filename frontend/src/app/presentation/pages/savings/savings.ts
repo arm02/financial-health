@@ -12,7 +12,7 @@ import {
   TransactionResponse,
 } from '../../../core/domain/entities/transaction.entities';
 import { GetAllTransactionUseCase } from '../../../core/usecase/transactions/get-all-transaction.usecase';
-import { TransactionForm } from './transaction-form/transaction-form';
+import { SavingsForm } from './savings-form/savings-form';
 import { TableLocal } from '../../../core/helpers/components/table';
 import { CreateTransactionDTO } from '../../../core/domain/dto/transaction.dto';
 import { CreateTransactionUseCase } from '../../../core/usecase/transactions/create-transaction.usecase';
@@ -24,13 +24,13 @@ import {
 import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
 
 @Component({
-  selector: 'app-transactions',
+  selector: 'app-savings',
   standalone: true,
   imports: [TableLocal],
-  templateUrl: './transactions.html',
-  styleUrl: './transactions.scss',
+  templateUrl: './savings.html',
+  styleUrl: './savings.scss',
 })
-export class TransactionsComponent implements OnInit, OnDestroy {
+export class SavingsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private getAllTransactionUseCase = inject(GetAllTransactionUseCase);
   private createTransactionUseCase = inject(CreateTransactionUseCase);
@@ -40,7 +40,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   params: DefaultParams = {
     page: 1,
     limit: 10,
-    tipe: 'debit,credit,loan_payment'
+    tipe: 'saving'
   };
 
   cols: TableColumn[] = structuredClone(TRANSACTION_TABLE_COLUMN);
@@ -101,7 +101,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   onCreate() {
     this.dialogService
-      .Open(TransactionForm, {
+      .Open(SavingsForm, {
         title: 'Create New Transaction',
         data: { mode: 'normal' },
         width: '550px',
@@ -116,8 +116,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   onCreateSimple() {
     this.dialogService
-      .Open(TransactionForm, {
-        title: 'Create New Transaction',
+      .Open(SavingsForm, {
+        title: 'Create New Saving',
         data: { mode: 'simple' },
         width: '550px',
       })

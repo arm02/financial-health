@@ -25,15 +25,19 @@
     border: none;
 
     &.debit {
+      background: #50A2FF;
+    }
+    
+    &.credit {
       background: #dc2626;
     }
-
-    &.credit {
-      background: #16a34a;
-    }
-
+    
     &.loan_payment {
       background: #f59e0b;
+    }
+    
+    &.saving {
+      background: #16a34a;
     }
   }
 

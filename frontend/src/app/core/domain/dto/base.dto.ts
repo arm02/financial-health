@@ -4,4 +4,5 @@ export interface DefaultParams {
   sort_by?: string;
   sort_type?: string;
   query?: string;
+  tipe?: string;
 }

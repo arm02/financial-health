@@ -1,0 +1,20 @@
+<app-table
+  [columns]="cols"
+  [data]="rows"
+  [loader]="loader()"
+  [showSearch]="true"
+  [simpleCreate]="true"
+  placeholder="Search Savings..."
+  [total]="totalRows"
+  [page]="params.page || 1"
+  [limit]="params.limit || 10"
+  [showContextMenu]="true"
+  [contextMenuData]="contextMenu"
+  (onSort)="OnTableChange('sort', $event)"
+  (onSearch)="OnTableChange('search', $event)"
+  (onPageChange)="OnTableChange('page', $event)"
+  (onCreate)="OnTableChange('create', $event)"
+  (onSimpleCreate)="OnTableChange('simplecreate', $event)"
+  (onContextAction)="OnHandleContext($event)"
+>
+</app-table>

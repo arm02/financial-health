@@ -1,0 +1,50 @@
+@if(data.data.mode === 'normal') {
+<form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="form">
+  <div class="form-group">
+    <label>Title</label>
+    <input type="text" placeholder="Insert Title" formControlName="title" />
+    @if (transactionForm.get('title')?.touched && transactionForm.get('title')?.invalid) {
+    <small class="error">Title is required (max 50 chars)</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Amount</label>
+    <input type="number" placeholder="Insert Amount" formControlName="amount" />
+    @if (transactionForm.get('amount')?.touched && transactionForm.get('amount')?.invalid) {
+    <small class="error">Minimum amount is 1000</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Date</label>
+    <input type="date" formControlName="transaction_date" />
+    @if (transactionForm.get('transaction_date')?.touched &&
+    transactionForm.get('transaction_date')?.invalid) {
+    <small class="error"> Date is required </small>
+    }
+  </div>
+
+  <div class="form-action">
+    <button class="btn-primary" type="submit">Save Saving</button>
+    <button class="btn-danger" type="button" (click)="onCloseDialog()">Cancel</button>
+  </div>
+</form>
+} @else {
+<div class="form-group">
+  <label>Insert Query</label>
+  <small class="hint">Format: Title, Amount</small>
+  <textarea
+    [(ngModel)]="transactionInputSimple"
+    rows="5"
+    placeholder="exp: Pay Electricity, 10000"
+  ></textarea>
+  @if (errorMessage) {
+  <small class="error"> {{ errorMessage }} </small>
+  }
+</div>
+<div class="form-action">
+  <button class="btn-primary" type="submit" (click)="onSimpleCreate()">Process Saving</button>
+  <button class="btn-danger" type="button" (click)="onCloseDialog()">Cancel</button>
+</div>
+}
