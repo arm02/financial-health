@@ -28,3 +28,5 @@ CREATE TABLE IF NOT EXISTS loan_details (
 CREATE INDEX idx_loans_title ON loans(title);
 CREATE INDEX idx_loans_user_id ON loans(user_id);
 EXPLAIN SELECT COUNT(*) FROM loans WHERE user_id = 123 AND title LIKE 'A%';
+
+CREATE INDEX idx_loan_details_loanid_duedate ON loan_details(loan_id, due_date);

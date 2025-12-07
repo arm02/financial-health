@@ -39,11 +39,15 @@ func InitializeApp(db *sql.DB) *App {
 	transactionRepo := repository.NewTransactionRepository(db)
 	transactionUseCase := usecase.NewTransactionUseCase(transactionRepo, loanRepo)
 
+	dashboardRepo := repository.NewDashboardRepository(db)
+	dashboardUseCase := usecase.NewDashboardUseCase(dashboardRepo)
+
 	routes.RegisterRoutes(&routes.RouteConfig{
 		Router:             router,
 		UserUsecase:        userUseCase,
 		LoanUseCase:        loanUseCase,
 		TransactionUseCase: transactionUseCase,
+		DashboardUseCase:   dashboardUseCase,
 		AuthMiddleware:     middleware.JWTMiddleware(),
 	})
 

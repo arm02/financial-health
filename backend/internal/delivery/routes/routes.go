@@ -12,6 +12,7 @@ type RouteConfig struct {
 	UserUsecase        domain.UserUseCase
 	LoanUseCase        domain.LoanUseCase
 	TransactionUseCase domain.TransactionUseCase
+	DashboardUseCase   domain.DashboardUseCase
 	AuthMiddleware     gin.HandlerFunc
 }
 
@@ -19,6 +20,7 @@ func RegisterRoutes(cfg *RouteConfig) {
 	userHandler := http.NewUserHandler(cfg.UserUsecase)
 	loanHandler := http.NewLoanHandler(cfg.LoanUseCase)
 	transactionHandler := http.NewTransactionHandler(cfg.TransactionUseCase)
+	dashboardHandler := http.NewDashboardnHandler(cfg.DashboardUseCase)
 
 	api := cfg.Router.Group("/api/v1")
 	{
@@ -44,5 +46,8 @@ func RegisterRoutes(cfg *RouteConfig) {
 		transactionsGroup.GET("/all", transactionHandler.GetAllTransaction)
 		transactionsGroup.DELETE("/:id", transactionHandler.DeleteTransaction)
 		transactionsGroup.PUT("/:id", transactionHandler.UpdateTransaction)
+
+		dashboardGroup := protected.Group("/dashboard")
+		dashboardGroup.GET("/summary", dashboardHandler.GetSummary)
 	}
 }
