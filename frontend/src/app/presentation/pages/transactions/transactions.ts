@@ -8,6 +8,7 @@ import {
 } from '../../../data/collection/transaction.collection';
 import {
   Transaction,
+  TransactionCreateResponse,
   TransactionResponse,
 } from '../../../core/domain/entities/transaction.entities';
 import { GetAllTransactionUseCase } from '../../../core/usecase/transactions/get-all-transaction.usecase';
@@ -20,6 +21,7 @@ import {
   SortTable,
   TableColumn,
 } from '../../../core/domain/entities/table.entities';
+import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
 
 @Component({
   selector: 'app-transactions',
@@ -33,6 +35,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private getAllTransactionUseCase = inject(GetAllTransactionUseCase);
   private createTransactionUseCase = inject(CreateTransactionUseCase);
   private dialogService = inject(DialogService);
+  private snackbar = inject(SnackbarService);
   protected loader = signal(false);
   params: DefaultParams = {
     page: 1,
@@ -131,7 +134,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       .execute(body)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (res: TransactionCreateResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, "SUCCESS");
+          }
           this.GetAllTransaction();
         },
       });

@@ -8,6 +8,7 @@ import {
 } from '../../../data/collection/expenses.collection';
 import {
   Expenses,
+  ExpensesCreateResponse,
   ExpensesResponse,
 } from '../../../core/domain/entities/expenses.entities';
 import { TableLocal } from '../../../core/helpers/components/table';
@@ -20,6 +21,7 @@ import {
 import { CreateExpensesUseCase } from '../../../core/usecase/expenses/create-expenses.usecase';
 import { GetAllExpensesUseCase } from '../../../core/usecase/expenses/get-all-expenses.usecase';
 import { ExpensesForm } from './expenses-form/expenses-form';
+import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
 
 @Component({
   selector: 'app-expenses',
@@ -33,6 +35,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   private getAllExpensesUseCase = inject(GetAllExpensesUseCase);
   private createExpensesUseCase = inject(CreateExpensesUseCase);
   private dialogService = inject(DialogService);
+  private snackbar = inject(SnackbarService);
+  
   protected loader = signal(false);
   params: DefaultParams = {
     page: 1,
@@ -131,7 +135,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
       .execute(body)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (res: ExpensesCreateResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
           this.GetAllExpenses();
         },
       });
