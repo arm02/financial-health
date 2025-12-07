@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: financial-health-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - JWT_SECRET=halohalobandungfinancialhealth
+      - GIN_MODE=debug
+      - DB_HOST=host.docker.internal
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_DATABASE=financial_health
+      - DB_PORT=3306
+
+  frontend:
+    build: ./frontend
+    container_name: financial-health-frontend
+    restart: always
+    ports:
+      - "3000:80"
