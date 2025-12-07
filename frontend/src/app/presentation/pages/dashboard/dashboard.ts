@@ -13,11 +13,14 @@ import {
   DashboardSummaryResponse,
 } from '../../../core/domain/entities/dashboard.entities';
 import { LoaderBarLocal } from '../../../core/helpers/components/loader';
+import { LoginData } from '../../../core/domain/entities/auth.entities';
+import { AuthService } from '../../auth/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BarChartLocal, LoaderBarLocal, MatIconModule],
+  imports: [CommonModule, BarChartLocal, LoaderBarLocal, MatIconModule, FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -25,14 +28,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private dashboardSummaryUseCase = inject(GetDashboarSummaryUseCase);
   private chartSummaryUseCase = inject(GetChartSummaryUseCase);
+  private authService = inject(AuthService);
   protected loader = signal(false);
   protected loaderChart = signal(false);
+  user: LoginData = this.authService.getUserData();
 
   chartSummary: ChartSummary = {
     loans: [],
     income: [],
     outcome: [],
   };
+
   summary: DashboardSummary = {
     total_loans: 0,
     total_remaining_loan: 0,
@@ -41,9 +47,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     total_outcome: 0,
   };
 
+  today = new Date();
+  firstDayOfMonth = new Date(this.today.getFullYear(), this.today.getMonth(), 2);
+  lastDayOfMonth = new Date(this.today.getFullYear(), this.today.getMonth() + 1, 1);
+  summaryParams: DashboardSummaryDTO = {
+    start_date: this.firstDayOfMonth.toISOString().split('T')[0],
+    end_date: this.lastDayOfMonth.toISOString().split('T')[0],
+  };
+
+  chartParams: ChartSummaryDTO = {
+    year: new Date(this.summaryParams.start_date).getFullYear(),
+  };
+
   ngOnInit(): void {
-    this.GetDashboardSummary();
-    this.GetChartSummary();
+    this.GetDashboardData();
   }
 
   ngOnDestroy(): void {
@@ -51,14 +68,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  GetDashboardData() {
+    this.chartParams.year = new Date(this.summaryParams.start_date).getFullYear();
+    this.GetDashboardSummary();
+    this.GetChartSummary();
+  }
+
   GetDashboardSummary() {
     this.loader.set(true);
-    const params: DashboardSummaryDTO = {
-      start_date: '2025-01-01',
-      end_date: '2027-12-31',
-    };
     this.dashboardSummaryUseCase
-      .execute(params)
+      .execute(this.summaryParams)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: DashboardSummaryResponse) => {
@@ -73,11 +92,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   GetChartSummary() {
     this.loaderChart.set(true);
-    const params: ChartSummaryDTO = {
-      year: new Date().getFullYear() + 1,
-    };
     this.chartSummaryUseCase
-      .execute(params)
+      .execute(this.chartParams)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: ChartSummaryResponse) => {

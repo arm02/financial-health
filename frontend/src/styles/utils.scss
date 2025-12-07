@@ -1,6 +1,6 @@
 @use "sass:string";
 
-$spaces: 0, 4, 8, 10, 12, 16, 20, 24, 32;
+$spaces: 0, 2, 4, 8, 10, 12, 16, 20, 24, 32;
 $widthPercent: (
   10,
   20,
@@ -63,6 +63,10 @@ $widthPercent: (
 
   .p-#{$space} {
     padding: #{$space}px;
+  }
+
+  .pb-#{$space} {
+    padding-bottom: #{$space}px;
   }
 
   .gap-#{$space} {
