@@ -17,6 +17,7 @@ services:
       - DB_DATABASE=financial_health
       - DB_PORT=3306
       - DOMAIN_COOKIE=.adrianmilano.my.id
+      - ORIGIN=https://financial.adrianmilano.my.id
 
   frontend:
     build: ./frontend
