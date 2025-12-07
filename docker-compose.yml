@@ -11,7 +11,7 @@ services:
       - PORT=8000
       - JWT_SECRET=halohalobandungfinancialhealth
       - GIN_MODE=debug
-      - DB_HOST=127.0.0.1
+      - DB_HOST=host.docker.internal
       - DB_USER=aesthaartgallery
       - DB_PASSWORD=masukaja123
       - DB_DATABASE=financial_health
