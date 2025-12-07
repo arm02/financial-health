@@ -1,9 +1,70 @@
-<span>Dashboard</span>
-<div class="dashboard-container">
-  <div class="chart-card">
-    <app-bar-chart type="bar" [monthlyData]="monthlyExpenses"></app-bar-chart>
+<div class="flex gap-10 w-percent-100">
+  @if(loader()) {
+  <div class="flex flex-items-center flex-justify-center w-percent-100 p-20">
+    <loader class="loader" [visibility]="loader()"></loader>
   </div>
-  <div class="chart-card">
-    <app-bar-chart type="line" [monthlyData]="monthlyExpenses"></app-bar-chart>
+  } @else {
+  <div class="card card-loans">
+    <mat-icon>account_balance_wallet</mat-icon>
+    <div class="info">
+      <div class="label">Total Loans</div>
+      <div class="value">Rp{{ summary.total_loans | number }}</div>
+    </div>
+  </div>
+
+  <div class="card card-remaining">
+    <mat-icon>pending_actions</mat-icon>
+    <div class="info">
+      <div class="label">Remaining Loan</div>
+      <div class="value">Rp{{ summary.total_remaining_loan | number }}</div>
+    </div>
+  </div>
+
+  <div class="card card-expenses">
+    <mat-icon>monetization_on</mat-icon>
+    <div class="info">
+      <div class="label">Total Expenses</div>
+      <div class="value">Rp{{ summary.total_expenses | number }}</div>
+    </div>
+  </div>
+
+  <div class="card card-expenses">
+    <mat-icon>trending_down</mat-icon>
+    <div class="info">
+      <div class="label">Total Outcome</div>
+      <div class="value">Rp{{ summary.total_outcome | number }}</div>
+    </div>
+  </div>
+
+  <div class="card card-income">
+    <mat-icon>trending_up</mat-icon>
+    <div class="info">
+      <div class="label">Net Income</div>
+      <div class="value">Rp{{ summary.total_income | number }}</div>
+    </div>
+  </div>
+  }
+</div>
+@if(loaderChart()) {
+<div class="flex flex-items-center flex-justify-center w-percent-100 p-20">
+  <loader class="loader" [visibility]="loaderChart()"></loader>
+</div>
+} @else {
+<div class="dashboard-container">
+  <div class="card">
+    <div class="mb-20">Loan Graph</div>
+    <app-bar-chart type="line" [colorUp]="'#dc2626'" [colorDown]="'#f59e0b'" [data]="chartSummary.loans"></app-bar-chart>
+  </div>
+  <div class="card">
+    <div class="mb-20">Income Graph</div>
+    <app-bar-chart type="bar" [data]="chartSummary.income"></app-bar-chart>
   </div>
 </div>
+<div class="dashboard-container">
+  <div class="card">
+    <div class="mb-20">Outcome Graph</div>
+    <app-bar-chart type="line" [data]="chartSummary.outcome"></app-bar-chart>
+  </div>
+</div>
+
+}

@@ -1,15 +1,119 @@
+@use "sass:string";
+
+$spaces: 0, 4, 8, 10, 12, 16, 20, 24, 32;
+$widthPercent: (
+  10,
+  20,
+  25,
+  30,
+  40,
+  50,
+  100
+);
+
+@function str-replace($string, $search, $replace: "") {
+  $index: string.index($string, $search);
+
+  @if $index {
+    $before: string.slice($string, 1, $index - 1);
+    $after: string.slice($string, $index + string.length($search));
+    @return $before +$replace +str-replace($after, $search, $replace);
+  }
+
+  @return $string;
+}
+
+
+@each $w in $widthPercent {
+  .w-percent-#{$w} {
+    width: #{$w}#{'%'};
+  }
+}
+
+@each $space in $spaces {
+  .m-#{$space} {
+    margin: #{$space}px;
+  }
+
+  .mx-#{$space} {
+    margin-left: #{$space}px;
+    margin-right: #{$space}px;
+  }
+
+  .my-#{$space} {
+    margin-top: #{$space}px;
+    margin-bottom: #{$space}px;
+  }
+
+  .mt-#{$space} {
+    margin-top: #{$space}px;
+  }
+
+  .mr-#{$space} {
+    margin-right: #{$space}px;
+  }
+
+  .mb-#{$space} {
+    margin-bottom: #{$space}px;
+  }
+
+  .ml-#{$space} {
+    margin-left: #{$space}px;
+  }
+
+  .p-#{$space} {
+    padding: #{$space}px;
+  }
+
+  .gap-#{$space} {
+    gap: #{$space}px;
+  }
+}
+
+$justify: (
+  center,
+  flex-start,
+  flex-end,
+  space-between,
+  space-around,
+  space-evenly
+);
+$align: (
+  center,
+  flex-start,
+  flex-end,
+  baseline,
+  stretch
+);
+
+.flex {
+  display: flex;
+
+  @each $name, $value in (row: row, col: column) {
+    &-#{$name} {
+      flex-direction: $value;
+    }
+  }
+
+  &-justify {
+    @each $value in $justify {
+      &-#{str-replace($value, " ", "")} {
+        justify-content: $value;
+      }
+    }
+  }
+
+  &-items {
+    @each $value in $align {
+      &-#{str-replace($value, " ", "")} {
+        align-items: $value;
+      }
+    }
+  }
+}
+
 .text {
   &-capitalize {
     text-transform: capitalize;
   }
 }
-
-.flex {
-  &-justify {
-    &-center {
-      display: flex;
-      justify-content: center;
-    }
-  }
-}
-

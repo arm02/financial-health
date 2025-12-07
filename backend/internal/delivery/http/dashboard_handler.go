@@ -3,6 +3,7 @@ package http
 import (
 	"financial-health/internal/domain"
 	"financial-health/internal/utils"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -42,6 +43,33 @@ func (h *DashboardHandler) GetSummary(c *gin.Context) {
 	endDate = endDate.Add(23*time.Hour + 59*time.Minute + 59*time.Second)
 
 	summary, err := h.DashboardUseCase.GetDashboardSummary(c, userID, startDate, endDate)
+	if err != nil {
+		utils.ErrorResponse(c, utils.NewBusinessError("failed to fetch summary", err))
+		return
+	}
+
+	utils.SuccessResponse(c, summary, "Summary fetched successfully")
+}
+
+func (h *DashboardHandler) GetChartSummary(c *gin.Context) {
+	userIDVal, _ := c.Get("user_id")
+	userID := int64(userIDVal.(float64))
+
+	yearStr := c.Query("year")
+
+	var year int
+	var err error
+	if yearStr == "" {
+		year = time.Now().Year()
+	} else {
+		year, err = strconv.Atoi(yearStr)
+		if err != nil {
+			utils.ErrorResponse(c, utils.NewBusinessError("invalid year format, example: 2025", err))
+			return
+		}
+	}
+
+	summary, err := h.DashboardUseCase.GetChartSummary(c, userID, year)
 	if err != nil {
 		utils.ErrorResponse(c, utils.NewBusinessError("failed to fetch summary", err))
 		return

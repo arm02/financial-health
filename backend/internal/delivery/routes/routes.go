@@ -51,6 +51,7 @@ func RegisterRoutes(cfg *RouteConfig) {
 
 		dashboardGroup := protected.Group("/dashboard")
 		dashboardGroup.GET("/summary", dashboardHandler.GetSummary)
+		dashboardGroup.GET("/chart", dashboardHandler.GetChartSummary)
 
 		expensesGroup := protected.Group("/expenses")
 		expensesGroup.POST("/create", expensesHandler.CreateExpenses)

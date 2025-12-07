@@ -79,3 +79,75 @@ func (r *DashboardRepositoryImpl) GetTotalsByDateRange(
 
 	return res, nil
 }
+
+func (r *DashboardRepositoryImpl) GetMonthlySummary(ctx context.Context, userID int64, year int) (domain.MonthlySummary, error) {
+	query := `
+			WITH RECURSIVE months(m) AS (
+			SELECT 1
+			UNION ALL
+			SELECT m + 1 FROM months WHERE m < 12
+		)
+		SELECT 
+			m AS month,
+
+			COALESCE((
+				SELECT CAST(SUM(ld.amount) AS SIGNED)
+				FROM loan_details ld
+				JOIN loans l ON l.id = ld.loan_id
+				WHERE l.user_id = ? 
+				AND MONTH(ld.due_date) = m
+				AND YEAR(ld.due_date) = ?
+			), 0) AS monthly_loans,
+
+			COALESCE((
+				SELECT CAST(SUM(t.amount) AS SIGNED)
+				FROM transactions t
+				WHERE t.user_id = ? AND t.type='credit'
+				AND MONTH(t.transaction_date) = m
+				AND YEAR(t.transaction_date) = ?
+			), 0) AS monthly_income,
+
+			COALESCE((
+				SELECT CAST(SUM(t.amount) AS SIGNED)
+				FROM transactions t
+				WHERE t.user_id = ? AND t.type='debit'
+				AND MONTH(t.transaction_date) = m
+				AND YEAR(t.transaction_date) = ?
+			), 0) AS monthly_outcome
+
+		FROM months
+		ORDER BY m;
+	`
+
+	rows, err := r.db.QueryContext(ctx, query,
+		userID, year, // loans
+		userID, year, // income
+		userID, year, // outcome
+	)
+	if err != nil {
+		return domain.MonthlySummary{}, err
+	}
+	defer rows.Close()
+
+	var summary domain.MonthlySummary
+	summary.Loans = make([]int64, 12)
+	summary.Income = make([]int64, 12)
+	summary.Outcome = make([]int64, 12)
+
+	for rows.Next() {
+		var month int
+		var loan, income, outcome int64
+
+		if err := rows.Scan(&month, &loan, &income, &outcome); err != nil {
+			return summary, err
+		}
+
+		idx := month - 1
+
+		summary.Loans[idx] = loan
+		summary.Income[idx] = income
+		summary.Outcome[idx] = outcome
+	}
+
+	return summary, nil
+}

@@ -60,8 +60,10 @@ Chart.register(
 export class BarChartLocal implements AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  @Input() monthlyData: number[] = [];
+  @Input() data: number[] = [];
   @Input() type: string = '';
+  @Input() colorUp: string = '#50A2FF';
+  @Input() colorDown: string = '#dc2626';
 
   private chart!: Chart;
 
@@ -72,6 +74,20 @@ export class BarChartLocal implements AfterViewInit {
 
   barChart() {
     if (this.chart) this.chart.destroy();
+    const backgroundColors: string[] = [];
+
+    for (let i = 0; i < this.data.length; i++) {
+      if (i === 0) {
+        backgroundColors.push(this.colorUp);
+      } else {
+        if (this.data[i] >= this.data[i - 1]) {
+          backgroundColors.push(this.colorUp);
+        } else {
+          backgroundColors.push(this.colorDown);
+        }
+      }
+    }
+
     this.chart = new Chart(this.chartCanvas.nativeElement, {
       type: 'bar',
       data: {
@@ -92,8 +108,8 @@ export class BarChartLocal implements AfterViewInit {
         datasets: [
           {
             label: 'Total Pengeluaran',
-            data: this.monthlyData,
-            backgroundColor: '#50A2FF',
+            data: this.data,
+            backgroundColor: backgroundColors,
             borderRadius: 6,
             barPercentage: 0.6,
           },
@@ -125,6 +141,24 @@ export class BarChartLocal implements AfterViewInit {
   lineChart() {
     if (this.chart) this.chart.destroy();
 
+    const borderColors: string[] = [];
+    const backgroundColors: string[] = [];
+
+    for (let i = 0; i < this.data.length; i++) {
+      if (i === 0) {
+        borderColors.push(this.colorUp);
+        backgroundColors.push('rgba(80, 162, 255, 0.2)');
+      } else {
+        if (this.data[i] > this.data[i - 1]) {
+          borderColors.push(this.colorUp);
+          backgroundColors.push('rgba(80, 162, 255, 0.2)');
+        } else {
+          borderColors.push(this.colorDown);
+          backgroundColors.push('rgba(255, 80, 80, 0.2)');
+        }
+      }
+    }
+
     this.chart = new Chart(this.chartCanvas.nativeElement, {
       type: 'line',
       data: {
@@ -145,15 +179,15 @@ export class BarChartLocal implements AfterViewInit {
         datasets: [
           {
             label: 'Total Pengeluaran',
-            data: this.monthlyData,
-            borderColor: '#50A2FF',
-            backgroundColor: 'rgba(80, 162, 255, 0.2)',
+            data: this.data,
+            borderColor: borderColors,
+            backgroundColor: backgroundColors,
             fill: true,
             borderWidth: 3,
             tension: 0.35,
             pointRadius: 4,
             pointHoverRadius: 6,
-            pointBackgroundColor: '#50A2FF',
+            pointBackgroundColor: '#fff',
           },
         ],
       },
