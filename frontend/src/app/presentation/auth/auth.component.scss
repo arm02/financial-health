@@ -1,4 +1,7 @@
 .container {
+  background-image: linear-gradient(to bottom right in oklab, #eff6ff 0%, #ecfeff 50%, #dbeafe 100%);
+  background-repeat: no-repeat;
+  height: calc(100vh - 3rem);
   padding: 24px;
 
   @media screen and (max-width: 480px) {
