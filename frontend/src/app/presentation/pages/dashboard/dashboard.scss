@@ -74,12 +74,28 @@
   @media screen and (max-width: 768px) {
     display: grid;
     grid-template-areas:
-    "loans loans"
-    "remaining expenses"
-    "outcome income";
+    "outcome income"
+    "expenses expenses"
+    "remaining loans";
 
     .card{
       width: unset;
+    }
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+
+    mat-icon {
+      color: #50A2FF;
+    }
+
+    a {
+      font-size: 12px;
+      color: #50A2FF;
+      cursor: pointer;
+      margin-top: -4px;
     }
   }
 }

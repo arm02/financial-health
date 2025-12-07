@@ -26,6 +26,5 @@ export class Sidebar implements OnInit {
 
     this.sidebarListResponsive = data;
 
-    console.log(this.sidebarListResponsive);
   }
 }

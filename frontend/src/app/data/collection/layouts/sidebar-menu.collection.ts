@@ -18,15 +18,15 @@ export const SIDEBAR_MENU = [
     route: '/transactions',
   },
   {
-    id: 3,
+    id: 4,
     title: 'Expenses',
     icon: 'monetization_on',
     route: '/expenses',
   },
   {
-    id: 4,
+    id: 5,
     title: 'Savings',
     icon: 'account_balance_wallet',
-    route: '/expenses',
+    route: '/savings',
   },
 ];

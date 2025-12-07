@@ -22,7 +22,9 @@
     @for (item of sidebarListResponsive; track item) {
     <a class="menu-item" [ngClass]="{'dashboard' : item.id === 1}" [routerLink]="item.route" routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }">
-      <mat-icon>{{ item.icon }}</mat-icon>
+      <div [ngClass]="{'dashboard' : item.id === 1}">
+        <mat-icon>{{ item.icon }}</mat-icon>
+      </div>
       <div class="menu-name">{{ item.title }}</div>
     </a>
     }

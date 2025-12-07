@@ -90,7 +90,7 @@
             justify-content: space-evenly;
             align-items: center;
             width: 100%;
-            padding: 0 24px;
+            padding: 0 12px;
 
             .menu-item {
                 display: flex;
@@ -104,21 +104,41 @@
                 padding: 8px 12px;
 
                 &.dashboard {
+                    gap: 0;
+                }
+                .dashboard {
                     border-radius: 25px;
                     color: white;
-                    background: #50A2FF;
-                    margin-bottom: 3rem;
+                    background: white;
+                    height: 55px;
+                    width: 55px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-top: -22px;
+
                     mat-icon {
+                        border-radius: 25px;
                         color: white;
+                        background: #50A2FF;
+                        height: 40px;
+                        width: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                     }
                 }
 
-                &.active:not(.dashboard) {
+                &.active {
                     color: #50A2FF;
-                    mat-icon {
-                        color: #50A2FF;
+
+                    &:not(.dashboard) {
+                        mat-icon {
+                            color: #50A2FF;
+                        }
                     }
                 }
+
                 mat-icon {
                     color: #696f7c;
                     font-size: 24px;

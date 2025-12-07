@@ -16,11 +16,12 @@ import { LoaderBarLocal } from '../../../core/helpers/components/loader';
 import { LoginData } from '../../../core/domain/entities/auth.entities';
 import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BarChartLocal, LoaderBarLocal, MatIconModule, FormsModule],
+  imports: [CommonModule, RouterModule, BarChartLocal, LoaderBarLocal, MatIconModule, FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
