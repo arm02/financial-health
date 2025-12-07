@@ -12,8 +12,8 @@ services:
       - JWT_SECRET=halohalobandungfinancialhealth
       - GIN_MODE=debug
       - DB_HOST=host.docker.internal
-      - DB_USER=aesthaartgallery
-      - DB_PASSWORD=masukaja123
+      - DB_USER=root
+      - DB_PASSWORD=root
       - DB_DATABASE=financial_health
       - DB_PORT=3306
 
