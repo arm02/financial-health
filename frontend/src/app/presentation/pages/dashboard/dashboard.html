@@ -1,1 +1,9 @@
-<div>dashboard works!</div>
+<span>Dashboard</span>
+<div class="dashboard-container">
+  <div class="chart-card">
+    <app-bar-chart type="bar" [monthlyData]="monthlyExpenses"></app-bar-chart>
+  </div>
+  <div class="chart-card">
+    <app-bar-chart type="line" [monthlyData]="monthlyExpenses"></app-bar-chart>
+  </div>
+</div>
