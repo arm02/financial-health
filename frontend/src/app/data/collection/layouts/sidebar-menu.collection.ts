@@ -1,7 +1,7 @@
 export const SIDEBAR_MENU = [
   {
     id: 1,
-    title: 'Dashboard',
+    title: 'Home',
     icon: 'dashboard',
     route: '/',
   },
@@ -21,6 +21,12 @@ export const SIDEBAR_MENU = [
     id: 3,
     title: 'Expenses',
     icon: 'monetization_on',
+    route: '/expenses',
+  },
+  {
+    id: 4,
+    title: 'Savings',
+    icon: 'account_balance_wallet',
     route: '/expenses',
   },
 ];

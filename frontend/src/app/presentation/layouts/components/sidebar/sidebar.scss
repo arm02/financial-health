@@ -75,7 +75,7 @@
         bottom: 2rem;
         left: 12px;
         width: calc(100% - 24px);
-        height: 80px;
+        height: 65px;
         background-color: white;
         border-radius: 100px;
         box-shadow: 0 10px 15px -3px #bedbff, 0 4px 6px -4px #bedbff;
@@ -101,15 +101,22 @@
                 font-size: 12px;
                 color: #696f7c;
                 gap: 4px;
-                padding: 8px;
+                padding: 8px 12px;
 
-                &.active {
-                    border-radius: 12px;
+                &.dashboard {
+                    border-radius: 25px;
                     color: white;
                     background: #50A2FF;
-
+                    margin-bottom: 3rem;
                     mat-icon {
                         color: white;
+                    }
+                }
+
+                &.active:not(.dashboard) {
+                    color: #50A2FF;
+                    mat-icon {
+                        color: #50A2FF;
                     }
                 }
                 mat-icon {
