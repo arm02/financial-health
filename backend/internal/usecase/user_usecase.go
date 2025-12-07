@@ -20,7 +20,7 @@ func NewUserUseCase(repo domain.UserRepository, secret string) domain.UserUseCas
 	return &UserUseCase{
 		userRepository: repo,
 		jwtSecret:      []byte(secret),
-		tokenExpiry:    60 * time.Minute,
+		tokenExpiry:    168 * time.Hour,
 	}
 }
 

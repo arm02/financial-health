@@ -54,12 +54,12 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("auth_token", user.Token, 3600, "/", "localhost", false, true)
+	c.SetCookie("auth_token", user.Token, 3600, "/", "financial.adrianmilano.my.id", true, true)
 	utils.SuccessResponse(c, user, constants.USER_SUCCESS_LOGIN)
 }
 
 func (h *UserHandler) Logout(c *gin.Context) {
-	c.SetCookie("auth_token", "", -1, "/", "localhost", false, true)
+	c.SetCookie("auth_token", "", -1, "/", "financial.adrianmilano.my.id", true, true)
 	utils.SuccessResponse(c, nil, "Logout successful")
 }
 
