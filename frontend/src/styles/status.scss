@@ -37,6 +37,19 @@
     }
   }
 
+  &-expenses {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    border: none;
+
+    &.fixed {
+      background: #50A2FF;
+    }
+  }
+
   &-payment {
     padding: 4px 10px;
     border-radius: 6px;

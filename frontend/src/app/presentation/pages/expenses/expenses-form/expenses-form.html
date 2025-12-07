@@ -1,0 +1,52 @@
+@if(data.data.mode === 'normal') {
+<form [formGroup]="expensesForm" (ngSubmit)="onSubmit()" class="form">
+  <div class="form-group">
+    <label>Title</label>
+    <input type="text" placeholder="Insert Title" formControlName="title" />
+    @if (expensesForm.get('title')?.touched && expensesForm.get('title')?.invalid) {
+    <small class="error">Title is required (max 50 chars)</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Type</label>
+    <select formControlName="type" required>
+      <option value="" disabled hidden>Choose your Type</option>
+      <option value="fixed">Fixed</option>
+    </select>
+    @if(expensesForm.get('type')?.touched && expensesForm.get('type')?.invalid) {
+    <small class="error">Type is required</small>
+    }
+  </div>
+
+  <div class="form-group">
+    <label>Amount</label>
+    <input type="number" placeholder="Insert Amount" formControlName="amount" />
+    @if (expensesForm.get('amount')?.touched && expensesForm.get('amount')?.invalid) {
+    <small class="error">Minimum amount is 1000</small>
+    }
+  </div>
+
+  <div class="form-action">
+    <button class="btn-primary" type="submit">Save Expenses</button>
+    <button class="btn-danger" type="button" (click)="onCloseDialog()">Cancel</button>
+  </div>
+</form>
+} @else {
+<div class="form-group">
+  <label>Insert Query</label>
+  <small class="hint">Format: Title, Type, Amount</small>
+  <textarea
+    [(ngModel)]="expensesInputSimple"
+    rows="5"
+    placeholder="exp: Internet Package, fixed, 10000"
+  ></textarea>
+  @if (errorMessage) {
+  <small class="error"> {{ errorMessage }} </small>
+  }
+</div>
+<div class="form-action">
+  <button class="btn-primary" type="submit" (click)="onSimpleCreate()">Process Expenses</button>
+  <button class="btn-danger" type="button" (click)="onCloseDialog()">Cancel</button>
+</div>
+}

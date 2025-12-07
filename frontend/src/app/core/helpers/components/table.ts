@@ -96,6 +96,10 @@ import { MatIconModule } from '@angular/material/icon';
                 <button class="text-capitalize status-transaction {{ row[col.key] }}">
                   {{ row[col.key].replace('_', ' ') }}
                 </button>
+                } @else if(col.type === 'expenses_type') {
+                <button class="text-capitalize status-expenses {{ row[col.key] }}">
+                  {{ row[col.key].replace('_', ' ') }}
+                </button>
                 } @else {
                 {{ row[col.key] }}
                 }
