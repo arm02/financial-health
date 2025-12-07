@@ -102,7 +102,7 @@ export class SavingsComponent implements OnInit, OnDestroy {
   onCreate() {
     this.dialogService
       .Open(SavingsForm, {
-        title: 'Create New Transaction',
+        title: 'Create New Saving',
         data: { mode: 'normal' },
         width: '550px',
       })
