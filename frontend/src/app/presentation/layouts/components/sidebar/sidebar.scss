@@ -79,6 +79,7 @@
         background-color: white;
         border-radius: 100px;
         box-shadow: 0 10px 15px -3px #bedbff, 0 4px 6px -4px #bedbff;
+        z-index: 999;
 
         @media screen and (max-width: 768px) {
             display: flex;
