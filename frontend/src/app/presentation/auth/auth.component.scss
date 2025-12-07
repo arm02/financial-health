@@ -23,23 +23,20 @@
   }
 
   &-logo {
-    height: 3.5rem;
-    width: 3.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #51a2ff;
     border-radius: 12px;
 
     img {
-      width: 2rem;
+      width: 25%;
     }
   }
 
   &-title {
     color: #1c398e;
     margin: 0;
-    font-size: 16px;
+    font-size: 24px;
     font-weight: normal;
   }
 
