@@ -60,7 +60,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 		Value:    user.Token,
 		Path:     "/",
 		Domain:   utils.GetEnv("DOMAIN_COOKIE", "localhost"),
-		MaxAge:   3600,
+		MaxAge:   604800,
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
