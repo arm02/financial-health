@@ -4,6 +4,7 @@ import (
 	"financial-health/internal/constants"
 	"financial-health/internal/domain"
 	"financial-health/internal/utils"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -54,12 +55,31 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("auth_token", user.Token, 3600, "/", "localhost", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "auth_token",
+		Value:    user.Token,
+		Path:     "/",
+		Domain:   utils.GetEnv("DOMAIN_COOKIE", "localhost"),
+		MaxAge:   604800,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+	})
 	utils.SuccessResponse(c, user, constants.USER_SUCCESS_LOGIN)
 }
 
 func (h *UserHandler) Logout(c *gin.Context) {
-	c.SetCookie("auth_token", "", -1, "/", "localhost", false, true)
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "auth_token",
+		Value:    "",
+		Path:     "/",
+		Domain:   utils.GetEnv("DOMAIN_COOKIE", "localhost"),
+		MaxAge:   -1,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+	})
+
 	utils.SuccessResponse(c, nil, "Logout successful")
 }
 
