@@ -129,20 +129,20 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       });
   }
 
-  onCreateAction(body: CreateTransactionDTO) {
-    this.loader.set(true);
-    this.createTransactionUseCase
-      .execute(body)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res: TransactionCreateResponse) => {
-          if (res.message) {
-            this.snackbar.show(res.message, "SUCCESS");
-          }
-          this.GetAllTransaction();
-        },
-      });
-  }
+    onCreateAction(body: CreateTransactionDTO) {
+      this.loader.set(true);
+      this.createTransactionUseCase
+        .execute(body)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res: TransactionCreateResponse) => {
+            if (res.message) {
+              this.snackbar.show(res.message, "SUCCESS");
+            }
+            this.GetAllTransaction();
+          },
+        });
+    }
 
   onSort($event: SortTable) {
     this.params.sort_by = $event.sortBy;

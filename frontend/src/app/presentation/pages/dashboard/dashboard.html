@@ -3,21 +3,32 @@
     <div
       class="card w-percent-100 md:w-percent-50 flex flex-col flex-items-flex-start flex-justify-flex-start"
     >
-      <span class="dashboard-title pb-10 mb-10 w-percent-100"
-        >Hi, {{ user.fullname }}</span
-      >
+      <span class="dashboard-title pb-10 mb-10 w-percent-100">Hi, {{ user.fullname }}</span>
       <div class="w-percent-100">
         <span>Quick Action</span>
         <div class="w-percent-100 mt-10 flex gap-10">
-          <button class="btn-primary w-percent-100">Create Simple Transaction</button>
+          <button
+            class="btn-primary w-percent-100"
+            (click)="onQuickAction('transaction', 'simple')"
+          >
+            Create Simple Transaction
+          </button>
         </div>
         <div class="w-percent-100 mt-10 flex gap-10">
-          <button class="btn-primary w-percent-50">Create Transaction</button>
-          <button class="btn-danger w-percent-50">Create Expenses</button>
+          <button class="btn-primary w-percent-50" (click)="onQuickAction('transaction', 'normal')">
+            Create Transaction
+          </button>
+          <button class="btn-danger w-percent-50" (click)="onQuickAction('expenses', 'simple')">
+            Create Expenses
+          </button>
         </div>
         <div class="w-percent-100 mt-10 flex gap-10">
-          <button class="btn-primary w-percent-50">Create Savings</button>
-          <button class="btn-danger w-percent-50">Create Loan</button>
+          <button class="btn-primary w-percent-50" (click)="onQuickAction('savings', 'simple')">
+            Create Savings
+          </button>
+          <button class="btn-danger w-percent-50" (click)="onQuickAction('loans', 'simple')">
+            Create Loan
+          </button>
         </div>
       </div>
     </div>
