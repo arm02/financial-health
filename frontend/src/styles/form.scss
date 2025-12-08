@@ -87,6 +87,10 @@ button {
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
       }
 
+      &:focus-visible {
+        outline: none;
+      }
+
       &:disabled {
         border-color: #999;
         color: #999;
@@ -109,6 +113,10 @@ button {
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
       }
 
+      &:focus-visible {
+        outline: none;
+      }
+
       &:disabled {
         border-color: #999;
         color: #999;
@@ -117,4 +125,27 @@ button {
     }
   }
 
+}
+
+.text {
+  &-primary {
+    color: #50A2FF;
+  }
+
+  &-success {
+    color: #32d362;
+  }
+
+  &-warning {
+    color: #ecd363;
+  }
+
+  &-danger {
+    color: #ec6363;
+  }
+
+  &-secondary {
+    color: rgb(87, 83, 83);
+    ;
+  }
 }

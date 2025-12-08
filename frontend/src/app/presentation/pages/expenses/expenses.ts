@@ -22,6 +22,8 @@ import { CreateExpensesUseCase } from '../../../core/usecase/expenses/create-exp
 import { GetAllExpensesUseCase } from '../../../core/usecase/expenses/get-all-expenses.usecase';
 import { ExpensesForm } from './expenses-form/expenses-form';
 import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
+import { InformationDialogDTO } from '../../../core/domain/dto/dialog.dto';
+import { InformationDialogComponent } from '../../../core/helpers/components/information-dialog';
 
 @Component({
   selector: 'app-expenses',
@@ -36,7 +38,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   private createExpensesUseCase = inject(CreateExpensesUseCase);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarService);
-  
+
   protected loader = signal(false);
   params: DefaultParams = {
     page: 1,
@@ -99,6 +101,29 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
   }
 
+  openDialogInformation(title: string, subtitle: string, type: 'success' | 'failed') {
+    const data: InformationDialogDTO = {
+      icon: type === 'success' ? 'check_circle_outline' : 'cancel',
+      iconClass: type === 'success' ? 'text-success' : 'text-danger',
+      title,
+      subtitle,
+      submitButton: 'Done',
+      submitClass: 'btn-primary',
+    }
+    this.dialogService
+      .Open(InformationDialogComponent, {
+        title: 'Create New Expenses',
+        data,
+        width: '400px',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+        },
+      });
+  }
+
   onCreate() {
     this.dialogService
       .Open(ExpensesForm, {
@@ -137,10 +162,14 @@ export class ExpensesComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: ExpensesCreateResponse) => {
           if (res.message) {
-            this.snackbar.show(res.message, 'SUCCESS');
+            // this.snackbar.show(res.message, 'SUCCESS');
+            this.openDialogInformation('Success!', res.message, 'success');
           }
           this.GetAllExpenses();
         },
+        error: (err) => {
+          this.openDialogInformation('Failed!', err.message, 'failed');
+        }
       });
   }
 
