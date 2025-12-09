@@ -9,11 +9,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RegisterUseCase } from '../../core/usecase/register.usecase';
 import { environment } from '../../../environments/environment';
 import { LoaderBarLocal } from '../../core/helpers/components/loader';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoaderBarLocal],
+  imports: [CommonModule, FormsModule, LoaderBarLocal, TranslateModule],
+  providers: [TranslatePipe],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })

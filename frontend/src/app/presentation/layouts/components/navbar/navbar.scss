@@ -91,6 +91,48 @@
           }
         }
       }
+
+      .translate-container {
+          position: relative;
+          cursor: pointer;
+
+          &-title {
+            display: flex;
+            align-items: center;
+          }
+
+          .menu-list {
+            width: min-content;
+            top: 24px;
+            right: 10px;
+            padding: 0;
+
+            div {
+              padding: 4px 8px;
+              transition: .2s;
+              text-align: center;
+
+              &:first-child {
+                border-top-right-radius: 8px;
+                border-top-left-radius: 8px;
+              }
+
+              &:last-child {
+                border-bottom-right-radius: 8px;
+                border-bottom-left-radius: 8px;
+              }
+
+              &:hover {
+                background-color: #b8dff5;
+              }
+            }
+            
+            hr {
+              width: 60%;
+              margin: 0 6px;
+            }
+          }
+      }
     }
   }
 

@@ -1,6 +1,20 @@
 <nav class="navbar-section">
   <img class="navbar-logo" src="./assets/images/logo_vertical.png" alt="Financial Health Logo" />
   <div class="right-side">
+    <div class="translate-container">
+      <div class="translate-container-title" (click)="toggleDropdownTranslate()">
+        <span>{{currentLang}}</span>
+        <mat-icon>expand_more</mat-icon>
+      </div>
+
+      @if (dropdownTranslateOpen) {
+        <div class="menu-list">
+          <div class="id" (click)="switch('id')">ID</div>
+          <hr/>
+          <div class="en" (click)="switch('en')">EN</div>
+        </div>
+      }
+    </div>
     <div class="profile-information" (click)="toggleDropdown()">
       <div class="user-identity">
         <mat-icon class="user-icon">person</mat-icon>

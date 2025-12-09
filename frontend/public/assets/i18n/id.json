@@ -1,0 +1,20 @@
+{
+  "financial_health": "Financial Health",
+  "lbl_fullname": "Nama Lengkap",
+  "lbl_email": "Email",
+  "lbl_password": "Password",
+  "lbl_or": "atau",
+  "auth": {
+    "desc": "Kelola keuangan Anda dengan mudah",
+    "lbl_welcome": "Selamat Datang!",
+    "lbl_subtitle": "Silahkan Masuk ke akun anda",
+    "lbl_register_welcome": "Daftar Sekarang",
+    "lbl_register_subtitle": "Silahkan isi data lengkap anda",
+    "button_submit": "Masuk",
+    "button_register": "Daftar",
+    "register_title": "Belum punya akun?",
+    "register_now": "Daftar Sekarang",
+    "login_now": "Daftar Sekarang",
+    "plch_password": "Masukkan kata sandi"
+  }
+}

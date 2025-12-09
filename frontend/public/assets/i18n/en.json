@@ -1,0 +1,20 @@
+{
+  "financial_health": "Financial Health",
+  "lbl_fullname": "Full Name",
+  "lbl_email": "Email",
+  "lbl_password": "Password",
+  "lbl_or": "or",
+  "auth": {
+    "desc": "Manage your finances easily",
+    "lbl_welcome": "Welcome!",
+    "lbl_subtitle": "Please log in to your account",
+    "lbl_register_welcome": "Register Now",
+    "lbl_register_subtitle": "Please fill in your complete information",
+    "button_submit": "Login",
+    "button_register": "Register",
+    "register_title": "Don't have an account?",
+    "register_now": "Register Now",
+    "login_now": "Login Now",
+    "plch_password": "Enter your password"
+  }
+}
