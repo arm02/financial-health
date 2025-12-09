@@ -162,8 +162,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: ExpensesCreateResponse) => {
           if (res.message) {
-            // this.snackbar.show(res.message, 'SUCCESS');
-            this.openDialogInformation('Success!', res.message, 'success');
+            this.snackbar.show(res.message, 'SUCCESS');
+            // this.openDialogInformation('Success!', res.message, 'success');
           }
           this.GetAllExpenses();
         },
