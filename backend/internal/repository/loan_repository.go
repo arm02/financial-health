@@ -190,3 +190,12 @@ func (r *LoanRepositoryImpl) GetDetailsByLoanID(ctx context.Context, loanID int6
 
 	return loans, total, nil
 }
+
+func (r *LoanRepositoryImpl) Delete(ctx context.Context, loanID int64) error {
+	query := "DELETE FROM loans WHERE id = ?"
+	_, err := r.db.ExecContext(ctx, query, loanID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

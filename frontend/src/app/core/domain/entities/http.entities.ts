@@ -8,9 +8,14 @@ export interface HttpResponse<T> {
 export interface ListResponse<T> {
   page: number;
   limit: number;
-  rows: T,
+  rows: T;
   total: number;
   total_pages: number;
+}
+
+export interface UpdateRequest<T> {
+  id: number;
+  data: T;
 }
 
 export interface ErrorResponse {

@@ -15,6 +15,8 @@ import {
   SortTable,
   TableColumn,
 } from '../../../core/domain/entities/table.entities';
+import { DeleteLoanUseCase } from '../../../core/usecase/loans/delete-loan.usecase';
+import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
 
 @Component({
   selector: 'app-loans',
@@ -27,7 +29,9 @@ export class LoansComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private getAllLoanUseCase = inject(GetAllLoanUseCase);
   private createLoanUseCase = inject(CreateLoanUseCase);
+  private deleteLoanUseCase = inject(DeleteLoanUseCase);
   private dialogService = inject(DialogService);
+  private snackbarService = inject(SnackbarService);
   protected loader = signal(false);
   params: DefaultParams = {
     page: 1,
@@ -80,14 +84,14 @@ export class LoansComponent implements OnInit, OnDestroy {
     }
   }
 
-  OnHandleContext(e: { action: string; row: any }) {
-    const handlers: Record<string, { fn: () => void; reload: boolean }> = {
-      detail: { fn: () => this.onDetail(e.row), reload: true },
+  OnHandleContext(e: { action: string; row: Loan }) {
+    const handlers: Record<string, { fn: () => void }> = {
+      detail: { fn: () => this.onDetail(e.row) },
+      delete: { fn: () => this.onDelete(e.row) },
     };
     const handler = handlers[e.action];
     if (handler) {
       handler.fn();
-      if (handler.reload) this.GetAllLoan();
     }
   }
 
@@ -120,6 +124,38 @@ export class LoansComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {},
+      });
+  }
+
+  onDelete(params: Loan) {
+    this.dialogService
+      .Confirmation({
+        title: 'Are you sure you want to delete this loan?',
+        message: `This action will affect the loan's detail data and related transactions.`,
+        width: '500px',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: boolean) => {
+          if (res) this.onDeleteAction(params.id);
+        },
+      });
+  }
+
+  onDeleteAction(loanID: number) {
+    this.loader.set(true);
+    this.deleteLoanUseCase
+      .execute(loanID)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.GetAllLoan();
+          this.snackbarService.show('Loan Successfully Deleted', 'SUCCESS');
+          this.loader.set(false);
+        },
+        error: () => {
+          this.loader.set(false);
+        },
       });
   }
 

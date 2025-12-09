@@ -22,6 +22,8 @@ import {
   TableColumn,
 } from '../../../core/domain/entities/table.entities';
 import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
+import { UpdateRequest } from '../../../core/domain/entities/http.entities';
+import { UpdateTransactionUseCase } from '../../../core/usecase/transactions/update-transaction.usecase';
 
 @Component({
   selector: 'app-transactions',
@@ -34,13 +36,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private getAllTransactionUseCase = inject(GetAllTransactionUseCase);
   private createTransactionUseCase = inject(CreateTransactionUseCase);
+  private updateTransactionUseCase = inject(UpdateTransactionUseCase);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarService);
   protected loader = signal(false);
   params: DefaultParams = {
     page: 1,
     limit: 10,
-    tipe: 'debit,credit,loan_payment'
+    tipe: 'debit,credit,loan_payment',
   };
 
   cols: TableColumn[] = structuredClone(TRANSACTION_TABLE_COLUMN);
@@ -58,7 +61,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  GetAllTransaction() {
+  GetAllTransaction(): void {
     this.loader.set(true);
     this.getAllTransactionUseCase
       .execute(this.params)
@@ -75,7 +78,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       });
   }
 
-  OnTableChange(type: string, payload: any) {
+  OnTableChange(type: string, payload: any): void {
     const handlers: Record<string, { fn: () => void; reload: boolean }> = {
       sort: { fn: () => this.onSort(payload), reload: true },
       search: { fn: () => this.onSearch(payload), reload: true },
@@ -90,16 +93,17 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  OnHandleContext(e: { action: string; row: any }) {
-    const handlers: Record<string, { fn: () => void; reload: boolean }> = {};
+  OnHandleContext(e: { action: string; row: Transaction }): void {
+    const handlers: Record<string, { fn: () => void }> = {
+      edit: { fn: () => this.onEdit(e.row) },
+    };
     const handler = handlers[e.action];
     if (handler) {
       handler.fn();
-      if (handler.reload) this.GetAllTransaction();
     }
   }
 
-  onCreate() {
+  onCreate(): void {
     this.dialogService
       .Open(TransactionForm, {
         title: 'Create New Transaction',
@@ -114,7 +118,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       });
   }
 
-  onCreateSimple() {
+  onCreateSimple(): void {
     this.dialogService
       .Open(TransactionForm, {
         title: 'Create New Transaction',
@@ -129,31 +133,61 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       });
   }
 
-    onCreateAction(body: CreateTransactionDTO) {
-      this.loader.set(true);
-      this.createTransactionUseCase
-        .execute(body)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res: TransactionCreateResponse) => {
-            if (res.message) {
-              this.snackbar.show(res.message, "SUCCESS");
-            }
-            this.GetAllTransaction();
-          },
-        });
-    }
+  onCreateAction(body: CreateTransactionDTO): void {
+    this.loader.set(true);
+    this.createTransactionUseCase
+      .execute(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: TransactionCreateResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
+          this.GetAllTransaction();
+        },
+      });
+  }
 
-  onSort($event: SortTable) {
+  onEdit(row: Transaction): void {
+    this.dialogService
+      .Open(TransactionForm, {
+        title: 'Edit Transaction',
+        data: { mode: 'normal', transaction: row },
+        width: '550px',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: CreateTransactionDTO) => {
+          if (res) this.onUpdateAction({ id: row.id, data: res });
+        },
+      });
+  }
+
+  onUpdateAction(body: UpdateRequest<CreateTransactionDTO>): void {
+    this.loader.set(true);
+    this.updateTransactionUseCase
+      .execute(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: TransactionCreateResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
+          this.GetAllTransaction();
+        },
+      });
+  }
+
+  onSort($event: SortTable): void {
     this.params.sort_by = $event.sortBy;
     this.params.sort_type = $event.sortType;
   }
 
-  onSearch($event: string) {
+  onSearch($event: string): void {
     this.params.query = $event;
   }
 
-  onPageChange($event: number) {
+  onPageChange($event: number): void {
     this.rows = [];
     this.params.page = $event;
   }

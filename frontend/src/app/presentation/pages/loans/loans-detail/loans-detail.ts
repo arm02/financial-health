@@ -119,7 +119,6 @@ export class LoansDetail implements OnInit, OnDestroy {
   }
 
   onPayLoan(loan: LoanDetail) {
-    console.log(loan);
     this.dialogService
       .Confirmation()
       .pipe(takeUntil(this.destroy$))

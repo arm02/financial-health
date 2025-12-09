@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { DialogLocal } from '../components/dialog';
 import { ConfirmationLocal } from '../components/confirmation';
+import { ConfirmationDialog } from '../../domain/entities/dialog.entities';
 
 export interface DialogParams {
   title?: string;
@@ -40,10 +41,15 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  Confirmation(): Observable<any> {
+  Confirmation(params?: ConfirmationDialog): Observable<any> {
     const dialogRef = this.dialog.open(ConfirmationLocal, {
-      data: {},
-      width: '400px',
+      data: {
+        title: params?.title || 'Are you sure?',
+        message: params?.message || 'Do you want take this action...',
+        btnConfirm: params?.btnConfirm || 'Confirm',
+        btnCancel: params?.btnCancel || 'Cancel',
+      },
+      width: params?.width || '400px',
       panelClass: 'global-dialog-padding',
     });
     return dialogRef.afterClosed();

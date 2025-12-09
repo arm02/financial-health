@@ -2,6 +2,7 @@ package constants
 
 const (
 	SUCCESS                 string = "success"
+	SUCCESS_DELETED         string = "row successfully deleted"
 	USER_SUCCESS_LOGIN      string = "Login successful"
 	USER_SUCESSS_REGISTERED string = "User registered successfully"
 
@@ -11,6 +12,7 @@ const (
 	TRANSACTION_UPDATED string = "Transaction updated"
 
 	TRANSACTION_NOT_FOUND string = "transaction not found"
+	LOAN_NOT_FOUND        string = "loan not found"
 
 	TRANSACTION_DATE_REQUIRED string = "transaction date must be filled"
 	REFERENCE_ID_REQUIRED     string = "reference id must be filled"

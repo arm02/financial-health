@@ -3,4 +3,5 @@ export interface ConfirmationDialog {
   message?: string;
   btnConfirm?: string;
   btnCancel?: string;
+  width?: string;
 }

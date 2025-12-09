@@ -20,4 +20,8 @@ export class HttpTransactionRepository implements TransactionRepository {
   Create(body: CreateTransactionDTO): Observable<TransactionCreateResponse> {
     return this.http.Post(`transactions/create`, body);
   }
+
+  Update(id: number, body: CreateTransactionDTO): Observable<TransactionCreateResponse> {
+    return this.http.Put(`transactions/${id}`, body);
+  }
 }

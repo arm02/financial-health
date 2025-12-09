@@ -101,3 +101,17 @@ func (h *LoanHandler) GetLoanDetails(c *gin.Context) {
 	}
 	utils.SuccessResponse(c, details, constants.SUCCESS)
 }
+
+func (h *LoanHandler) DeleteLoan(c *gin.Context) {
+	loanIDStr := c.Param("id")
+	loanID, _ := strconv.ParseInt(loanIDStr, 10, 64)
+	userIDVal, _ := c.Get("user_id")
+	userID := int64(userIDVal.(float64))
+
+	err := h.LoanUseCase.DeleteLoan(c.Request.Context(), userID, loanID)
+	if err != nil {
+		utils.ErrorResponse(c, utils.NewBusinessError(err.Error(), err))
+		return
+	}
+	utils.SuccessResponse(c, nil, constants.SUCCESS_DELETED)
+}

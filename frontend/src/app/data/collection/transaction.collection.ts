@@ -9,11 +9,6 @@ export const TRANSACTION_TABLE_COLUMN: TableColumn[] = [
 
 export const TRANSACTION_CONTEXT_MENU: ContextAction[] = [
   {
-    key: 'detail',
-    icon: 'info',
-    label: 'Detail Transaction',
-  },
-  {
     key: 'edit',
     icon: 'edit',
     label: 'Edit Transaction',

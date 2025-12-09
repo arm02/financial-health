@@ -3,15 +3,15 @@ import { LoanDetailResponse } from '../../domain/entities/loan.entities';
 import { UseCase } from '../../base/usecase';
 import { LoanRepository } from '../../repository/loan.repository';
 import { Observable } from 'rxjs';
-import { GetDetailLoanDTO } from '../../domain/dto/loan.dto';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GetDetailLoanUseCase implements UseCase<GetDetailLoanDTO, LoanDetailResponse> {
+export class DeleteLoanUseCase implements UseCase<number, HttpResponse<null>> {
   private repository = inject(LoanRepository);
 
-  execute(params: GetDetailLoanDTO): Observable<LoanDetailResponse> {
-    return this.repository.GetDetailLoan(params.loanID, params.params);
+  execute(loanID: number): Observable<HttpResponse<null>> {
+    return this.repository.DeleteLoan(loanID);
   }
 }

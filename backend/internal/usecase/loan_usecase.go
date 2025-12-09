@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"financial-health/internal/constants"
 	"financial-health/internal/domain"
 	"fmt"
 	"log"
@@ -131,4 +132,15 @@ func (u *LoanUseCase) GetLoanDetails(ctx context.Context, userID, loanID int64, 
 		Total:      total,
 		TotalPages: totalPages,
 	}, nil
+}
+
+func (u *LoanUseCase) DeleteLoan(ctx context.Context, userID, loanID int64) error {
+	detail, err := u.loanRepo.GetLoanByID(ctx, loanID)
+	if err != nil {
+		return errors.New(constants.LOAN_NOT_FOUND)
+	}
+	if detail.UserID != userID {
+		return errors.New(constants.LOAN_NOT_FOUND)
+	}
+	return u.loanRepo.Delete(ctx, loanID)
 }

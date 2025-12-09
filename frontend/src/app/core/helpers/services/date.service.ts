@@ -14,4 +14,8 @@ export class DateService {
 
     return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
   }
+
+  FormatISODate(d: string) {
+    return d ? new Date(d).toISOString().split('T')[0] : '';
+  }
 }

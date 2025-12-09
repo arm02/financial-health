@@ -9,6 +9,7 @@ import {
 } from '../../core/domain/entities/loan.entities';
 import { HttpService } from '../../core/helpers/services/http.service';
 import { CreateLoanDTO } from '../../core/domain/dto/loan.dto';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class HttpLoanRepository implements LoanRepository {
@@ -24,5 +25,9 @@ export class HttpLoanRepository implements LoanRepository {
 
   GetDetailLoan(loanID: number, params: DefaultParams): Observable<LoanDetailResponse> {
     return this.http.Get(`loans/details/${loanID}`, params);
+  }
+
+  DeleteLoan(loanID: number): Observable<HttpResponse<null>> {
+    return this.http.Delete(`loans/${loanID}`);
   }
 }
