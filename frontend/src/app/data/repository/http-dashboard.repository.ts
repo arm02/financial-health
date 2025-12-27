@@ -4,9 +4,10 @@ import { HttpService } from '../../core/helpers/services/http.service';
 import { DashboardRepository } from '../../core/repository/dashboard.repository';
 import {
   ChartSummaryResponse,
+  DailySummaryResponse,
   DashboardSummaryResponse,
 } from '../../core/domain/entities/dashboard.entities';
-import { ChartSummaryDTO, DashboardSummaryDTO } from '../../core/domain/dto/dashboard.dto';
+import { ChartSummaryDTO, DailyChartSummaryDTO, DashboardSummaryDTO } from '../../core/domain/dto/dashboard.dto';
 
 @Injectable({ providedIn: 'root' })
 export class HttpDashboardRepository implements DashboardRepository {
@@ -18,5 +19,9 @@ export class HttpDashboardRepository implements DashboardRepository {
 
   GetChartSummary(params: ChartSummaryDTO): Observable<ChartSummaryResponse> {
     return this.http.Get(`dashboard/chart`, params);
+  }
+
+  GetDailyChartSummary(params: DailyChartSummaryDTO): Observable<DailySummaryResponse> {
+    return this.http.Get(`dashboard/chart/daily`, params);
   }
 }

@@ -29,4 +29,10 @@ export const SIDEBAR_MENU = [
     icon: 'account_balance_wallet',
     route: '/savings',
   },
+  {
+    id: 6,
+    title: 'Analytics',
+    icon: 'analytics',
+    route: '/analytics',
+  },
 ];

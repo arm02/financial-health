@@ -14,5 +14,12 @@ export interface ChartSummary {
   outcome: number[];
 }
 
+export interface DailySummary {
+  labels: string[];
+  income: number[];
+  outcome: number[];
+}
+
 export type DashboardSummaryResponse = HttpResponse<DashboardSummary>;
 export type ChartSummaryResponse = HttpResponse<ChartSummary>;
+export type DailySummaryResponse = HttpResponse<DailySummary>;

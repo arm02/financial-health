@@ -1,0 +1,124 @@
+<div class="analytics-section">
+  @if(loader()) {
+  <div class="flex flex-items-center flex-justify-center w-percent-100 p-20">
+    <loader class="loader" [visibility]="loader()"></loader>
+  </div>
+  } @else {
+  <div class="analytics-header">
+    <h2>Financial Health Check</h2>
+    <p>Your comprehensive financial health analysis</p>
+  </div>
+
+  <div class="score-overview">
+    <div class="score-ring-container">
+      <div class="score-ring" [ngStyle]="getScoreRingStyle(healthScore.overall_score)">
+        <div class="score-inner">
+          <span class="score-value">{{ healthScore.overall_score }}</span>
+          <span class="score-label">Score</span>
+        </div>
+      </div>
+      <div
+        class="status-badge"
+        [style.background-color]="getStatusColor(healthScore.overall_status)"
+      >
+        {{ healthScore.overall_status }}
+      </div>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    @for(item of getMetrics(); track item.key) {
+    <div class="metric-card">
+      <div class="metric-header">
+        <mat-icon [style.color]="getStatusColor(item.metric.status)">
+          {{ getMetricIcon(item.key) }}
+        </mat-icon>
+        <span class="metric-title">{{ getMetricTitle(item.key) }}</span>
+      </div>
+      <div class="metric-body">
+        <div class="metric-value">
+          <span class="value">{{ item.metric.value }}{{ item.key.includes('ratio') && !item.key.includes('fund') ? '%' : 'x' }}</span>
+          <span
+            class="status-pill"
+            [style.background-color]="getStatusColor(item.metric.status)"
+          >
+            {{ item.metric.status }}
+          </span>
+        </div>
+        <div class="metric-score">
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="item.metric.score"
+              [style.background-color]="getStatusColor(item.metric.status)"
+            ></div>
+          </div>
+          <span class="score-text">{{ item.metric.score }}/100</span>
+        </div>
+        <p class="metric-description">{{ item.metric.description }}</p>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="summary-section">
+    <h3>Financial Summary</h3>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <mat-icon>trending_up</mat-icon>
+        <div class="summary-info">
+          <span class="summary-label">Total Income (Year)</span>
+          <span class="summary-value">Rp{{ healthScore.financial_summary.total_income | number }}</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <mat-icon>trending_down</mat-icon>
+        <div class="summary-info">
+          <span class="summary-label">Total Expenses (Year)</span>
+          <span class="summary-value">Rp{{ healthScore.financial_summary.total_expenses | number }}</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <mat-icon>savings</mat-icon>
+        <div class="summary-info">
+          <span class="summary-label">Total Savings</span>
+          <span class="summary-value">Rp{{ healthScore.financial_summary.total_savings | number }}</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <mat-icon>credit_card</mat-icon>
+        <div class="summary-info">
+          <span class="summary-label">Total Debt</span>
+          <span class="summary-value">Rp{{ healthScore.financial_summary.total_debt | number }}</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <mat-icon>calendar_month</mat-icon>
+        <div class="summary-info">
+          <span class="summary-label">Monthly Debt Payment</span>
+          <span class="summary-value">Rp{{ healthScore.financial_summary.monthly_debt_payment | number }}</span>
+        </div>
+      </div>
+      <div class="summary-card">
+        <mat-icon>receipt_long</mat-icon>
+        <div class="summary-info">
+          <span class="summary-label">Monthly Expenses</span>
+          <span class="summary-value">Rp{{ healthScore.financial_summary.monthly_expenses | number }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recommendations-section">
+    <h3>Recommendations</h3>
+    <div class="recommendations-list">
+      @for(rec of healthScore.recommendations; track rec) {
+      <div class="recommendation-item">
+        <mat-icon>lightbulb</mat-icon>
+        <span>{{ rec }}</span>
+      </div>
+      }
+    </div>
+  </div>
+  }
+</div>

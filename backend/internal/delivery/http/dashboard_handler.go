@@ -77,3 +77,36 @@ func (h *DashboardHandler) GetChartSummary(c *gin.Context) {
 
 	utils.SuccessResponse(c, summary, "Summary fetched successfully")
 }
+
+func (h *DashboardHandler) GetDailyChartSummary(c *gin.Context) {
+	userIDVal, _ := c.Get("user_id")
+	userID := int64(userIDVal.(float64))
+
+	startDateStr := c.Query("start_date")
+	endDateStr := c.Query("end_date")
+
+	if startDateStr == "" || endDateStr == "" {
+		utils.ErrorResponse(c, utils.NewBusinessError("start_date and end_date are required (format: 2025-01-01)", nil))
+		return
+	}
+
+	startDate, err := time.Parse("2006-01-02", startDateStr)
+	if err != nil {
+		utils.ErrorResponse(c, utils.NewBusinessError("invalid start_date format, use YYYY-MM-DD", nil))
+		return
+	}
+
+	endDate, err := time.Parse("2006-01-02", endDateStr)
+	if err != nil {
+		utils.ErrorResponse(c, utils.NewBusinessError("invalid end_date format, use YYYY-MM-DD", nil))
+		return
+	}
+
+	summary, err := h.DashboardUseCase.GetDailyChartSummary(c, userID, startDate, endDate)
+	if err != nil {
+		utils.ErrorResponse(c, utils.NewBusinessError("failed to fetch daily chart summary", err))
+		return
+	}
+
+	utils.SuccessResponse(c, summary, "Daily chart summary fetched successfully")
+}

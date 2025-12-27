@@ -19,12 +19,20 @@ type MonthlySummary struct {
 	Outcome []int64 `json:"outcome"`
 }
 
+type DailySummary struct {
+	Labels  []string `json:"labels"`
+	Income  []int64  `json:"income"`
+	Outcome []int64  `json:"outcome"`
+}
+
 type DashboardUseCase interface {
 	GetDashboardSummary(ctx context.Context, userID int64, startDate, endDate time.Time) (Dashboard, error)
 	GetChartSummary(ctx context.Context, userID int64, year int) (MonthlySummary, error)
+	GetDailyChartSummary(ctx context.Context, userID int64, startDate, endDate time.Time) (DailySummary, error)
 }
 
 type DashboardRepository interface {
 	GetTotalsByDateRange(ctx context.Context, userID int64, startDate, endDate time.Time) (Dashboard, error)
 	GetMonthlySummary(ctx context.Context, userID int64, year int) (MonthlySummary, error)
+	GetDailySummary(ctx context.Context, userID int64, startDate, endDate time.Time) (DailySummary, error)
 }

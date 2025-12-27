@@ -61,15 +61,21 @@ export class BarChartLocal implements AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   @Input() data: number[] = [];
+  @Input() labels: string[] = [];
   @Input() type: string = '';
   @Input() colorUp: string = '#50A2FF';
   @Input() colorDown: string = '#dc2626';
 
   private chart!: Chart;
+  private defaultMonthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   ngAfterViewInit() {
     if (this.type === 'line') this.lineChart();
     if (this.type === 'bar') this.barChart();
+  }
+
+  private getLabels(): string[] {
+    return this.labels.length > 0 ? this.labels : this.defaultMonthLabels;
   }
 
   barChart() {
@@ -91,20 +97,7 @@ export class BarChartLocal implements AfterViewInit {
     this.chart = new Chart(this.chartCanvas.nativeElement, {
       type: 'bar',
       data: {
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
+        labels: this.getLabels(),
         datasets: [
           {
             label: 'Total Pengeluaran',
@@ -162,20 +155,7 @@ export class BarChartLocal implements AfterViewInit {
     this.chart = new Chart(this.chartCanvas.nativeElement, {
       type: 'line',
       data: {
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
+        labels: this.getLabels(),
         datasets: [
           {
             label: 'Total Pengeluaran',

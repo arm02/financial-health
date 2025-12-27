@@ -24,6 +24,10 @@ export const PAGES_ROUTES: Routes = [
         path: 'savings',
         loadComponent: () => import('./savings/savings').then((m) => m.SavingsComponent),
       },
+      {
+        path: 'analytics',
+        loadComponent: () => import('./analytics/analytics').then((m) => m.AnalyticsComponent),
+      },
     ],
   },
 ];

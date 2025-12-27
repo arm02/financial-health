@@ -5,10 +5,13 @@ import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { GetDashboarSummaryUseCase } from '../../../core/usecase/dashboard/get-dashboard-summary.usecase';
 import { GetChartSummaryUseCase } from '../../../core/usecase/dashboard/get-chart-summary.usecase';
-import { ChartSummaryDTO, DashboardSummaryDTO } from '../../../core/domain/dto/dashboard.dto';
+import { GetDailyChartSummaryUseCase } from '../../../core/usecase/dashboard/get-daily-chart-summary.usecase';
+import { ChartSummaryDTO, DailyChartSummaryDTO, DashboardSummaryDTO } from '../../../core/domain/dto/dashboard.dto';
 import {
   ChartSummary,
   ChartSummaryResponse,
+  DailySummary,
+  DailySummaryResponse,
   DashboardSummary,
   DashboardSummaryResponse,
 } from '../../../core/domain/entities/dashboard.entities';
@@ -33,6 +36,8 @@ import { CreateLoanDTO } from '../../../core/domain/dto/loan.dto';
 import { LoanCreateResponse } from '../../../core/domain/entities/loan.entities';
 import { CreateLoanUseCase } from '../../../core/usecase/loans/create-loan.usecase';
 
+export type ChartViewMode = 'daily' | 'monthly';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -44,6 +49,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private dashboardSummaryUseCase = inject(GetDashboarSummaryUseCase);
   private chartSummaryUseCase = inject(GetChartSummaryUseCase);
+  private dailyChartSummaryUseCase = inject(GetDailyChartSummaryUseCase);
   private createTransactionUseCase = inject(CreateTransactionUseCase);
   private createExpensesUseCase = inject(CreateExpensesUseCase);
   private createLoanUseCase = inject(CreateLoanUseCase);
@@ -54,8 +60,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   protected loaderChart = signal(false);
   user: LoginData = this.authService.getUserData();
 
+  chartViewMode: ChartViewMode = 'daily';
+
   chartSummary: ChartSummary = {
     loans: [],
+    income: [],
+    outcome: [],
+  };
+
+  dailySummary: DailySummary = {
+    labels: [],
     income: [],
     outcome: [],
   };
@@ -80,6 +94,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     year: new Date(this.summaryParams.start_date).getFullYear(),
   };
 
+  dailyChartParams: DailyChartSummaryDTO = {
+    start_date: this.summaryParams.start_date,
+    end_date: this.summaryParams.end_date,
+  };
+
   ngOnInit(): void {
     this.GetDashboardData();
   }
@@ -91,8 +110,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   GetDashboardData() {
     this.chartParams.year = new Date(this.summaryParams.start_date).getFullYear();
+    this.dailyChartParams.start_date = this.summaryParams.start_date;
+    this.dailyChartParams.end_date = this.summaryParams.end_date;
     this.GetDashboardSummary();
-    this.GetChartSummary();
+    if (this.chartViewMode === 'daily') {
+      this.GetDailyChartSummary();
+    } else {
+      this.GetChartSummary();
+    }
+  }
+
+  onChartViewModeChange(mode: ChartViewMode) {
+    this.chartViewMode = mode;
+    if (mode === 'daily') {
+      this.GetDailyChartSummary();
+    } else {
+      this.GetChartSummary();
+    }
   }
 
   GetDashboardSummary() {
@@ -119,6 +153,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: ChartSummaryResponse) => {
           this.chartSummary = res.data;
+          this.loaderChart.set(false);
+        },
+        error: () => {
+          this.loaderChart.set(false);
+        },
+      });
+  }
+
+  GetDailyChartSummary() {
+    this.loaderChart.set(true);
+    this.dailyChartSummaryUseCase
+      .execute(this.dailyChartParams)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: DailySummaryResponse) => {
+          this.dailySummary = res.data;
           this.loaderChart.set(false);
         },
         error: () => {

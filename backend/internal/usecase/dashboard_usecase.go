@@ -23,3 +23,7 @@ func (u *DashboardUseCase) GetDashboardSummary(ctx context.Context, userID int64
 func (u *DashboardUseCase) GetChartSummary(ctx context.Context, userID int64, year int) (domain.MonthlySummary, error) {
 	return u.dashboardRepo.GetMonthlySummary(ctx, userID, year)
 }
+
+func (u *DashboardUseCase) GetDailyChartSummary(ctx context.Context, userID int64, startDate, endDate time.Time) (domain.DailySummary, error) {
+	return u.dashboardRepo.GetDailySummary(ctx, userID, startDate, endDate)
+}

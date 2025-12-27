@@ -14,6 +14,7 @@ type RouteConfig struct {
 	TransactionUseCase domain.TransactionUseCase
 	DashboardUseCase   domain.DashboardUseCase
 	ExpensesUseCase    domain.ExpensesUseCase
+	AnalyticsUseCase   domain.AnalyticsUseCase
 	AuthMiddleware     gin.HandlerFunc
 }
 
@@ -23,6 +24,7 @@ func RegisterRoutes(cfg *RouteConfig) {
 	transactionHandler := http.NewTransactionHandler(cfg.TransactionUseCase)
 	dashboardHandler := http.NewDashboardnHandler(cfg.DashboardUseCase)
 	expensesHandler := http.NewExpensesHandler(cfg.ExpensesUseCase)
+	analyticsHandler := http.NewAnalyticsHandler(cfg.AnalyticsUseCase)
 
 	api := cfg.Router.Group("/api/v1")
 	{
@@ -53,6 +55,7 @@ func RegisterRoutes(cfg *RouteConfig) {
 		dashboardGroup := protected.Group("/dashboard")
 		dashboardGroup.GET("/summary", dashboardHandler.GetSummary)
 		dashboardGroup.GET("/chart", dashboardHandler.GetChartSummary)
+		dashboardGroup.GET("/chart/daily", dashboardHandler.GetDailyChartSummary)
 
 		expensesGroup := protected.Group("/expenses")
 		expensesGroup.POST("/create", expensesHandler.CreateExpenses)
@@ -60,5 +63,8 @@ func RegisterRoutes(cfg *RouteConfig) {
 		expensesGroup.GET("/:id", expensesHandler.GetDetailExpenses)
 		expensesGroup.DELETE("/:id", expensesHandler.DeleteExpenses)
 		expensesGroup.PUT("/:id", expensesHandler.UpdateExpenses)
+
+		analyticsGroup := protected.Group("/analytics")
+		analyticsGroup.GET("/health", analyticsHandler.GetFinancialHealth)
 	}
 }
