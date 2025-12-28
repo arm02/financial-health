@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { DefaultParams } from '../../core/domain/dto/base.dto';
 import { HttpService } from '../../core/helpers/services/http.service';
 import { CreateExpensesDTO } from '../../core/domain/dto/expenses.dto';
-import { ExpensesCreateResponse, ExpensesResponse } from '../../core/domain/entities/expenses.entities';
+import { ExpensesCreateResponse, ExpensesDeleteResponse, ExpensesResponse } from '../../core/domain/entities/expenses.entities';
 import { ExpensesRepository } from '../../core/repository/expenses.repository';
 
 @Injectable({ providedIn: 'root' })
@@ -16,5 +16,13 @@ export class HttpExpensesRepository implements ExpensesRepository {
 
   Create(body: CreateExpensesDTO): Observable<ExpensesCreateResponse> {
     return this.http.Post(`expenses/create`, body);
+  }
+
+  Update(id: number, body: CreateExpensesDTO): Observable<ExpensesCreateResponse> {
+    return this.http.Put(`expenses/${id}`, body);
+  }
+
+  Delete(id: number): Observable<ExpensesDeleteResponse> {
+    return this.http.Delete(`expenses/${id}`);
   }
 }

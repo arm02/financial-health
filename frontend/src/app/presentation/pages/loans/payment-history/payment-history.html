@@ -1,0 +1,62 @@
+<div class="payment-history-dialog">
+  <div class="dialog-header">
+    <h2>Payment History</h2>
+    <p>{{ loan.data.data.title }}</p>
+  </div>
+
+  @if(loader()) {
+  <div class="flex flex-items-center flex-justify-center w-percent-100 p-20">
+    <loader class="loader" [visibility]="loader()"></loader>
+  </div>
+  } @else {
+  <div class="payment-list">
+    @if(rows.length === 0) {
+    <div class="empty-state">
+      <mat-icon>receipt_long</mat-icon>
+      <p>No payment history yet</p>
+    </div>
+    } @else { @for(payment of rows; track payment.id) {
+    <div class="payment-item">
+      <div class="payment-icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="payment-info">
+        <span class="payment-title">{{ payment.title }}</span>
+        <span class="payment-date">{{ formatDate(payment.transaction_date) }}</span>
+      </div>
+      <div class="payment-amount">
+        {{ formatCurrency(payment.amount) }}
+      </div>
+    </div>
+    }
+
+    @if(totalPages > 1) {
+    <div class="pagination">
+      <button
+        class="page-btn"
+        [disabled]="params.page === 1"
+        (click)="onPageChange(params.page! - 1)"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="page-info">{{ params.page }} / {{ totalPages }}</span>
+      <button
+        class="page-btn"
+        [disabled]="params.page === totalPages"
+        (click)="onPageChange(params.page! + 1)"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    } }
+  </div>
+
+  <div class="dialog-footer">
+    <div class="total-paid">
+      <span class="label">Total Payments:</span>
+      <span class="value">{{ totalRows }}</span>
+    </div>
+    <button class="btn-close" (click)="close()">Close</button>
+  </div>
+  }
+</div>

@@ -1,13 +1,29 @@
 <div class="analytics-section">
+  <div class="analytics-header">
+    <div class="header-title">
+      <h2>Financial Health Check</h2>
+      <p>Your comprehensive financial health analysis</p>
+    </div>
+    <div class="date-filter">
+      <div class="date-inputs">
+        <div class="date-field">
+          <label>Start Date</label>
+          <input type="date" [(ngModel)]="startDate" (change)="onDateChange()" />
+        </div>
+        <div class="date-field">
+          <label>End Date</label>
+          <input type="date" [(ngModel)]="endDate" (change)="onDateChange()" />
+        </div>
+      </div>
+      <div class="filter-label">{{ filterLabel }}</div>
+    </div>
+  </div>
+
   @if(loader()) {
   <div class="flex flex-items-center flex-justify-center w-percent-100 p-20">
     <loader class="loader" [visibility]="loader()"></loader>
   </div>
   } @else {
-  <div class="analytics-header">
-    <h2>Financial Health Check</h2>
-    <p>Your comprehensive financial health analysis</p>
-  </div>
 
   <div class="score-overview">
     <div class="score-ring-container">
@@ -67,14 +83,14 @@
       <div class="summary-card">
         <mat-icon>trending_up</mat-icon>
         <div class="summary-info">
-          <span class="summary-label">Total Income (Year)</span>
+          <span class="summary-label">Total Income</span>
           <span class="summary-value">Rp{{ healthScore.financial_summary.total_income | number }}</span>
         </div>
       </div>
       <div class="summary-card">
         <mat-icon>trending_down</mat-icon>
         <div class="summary-info">
-          <span class="summary-label">Total Expenses (Year)</span>
+          <span class="summary-label">Total Expenses</span>
           <span class="summary-value">Rp{{ healthScore.financial_summary.total_expenses | number }}</span>
         </div>
       </div>

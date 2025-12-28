@@ -98,6 +98,7 @@ export class LoansDetail implements OnInit, OnDestroy {
   OnHandleContext(e: { action: string; row: LoanDetail }) {
     const handlers: Record<string, { fn: () => void; reload: boolean }> = {
       pay: { fn: () => this.onPayLoan(e.row), reload: false },
+      paymenthistory: { fn: () => this.onPaymentHistory(e.row), reload: false },
     };
     const handler = handlers[e.action];
     if (handler) {
@@ -120,13 +121,32 @@ export class LoansDetail implements OnInit, OnDestroy {
 
   onPayLoan(loan: LoanDetail) {
     this.dialogService
-      .Confirmation()
+      .Confirmation({
+        title: 'Pay Installment',
+        message: `Pay installment #${loan.cycle_number} for Rp${loan.amount?.toLocaleString('id-ID')}?`,
+        btnConfirm: 'Pay',
+        btnCancel: 'Cancel',
+      })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: boolean) => {
           if (res) this.PayLoan(loan);
         },
       });
+  }
+
+  onPaymentHistory(loan: LoanDetail) {
+    const status = loan.status === 'paid' ? 'Paid' : 'Unpaid';
+    const paidDate = loan.paid_at ? new Date(loan.paid_at).toLocaleDateString('id-ID') : '-';
+    this.dialogService
+      .Confirmation({
+        title: 'Payment History',
+        message: `Installment #${loan.cycle_number}\nAmount: Rp${loan.amount?.toLocaleString('id-ID')}\nDue Date: ${new Date(loan.due_date).toLocaleDateString('id-ID')}\nStatus: ${status}\nPaid Date: ${paidDate}`,
+        btnConfirm: 'Close',
+        btnCancel: '',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
   onSort($event: SortTable) {

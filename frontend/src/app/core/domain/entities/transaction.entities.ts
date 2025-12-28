@@ -13,3 +13,4 @@ export interface Transaction {
 
 export type TransactionResponse = HttpResponse<ListResponse<Transaction[]>>;
 export type TransactionCreateResponse = HttpResponse<Transaction>;
+export type TransactionDeleteResponse = HttpResponse<string>;

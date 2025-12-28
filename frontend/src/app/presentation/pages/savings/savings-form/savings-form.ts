@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -17,7 +17,7 @@ import { SavingsService } from '../savings.service';
   templateUrl: './savings-form.html',
   styleUrl: './savings-form.scss',
 })
-export class SavingsForm {
+export class SavingsForm implements OnInit {
   readonly dialogRef = inject(MatDialogRef<SavingsForm>);
   readonly data = inject<any>(MAT_DIALOG_DATA);
   readonly fb = inject(FormBuilder);
@@ -31,6 +31,19 @@ export class SavingsForm {
 
   transactionInputSimple = '';
   errorMessage = '';
+  isEditMode = false;
+
+  ngOnInit(): void {
+    if (this.data?.data?.transaction) {
+      this.isEditMode = true;
+      const transaction = this.data.data.transaction;
+      this.transactionForm.patchValue({
+        title: transaction.title,
+        amount: transaction.amount,
+        transaction_date: transaction.transaction_date?.split('T')[0],
+      });
+    }
+  }
 
   onCloseDialog(): void {
     this.dialogRef.close();

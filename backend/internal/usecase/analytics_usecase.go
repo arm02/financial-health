@@ -4,6 +4,7 @@ import (
 	"context"
 	"financial-health/internal/domain"
 	"math"
+	"time"
 )
 
 type AnalyticsUseCase struct {
@@ -16,8 +17,8 @@ func NewAnalyticsUseCase(analyticsRepo domain.AnalyticsRepository) domain.Analyt
 	}
 }
 
-func (u *AnalyticsUseCase) GetFinancialHealth(ctx context.Context, userID int64) (domain.FinancialHealthScore, error) {
-	data, err := u.analyticsRepo.GetAnalyticsData(ctx, userID)
+func (u *AnalyticsUseCase) GetFinancialHealth(ctx context.Context, userID int64, startDate, endDate time.Time) (domain.FinancialHealthScore, error) {
+	data, err := u.analyticsRepo.GetAnalyticsData(ctx, userID, startDate, endDate)
 	if err != nil {
 		return domain.FinancialHealthScore{}, err
 	}

@@ -144,3 +144,36 @@ func (u *LoanUseCase) DeleteLoan(ctx context.Context, userID, loanID int64) erro
 	}
 	return u.loanRepo.Delete(ctx, loanID)
 }
+
+func (u *LoanUseCase) GetPaymentHistory(ctx context.Context, userID, loanID int64, page, limit int) (*domain.RowsList[domain.LoanPaymentHistory], error) {
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 10
+	}
+
+	parentLoan, err := u.loanRepo.GetLoanByID(ctx, loanID)
+	if err != nil {
+		return nil, errors.New(constants.LOAN_NOT_FOUND)
+	}
+
+	if userID != parentLoan.UserID {
+		return nil, errors.New(constants.LOAN_NOT_FOUND)
+	}
+
+	history, total, err := u.loanRepo.GetPaymentHistory(ctx, loanID, page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	totalPages := (total + int64(limit) - 1) / int64(limit)
+
+	return &domain.RowsList[domain.LoanPaymentHistory]{
+		Rows:       history,
+		Page:       page,
+		Limit:      limit,
+		Total:      total,
+		TotalPages: totalPages,
+	}, nil
+}

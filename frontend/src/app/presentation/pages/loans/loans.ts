@@ -10,6 +10,7 @@ import { LOAN_CONTEXT_MENU, LOAN_TABLE_COLUMN } from '../../../data/collection/l
 import { CreateLoanDTO } from '../../../core/domain/dto/loan.dto';
 import { CreateLoanUseCase } from '../../../core/usecase/loans/create-loan.usecase';
 import { LoansDetail } from './loans-detail/loans-detail';
+import { PaymentHistoryComponent } from './payment-history/payment-history';
 import {
   ContextAction,
   SortTable,
@@ -88,6 +89,7 @@ export class LoansComponent implements OnInit, OnDestroy {
     const handlers: Record<string, { fn: () => void }> = {
       detail: { fn: () => this.onDetail(e.row) },
       delete: { fn: () => this.onDelete(e.row) },
+      paymenthistory: { fn: () => this.onPaymentHistory(e.row) },
     };
     const handler = handlers[e.action];
     if (handler) {
@@ -121,6 +123,15 @@ export class LoansComponent implements OnInit, OnDestroy {
   onDetail(params: Loan) {
     this.dialogService
       .Open(LoansDetail, { title: 'Detail Loan', data: params, width: '1000px' })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {},
+      });
+  }
+
+  onPaymentHistory(params: Loan) {
+    this.dialogService
+      .Open(PaymentHistoryComponent, { title: 'Payment History', data: params, width: '500px' })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {},

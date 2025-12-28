@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"time"
 )
 
 type FinancialHealthScore struct {
@@ -44,9 +45,9 @@ type AnalyticsData struct {
 }
 
 type AnalyticsUseCase interface {
-	GetFinancialHealth(ctx context.Context, userID int64) (FinancialHealthScore, error)
+	GetFinancialHealth(ctx context.Context, userID int64, startDate, endDate time.Time) (FinancialHealthScore, error)
 }
 
 type AnalyticsRepository interface {
-	GetAnalyticsData(ctx context.Context, userID int64) (AnalyticsData, error)
+	GetAnalyticsData(ctx context.Context, userID int64, startDate, endDate time.Time) (AnalyticsData, error)
 }

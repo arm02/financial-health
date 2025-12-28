@@ -9,6 +9,7 @@ import {
 import {
   Expenses,
   ExpensesCreateResponse,
+  ExpensesDeleteResponse,
   ExpensesResponse,
 } from '../../../core/domain/entities/expenses.entities';
 import { TableLocal } from '../../../core/helpers/components/table';
@@ -19,11 +20,14 @@ import {
   TableColumn,
 } from '../../../core/domain/entities/table.entities';
 import { CreateExpensesUseCase } from '../../../core/usecase/expenses/create-expenses.usecase';
+import { UpdateExpensesUseCase } from '../../../core/usecase/expenses/update-expenses.usecase';
+import { DeleteExpensesUseCase } from '../../../core/usecase/expenses/delete-expenses.usecase';
 import { GetAllExpensesUseCase } from '../../../core/usecase/expenses/get-all-expenses.usecase';
 import { ExpensesForm } from './expenses-form/expenses-form';
 import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
 import { InformationDialogDTO } from '../../../core/domain/dto/dialog.dto';
 import { InformationDialogComponent } from '../../../core/helpers/components/information-dialog';
+import { UpdateRequest } from '../../../core/domain/entities/http.entities';
 
 @Component({
   selector: 'app-expenses',
@@ -36,6 +40,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private getAllExpensesUseCase = inject(GetAllExpensesUseCase);
   private createExpensesUseCase = inject(CreateExpensesUseCase);
+  private updateExpensesUseCase = inject(UpdateExpensesUseCase);
+  private deleteExpensesUseCase = inject(DeleteExpensesUseCase);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarService);
 
@@ -92,12 +98,14 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
   }
 
-  OnHandleContext(e: { action: string; row: any }) {
-    const handlers: Record<string, { fn: () => void; reload: boolean }> = {};
+  OnHandleContext(e: { action: string; row: Expenses }) {
+    const handlers: Record<string, { fn: () => void }> = {
+      edit: { fn: () => this.onEdit(e.row) },
+      delete: { fn: () => this.onDelete(e.row) },
+    };
     const handler = handlers[e.action];
     if (handler) {
       handler.fn();
-      if (handler.reload) this.GetAllExpenses();
     }
   }
 
@@ -163,13 +171,79 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         next: (res: ExpensesCreateResponse) => {
           if (res.message) {
             this.snackbar.show(res.message, 'SUCCESS');
-            // this.openDialogInformation('Success!', res.message, 'success');
           }
           this.GetAllExpenses();
         },
         error: (err) => {
           this.openDialogInformation('Failed!', err.message, 'failed');
         }
+      });
+  }
+
+  onEdit(row: Expenses) {
+    this.dialogService
+      .Open(ExpensesForm, {
+        title: 'Edit Expenses',
+        data: { mode: 'normal', expenses: row },
+        width: '550px',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: CreateExpensesDTO) => {
+          if (res) this.onUpdateAction({ id: row.id, data: res });
+        },
+      });
+  }
+
+  onUpdateAction(body: UpdateRequest<CreateExpensesDTO>) {
+    this.loader.set(true);
+    this.updateExpensesUseCase
+      .execute(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: ExpensesCreateResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
+          this.GetAllExpenses();
+        },
+        error: () => {
+          this.loader.set(false);
+        },
+      });
+  }
+
+  onDelete(row: Expenses) {
+    this.dialogService
+      .Confirmation({
+        title: 'Delete Expenses',
+        message: `Are you sure you want to delete "${row.title}"?`,
+        btnConfirm: 'Delete',
+        btnCancel: 'Cancel',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (confirmed: boolean) => {
+          if (confirmed) this.onDeleteAction(row.id);
+        },
+      });
+  }
+
+  onDeleteAction(id: number) {
+    this.loader.set(true);
+    this.deleteExpensesUseCase
+      .execute(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: ExpensesDeleteResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
+          this.GetAllExpenses();
+        },
+        error: () => {
+          this.loader.set(false);
+        },
       });
   }
 

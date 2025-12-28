@@ -5,6 +5,7 @@ import { DefaultParams } from '../../core/domain/dto/base.dto';
 import {
   LoanCreateResponse,
   LoanDetailResponse,
+  LoanPaymentHistoryResponse,
   LoanResponse,
 } from '../../core/domain/entities/loan.entities';
 import { HttpService } from '../../core/helpers/services/http.service';
@@ -29,5 +30,9 @@ export class HttpLoanRepository implements LoanRepository {
 
   DeleteLoan(loanID: number): Observable<HttpResponse<null>> {
     return this.http.Delete(`loans/${loanID}`);
+  }
+
+  GetPaymentHistory(loanID: number, params: DefaultParams): Observable<LoanPaymentHistoryResponse> {
+    return this.http.Get(`loans/payment-history/${loanID}`, params);
   }
 }

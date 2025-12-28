@@ -199,3 +199,45 @@ func (r *LoanRepositoryImpl) Delete(ctx context.Context, loanID int64) error {
 	}
 	return nil
 }
+
+func (r *LoanRepositoryImpl) GetPaymentHistory(ctx context.Context, loanID int64, page, limit int) ([]domain.LoanPaymentHistory, int64, error) {
+	offset := (page - 1) * limit
+
+	query := `
+		SELECT t.id, t.reference_id, ld.cycle_number, t.amount, t.transaction_date, t.title
+		FROM transactions t
+		JOIN loan_details ld ON ld.id = t.reference_id
+		WHERE ld.loan_id = ? AND t.type = 'loan_payment'
+		ORDER BY t.transaction_date DESC
+		LIMIT ? OFFSET ?
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, loanID, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+
+	var history []domain.LoanPaymentHistory
+	for rows.Next() {
+		var h domain.LoanPaymentHistory
+		if err := rows.Scan(&h.ID, &h.LoanDetailID, &h.CycleNumber, &h.Amount, &h.TransactionDate, &h.Title); err != nil {
+			return nil, 0, err
+		}
+		history = append(history, h)
+	}
+
+	countQuery := `
+		SELECT COUNT(*)
+		FROM transactions t
+		JOIN loan_details ld ON ld.id = t.reference_id
+		WHERE ld.loan_id = ? AND t.type = 'loan_payment'
+	`
+	var total int64
+	err = r.db.QueryRowContext(ctx, countQuery, loanID).Scan(&total)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return history, total, nil
+}

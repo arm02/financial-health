@@ -21,8 +21,19 @@ export interface LoanDetail {
   amount: number;
   due_date: string;
   status: string;
+  paid_at?: string;
+}
+
+export interface LoanPaymentHistory {
+  id: number;
+  loan_detail_id: number;
+  cycle_number: number;
+  amount: number;
+  transaction_date: string;
+  title: string;
 }
 
 export type LoanResponse = HttpResponse<ListResponse<Loan[]>>;
 export type LoanCreateResponse = HttpResponse<Loan>;
 export type LoanDetailResponse = HttpResponse<ListResponse<LoanDetail[]>>;
+export type LoanPaymentHistoryResponse = HttpResponse<ListResponse<LoanPaymentHistory[]>>;

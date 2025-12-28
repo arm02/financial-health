@@ -9,6 +9,7 @@ import {
 import {
   Transaction,
   TransactionCreateResponse,
+  TransactionDeleteResponse,
   TransactionResponse,
 } from '../../../core/domain/entities/transaction.entities';
 import { GetAllTransactionUseCase } from '../../../core/usecase/transactions/get-all-transaction.usecase';
@@ -16,12 +17,15 @@ import { SavingsForm } from './savings-form/savings-form';
 import { TableLocal } from '../../../core/helpers/components/table';
 import { CreateTransactionDTO } from '../../../core/domain/dto/transaction.dto';
 import { CreateTransactionUseCase } from '../../../core/usecase/transactions/create-transaction.usecase';
+import { UpdateTransactionUseCase } from '../../../core/usecase/transactions/update-transaction.usecase';
+import { DeleteTransactionUseCase } from '../../../core/usecase/transactions/delete-transaction.usecase';
 import {
   ContextAction,
   SortTable,
   TableColumn,
 } from '../../../core/domain/entities/table.entities';
 import { SnackbarService } from '../../../core/helpers/components/snackbar.service';
+import { UpdateRequest } from '../../../core/domain/entities/http.entities';
 
 @Component({
   selector: 'app-savings',
@@ -34,6 +38,8 @@ export class SavingsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private getAllTransactionUseCase = inject(GetAllTransactionUseCase);
   private createTransactionUseCase = inject(CreateTransactionUseCase);
+  private updateTransactionUseCase = inject(UpdateTransactionUseCase);
+  private deleteTransactionUseCase = inject(DeleteTransactionUseCase);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarService);
   protected loader = signal(false);
@@ -90,12 +96,14 @@ export class SavingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  OnHandleContext(e: { action: string; row: any }) {
-    const handlers: Record<string, { fn: () => void; reload: boolean }> = {};
+  OnHandleContext(e: { action: string; row: Transaction }) {
+    const handlers: Record<string, { fn: () => void }> = {
+      edit: { fn: () => this.onEdit(e.row) },
+      delete: { fn: () => this.onDelete(e.row) },
+    };
     const handler = handlers[e.action];
     if (handler) {
       handler.fn();
-      if (handler.reload) this.GetAllTransaction();
     }
   }
 
@@ -140,6 +148,73 @@ export class SavingsComponent implements OnInit, OnDestroy {
             this.snackbar.show(res.message, "SUCCESS");
           }
           this.GetAllTransaction();
+        },
+      });
+  }
+
+  onEdit(row: Transaction) {
+    this.dialogService
+      .Open(SavingsForm, {
+        title: 'Edit Saving',
+        data: { mode: 'normal', transaction: row },
+        width: '550px',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: CreateTransactionDTO) => {
+          if (res) this.onUpdateAction({ id: row.id, data: res });
+        },
+      });
+  }
+
+  onUpdateAction(body: UpdateRequest<CreateTransactionDTO>) {
+    this.loader.set(true);
+    this.updateTransactionUseCase
+      .execute(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: TransactionCreateResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
+          this.GetAllTransaction();
+        },
+        error: () => {
+          this.loader.set(false);
+        },
+      });
+  }
+
+  onDelete(row: Transaction) {
+    this.dialogService
+      .Confirmation({
+        title: 'Delete Saving',
+        message: `Are you sure you want to delete "${row.title}"?`,
+        btnConfirm: 'Delete',
+        btnCancel: 'Cancel',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (confirmed: boolean) => {
+          if (confirmed) this.onDeleteAction(row.id);
+        },
+      });
+  }
+
+  onDeleteAction(id: number) {
+    this.loader.set(true);
+    this.deleteTransactionUseCase
+      .execute(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: TransactionDeleteResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
+          this.GetAllTransaction();
+        },
+        error: () => {
+          this.loader.set(false);
         },
       });
   }

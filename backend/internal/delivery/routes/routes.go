@@ -45,6 +45,7 @@ func RegisterRoutes(cfg *RouteConfig) {
 		loansGroup.GET("/:id", loanHandler.GetLoan)
 		loansGroup.GET("/details/:id", loanHandler.GetLoanDetails)
 		loansGroup.DELETE("/:id", loanHandler.DeleteLoan)
+		loansGroup.GET("/payment-history/:id", loanHandler.GetPaymentHistory)
 
 		transactionsGroup := protected.Group("/transactions")
 		transactionsGroup.POST("/create", transactionHandler.CreateTransaction)

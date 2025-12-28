@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -16,7 +16,7 @@ import { ExpensesService } from '../expenses.service';
   templateUrl: './expenses-form.html',
   styleUrl: './expenses-form.scss',
 })
-export class ExpensesForm {
+export class ExpensesForm implements OnInit {
   readonly dialogRef = inject(MatDialogRef<ExpensesForm>);
   readonly data = inject<any>(MAT_DIALOG_DATA);
   readonly fb = inject(FormBuilder);
@@ -30,6 +30,19 @@ export class ExpensesForm {
 
   expensesInputSimple = '';
   errorMessage = '';
+  isEditMode = false;
+
+  ngOnInit(): void {
+    if (this.data?.data?.expenses) {
+      this.isEditMode = true;
+      const expenses = this.data.data.expenses;
+      this.expensesForm.patchValue({
+        title: expenses.title,
+        type: expenses.type,
+        amount: expenses.amount,
+      });
+    }
+  }
 
   onCloseDialog(): void {
     this.dialogRef.close();

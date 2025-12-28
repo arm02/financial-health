@@ -115,3 +115,20 @@ func (h *LoanHandler) DeleteLoan(c *gin.Context) {
 	}
 	utils.SuccessResponse(c, nil, constants.SUCCESS_DELETED)
 }
+
+func (h *LoanHandler) GetPaymentHistory(c *gin.Context) {
+	loanIDStr := c.Param("id")
+	loanID, _ := strconv.ParseInt(loanIDStr, 10, 64)
+	userIDVal, _ := c.Get("user_id")
+	userID := int64(userIDVal.(float64))
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
+
+	history, err := h.LoanUseCase.GetPaymentHistory(c.Request.Context(), userID, loanID, page, limit)
+	if err != nil {
+		utils.ErrorResponse(c, utils.NewBusinessError(err.Error(), err))
+		return
+	}
+	utils.SuccessResponse(c, history, "Payment history fetched successfully")
+}

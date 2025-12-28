@@ -11,3 +11,4 @@ export interface Expenses {
 
 export type ExpensesResponse = HttpResponse<ListResponse<Expenses[]>>;
 export type ExpensesCreateResponse = HttpResponse<Expenses>;
+export type ExpensesDeleteResponse = HttpResponse<string>;

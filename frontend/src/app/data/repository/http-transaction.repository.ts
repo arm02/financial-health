@@ -5,6 +5,7 @@ import { HttpService } from '../../core/helpers/services/http.service';
 import { TransactionRepository } from '../../core/repository/transaction.repository';
 import {
   TransactionCreateResponse,
+  TransactionDeleteResponse,
   TransactionResponse,
 } from '../../core/domain/entities/transaction.entities';
 import { CreateTransactionDTO } from '../../core/domain/dto/transaction.dto';
@@ -23,5 +24,9 @@ export class HttpTransactionRepository implements TransactionRepository {
 
   Update(id: number, body: CreateTransactionDTO): Observable<TransactionCreateResponse> {
     return this.http.Put(`transactions/${id}`, body);
+  }
+
+  Delete(id: number): Observable<TransactionDeleteResponse> {
+    return this.http.Delete(`transactions/${id}`);
   }
 }

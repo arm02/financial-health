@@ -26,6 +26,16 @@ type LoanDetail struct {
 	Amount      float64 `json:"amount"`
 	DueDate     string  `json:"due_date"`
 	Status      string  `json:"status"`
+	PaidAt      *string `json:"paid_at"`
+}
+
+type LoanPaymentHistory struct {
+	ID              int64   `json:"id"`
+	LoanDetailID    int64   `json:"loan_detail_id"`
+	CycleNumber     int     `json:"cycle_number"`
+	Amount          float64 `json:"amount"`
+	TransactionDate string  `json:"transaction_date"`
+	Title           string  `json:"title"`
 }
 
 type LoanUseCase interface {
@@ -34,6 +44,7 @@ type LoanUseCase interface {
 	GetLoan(ctx context.Context, loanID int64) (*Loan, error)
 	GetLoanDetails(ctx context.Context, userID, loanID int64, page, limit int, sortBy, sortType string) (*RowsList[LoanDetail], error)
 	DeleteLoan(ctx context.Context, userID, loanID int64) error
+	GetPaymentHistory(ctx context.Context, userID, loanID int64, page, limit int) (*RowsList[LoanPaymentHistory], error)
 }
 
 type LoanRepository interface {
@@ -46,4 +57,5 @@ type LoanRepository interface {
 	UpdateLoanStatusAndDue(ctx context.Context, loanID int64, amountPaid float64, status string) error
 	UpdateDetailStatus(ctx context.Context, detailID int64, status string) error
 	GetDetailsByLoanID(ctx context.Context, loanID int64, page, limit int, sortBy, sortType string) ([]LoanDetail, int64, error)
+	GetPaymentHistory(ctx context.Context, loanID int64, page, limit int) ([]LoanPaymentHistory, int64, error)
 }

@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { GetFinancialHealthUseCase } from '../../../core/usecase/analytics/get-financial-health.usecase';
 import {
@@ -9,11 +10,12 @@ import {
   FinancialMetric,
 } from '../../../core/domain/entities/analytics.entities';
 import { LoaderBarLocal } from '../../../core/helpers/components/loader';
+import { AnalyticsFilterDTO } from '../../../core/domain/dto/analytics.dto';
 
 @Component({
   selector: 'app-analytics',
   standalone: true,
-  imports: [CommonModule, MatIconModule, LoaderBarLocal],
+  imports: [CommonModule, MatIconModule, LoaderBarLocal, FormsModule],
   templateUrl: './analytics.html',
   styleUrl: './analytics.scss',
 })
@@ -21,6 +23,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private financialHealthUseCase = inject(GetFinancialHealthUseCase);
   protected loader = signal(false);
+
+  startDate: string = '';
+  endDate: string = '';
+  filterLabel: string = '';
 
   healthScore: FinancialHealthScore = {
     overall_score: 0,
@@ -43,7 +49,37 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
+    this.setDefaultDateRange();
     this.getFinancialHealth();
+  }
+
+  setDefaultDateRange(): void {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    this.startDate = this.formatDate(firstDay);
+    this.endDate = this.formatDate(lastDay);
+    this.updateFilterLabel();
+  }
+
+  formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  updateFilterLabel(): void {
+    if (this.startDate && this.endDate) {
+      const start = new Date(this.startDate);
+      const end = new Date(this.endDate);
+      const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' };
+      this.filterLabel = `${start.toLocaleDateString('id-ID', options)} - ${end.toLocaleDateString('id-ID', options)}`;
+    }
+  }
+
+  onDateChange(): void {
+    if (this.startDate && this.endDate) {
+      this.updateFilterLabel();
+      this.getFinancialHealth();
+    }
   }
 
   ngOnDestroy(): void {
@@ -53,8 +89,12 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
   getFinancialHealth(): void {
     this.loader.set(true);
+    const params: AnalyticsFilterDTO = {
+      start_date: this.startDate,
+      end_date: this.endDate,
+    };
     this.financialHealthUseCase
-      .execute()
+      .execute(params)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: FinancialHealthResponse) => {

@@ -9,6 +9,7 @@ import {
 import {
   Transaction,
   TransactionCreateResponse,
+  TransactionDeleteResponse,
   TransactionResponse,
 } from '../../../core/domain/entities/transaction.entities';
 import { GetAllTransactionUseCase } from '../../../core/usecase/transactions/get-all-transaction.usecase';
@@ -16,6 +17,7 @@ import { TransactionForm } from './transaction-form/transaction-form';
 import { TableLocal } from '../../../core/helpers/components/table';
 import { CreateTransactionDTO } from '../../../core/domain/dto/transaction.dto';
 import { CreateTransactionUseCase } from '../../../core/usecase/transactions/create-transaction.usecase';
+import { DeleteTransactionUseCase } from '../../../core/usecase/transactions/delete-transaction.usecase';
 import {
   ContextAction,
   SortTable,
@@ -37,6 +39,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   private getAllTransactionUseCase = inject(GetAllTransactionUseCase);
   private createTransactionUseCase = inject(CreateTransactionUseCase);
   private updateTransactionUseCase = inject(UpdateTransactionUseCase);
+  private deleteTransactionUseCase = inject(DeleteTransactionUseCase);
   private dialogService = inject(DialogService);
   private snackbar = inject(SnackbarService);
   protected loader = signal(false);
@@ -96,6 +99,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   OnHandleContext(e: { action: string; row: Transaction }): void {
     const handlers: Record<string, { fn: () => void }> = {
       edit: { fn: () => this.onEdit(e.row) },
+      delete: { fn: () => this.onDelete(e.row) },
     };
     const handler = handlers[e.action];
     if (handler) {
@@ -174,6 +178,40 @@ export class TransactionsComponent implements OnInit, OnDestroy {
             this.snackbar.show(res.message, 'SUCCESS');
           }
           this.GetAllTransaction();
+        },
+      });
+  }
+
+  onDelete(row: Transaction): void {
+    this.dialogService
+      .Confirmation({
+        title: 'Delete Transaction',
+        message: `Are you sure you want to delete "${row.title}"?`,
+        btnConfirm: 'Delete',
+        btnCancel: 'Cancel',
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (confirmed: boolean) => {
+          if (confirmed) this.onDeleteAction(row.id);
+        },
+      });
+  }
+
+  onDeleteAction(id: number): void {
+    this.loader.set(true);
+    this.deleteTransactionUseCase
+      .execute(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: TransactionDeleteResponse) => {
+          if (res.message) {
+            this.snackbar.show(res.message, 'SUCCESS');
+          }
+          this.GetAllTransaction();
+        },
+        error: () => {
+          this.loader.set(false);
         },
       });
   }
