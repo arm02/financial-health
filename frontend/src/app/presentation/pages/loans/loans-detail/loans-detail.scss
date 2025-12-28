@@ -1,17 +1,19 @@
 .loan-detail {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-md);
 
   .card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid #e5e5e5;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
 
-    &>h3 {
-      margin: 0px !important;
+    & > h3 {
+      margin: 0 !important;
       font-weight: 500;
+      font-size: 13px;
+      color: var(--color-text);
     }
 
     .table {
@@ -21,39 +23,45 @@
   }
 
   .info-grid {
-    margin-top: 16px;
+    margin-top: var(--space-md);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: var(--space-sm);
 
     label {
-      font-size: 12px;
-      color: #888;
+      font-size: 10px;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
 
     p {
       margin: 0;
       font-weight: 500;
+      font-size: 12px;
+      color: var(--color-text);
     }
   }
 
   .badge {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 10px;
+    font-weight: 500;
     color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 
     &.badge-success {
-      background: #16a34a;
+      background: var(--color-success);
     }
 
     &.badge-warning {
-      background: #f59e0b;
+      background: var(--color-warning);
     }
 
     &.badge-danger {
-      background: #dc2626;
+      background: var(--color-danger);
     }
   }
 }

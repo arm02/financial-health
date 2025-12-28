@@ -1,81 +1,68 @@
 .dashboard-section {
   @media screen and (max-width: 768px) {
-    margin-bottom: 120px;
+    margin-bottom: 80px;
   }
 }
 
 .dashboard-container {
   display: flex;
-  gap: 20px;
+  gap: var(--space-md);
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--space-md);
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    max-width: 100vw;
-
-    .card {
-      width: unset;
-    }
   }
 }
 
 .dashboard-title {
-  border-bottom: 1px solid #ececec;
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .dashboard-header {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: var(--space-sm);
 
-  &>input {
+  & > input {
     width: 100%;
     padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ececec;
-    background: transparent;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
     outline: none;
-    font-size: 14px;
-    color: #0b0b0b;
+    font-size: 12px;
+    color: var(--color-text);
+    transition: border-color 0.15s ease;
+
+    &:focus {
+      border-color: var(--color-accent);
+    }
+
+    &::placeholder {
+      color: var(--color-text-light);
+    }
   }
 }
 
 .card {
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background: var(--color-surface);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
 
-  &-loans {
-    grid-area: loans;
-  }
-
-  &-remaining {
-    grid-area: remaining;
-  }
-
-  &-expenses {
-    grid-area: expenses;
-  }
-
-  &-outcome {
-    grid-area: outcome;
-  }
-
-  &-income {
-    grid-area: income;
-  }
+  &-loans { grid-area: loans; }
+  &-remaining { grid-area: remaining; }
+  &-expenses { grid-area: expenses; }
+  &-outcome { grid-area: outcome; }
+  &-income { grid-area: income; }
 }
 
 .filter-card-container {
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    max-width: 100vw;
-
-    .card {
-      width: unset;
-    }
   }
 }
 
@@ -86,50 +73,63 @@
       "outcome income"
       "expenses expenses"
       "loans remaining";
-
-    .card {
-      width: unset;
-    }
+    gap: var(--space-sm);
   }
 
   .card-header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-sm);
 
     mat-icon {
-      color: #50A2FF;
+      color: var(--color-accent);
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
     }
 
     a {
-      font-size: 12px;
-      color: #50A2FF;
+      font-size: 11px;
+      color: var(--color-accent);
       cursor: pointer;
-      margin-top: -4px;
     }
+  }
+
+  .card-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .card-label {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-top: 2px;
   }
 }
 
 .chart-filter-container {
-  margin-top: 20px;
+  margin-top: var(--space-lg);
 }
 
 .btn-filter {
-  padding: 8px 20px;
-  border-radius: 8px;
-  border: 1px solid #ececec;
-  background: #fff;
-  color: #666;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
   cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
+  font-size: 11px;
+  transition: all 0.15s ease;
 
   &:hover {
-    background: #f5f5f5;
+    background: var(--color-border-light);
   }
 
   &.active {
-    background: #50A2FF;
-    color: #fff;
-    border-color: #50A2FF;
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
   }
 }

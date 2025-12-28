@@ -3,13 +3,14 @@
 @use './form';
 @use './status';
 @use './snackbar';
+@use './table';
 
 :host {
   display: block;
-  font-family: 'Poppins', sans-serif;
-  color: #111;
+  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--color-text);
 }
 
 h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select, label, table, th, td, ul, ol, li {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }

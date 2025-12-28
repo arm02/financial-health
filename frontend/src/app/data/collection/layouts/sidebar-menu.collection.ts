@@ -17,12 +17,12 @@ export const SIDEBAR_MENU = [
     icon: 'collections_bookmark',
     route: '/transactions',
   },
-  {
-    id: 4,
-    title: 'Expenses',
-    icon: 'monetization_on',
-    route: '/expenses',
-  },
+  // {
+  //   id: 4,
+  //   title: 'Expenses',
+  //   icon: 'monetization_on',
+  //   route: '/expenses',
+  // },
   {
     id: 5,
     title: 'Savings',

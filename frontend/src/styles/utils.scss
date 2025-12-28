@@ -17,7 +17,7 @@ $widthPercent: (
   @if $index {
     $before: string.slice($string, 1, $index - 1);
     $after: string.slice($string, $index + string.length($search));
-    @return $before +$replace +str-replace($after, $search, $replace);
+    @return $before + $replace + str-replace($after, $search, $replace);
   }
 
   @return $string;

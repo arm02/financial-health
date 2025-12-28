@@ -1,77 +1,85 @@
 .status {
   &-loan {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 10px;
     font-weight: 500;
     color: white;
     border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 
     &.settled {
-      background: #16a34a;
+      background: var(--color-success);
     }
 
     &.on_going {
-      background: #f59e0b;
+      background: var(--color-warning);
     }
   }
 
   &-transaction {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 10px;
     font-weight: 500;
     color: white;
     border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 
     &.debit {
-      background: #50A2FF;
+      background: var(--color-accent);
     }
-    
+
     &.credit {
-      background: #dc2626;
+      background: var(--color-danger);
     }
-    
+
     &.loan_payment {
-      background: #f59e0b;
+      background: var(--color-warning);
     }
-    
+
     &.saving {
-      background: #16a34a;
+      background: var(--color-success);
     }
   }
 
   &-expenses {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 10px;
     font-weight: 500;
     color: white;
     border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 
     &.fixed {
-      background: #50A2FF;
+      background: var(--color-accent);
     }
   }
 
   &-payment {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 10px;
     font-weight: 500;
     color: white;
     border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 
     &.paid {
-      background: #16a34a;
+      background: var(--color-success);
     }
 
     &.unpaid {
-      background: #f59e0b;
+      background: var(--color-warning);
     }
 
     &.overdue {
-      background: #dc2626;
+      background: var(--color-danger);
     }
   }
 }
