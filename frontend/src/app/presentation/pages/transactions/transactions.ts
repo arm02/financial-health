@@ -56,7 +56,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   totalRows = 0;
 
   ngOnInit(): void {
-    this.GetAllTransaction();
+    // API call will be triggered by datefilter emit from table component
   }
 
   ngOnDestroy(): void {

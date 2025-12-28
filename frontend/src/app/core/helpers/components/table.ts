@@ -175,7 +175,7 @@ export class TableLocal implements AfterViewInit, OnInit {
   @Input() contextMenuData: ContextAction[] = [];
   @Input() showContextMenu: boolean = false;
   @Input() showDateFilter: boolean = false;
-  @Input() defaultDateRange: 'today' | 'week' | 'month' = 'today';
+  @Input() defaultDateRange: 'today' | 'last3days' | 'week' | 'month' | 'none' = 'none';
 
   @Output() onSort = new EventEmitter<SortTable>();
   @Output() onSearch = new EventEmitter<string>();
@@ -212,9 +212,17 @@ export class TableLocal implements AfterViewInit, OnInit {
   }
 
   setDefaultDateRange(): void {
+    if (this.defaultDateRange === 'none') {
+      return;
+    }
     const today = new Date();
     if (this.defaultDateRange === 'today') {
       this.startDate = this.formatDate(today);
+      this.endDate = this.formatDate(today);
+    } else if (this.defaultDateRange === 'last3days') {
+      const threeDaysAgo = new Date(today);
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 2);
+      this.startDate = this.formatDate(threeDaysAgo);
       this.endDate = this.formatDate(today);
     } else if (this.defaultDateRange === 'week') {
       const weekAgo = new Date(today);
