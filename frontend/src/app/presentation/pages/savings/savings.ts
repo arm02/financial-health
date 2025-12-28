@@ -14,7 +14,7 @@ import {
 } from '../../../core/domain/entities/transaction.entities';
 import { GetAllTransactionUseCase } from '../../../core/usecase/transactions/get-all-transaction.usecase';
 import { SavingsForm } from './savings-form/savings-form';
-import { TableLocal } from '../../../core/helpers/components/table';
+import { DateRangeFilter, TableLocal } from '../../../core/helpers/components/table';
 import { CreateTransactionDTO } from '../../../core/domain/dto/transaction.dto';
 import { CreateTransactionUseCase } from '../../../core/usecase/transactions/create-transaction.usecase';
 import { UpdateTransactionUseCase } from '../../../core/usecase/transactions/update-transaction.usecase';
@@ -88,12 +88,18 @@ export class SavingsComponent implements OnInit, OnDestroy {
       page: { fn: () => this.onPageChange(payload), reload: true },
       create: { fn: () => this.onCreate(), reload: false },
       simplecreate: { fn: () => this.onCreateSimple(), reload: false },
+      datefilter: { fn: () => this.onDateFilter(payload), reload: true },
     };
     const handler = handlers[type];
     if (handler) {
       handler.fn();
       if (handler.reload) this.GetAllTransaction();
     }
+  }
+
+  onDateFilter($event: DateRangeFilter) {
+    this.params.start_date = $event.startDate;
+    this.params.end_date = $event.endDate;
   }
 
   OnHandleContext(e: { action: string; row: Transaction }) {

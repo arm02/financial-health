@@ -3,6 +3,8 @@
   [data]="rows"
   [loader]="loader()"
   [showSearch]="true"
+  [showDateFilter]="true"
+  [defaultDateRange]="'today'"
   placeholder="Search Loans..."
   [total]="totalRows"
   [page]="params.page || 1"
@@ -13,6 +15,7 @@
   (onSearch)="OnTableChange('search', $event)"
   (onPageChange)="OnTableChange('page', $event)"
   (onCreate)="OnTableChange('create', $event)"
+  (onDateFilter)="OnTableChange('datefilter', $event)"
   (onContextAction)="OnHandleContext($event)"
 >
 </app-table>

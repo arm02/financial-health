@@ -61,8 +61,10 @@ func (h *LoanHandler) GetAllLoans(c *gin.Context) {
 	sortBy := c.DefaultQuery("sort_by", "created_at")
 	sortType := c.DefaultQuery("sort_type", "DESC")
 	query := c.DefaultQuery("query", "")
+	startDate := c.DefaultQuery("start_date", "")
+	endDate := c.DefaultQuery("end_date", "")
 
-	result, err := h.LoanUseCase.GetAllLoans(c.Request.Context(), userID, page, limit, sortBy, sortType, query)
+	result, err := h.LoanUseCase.GetAllLoans(c.Request.Context(), userID, page, limit, sortBy, sortType, query, startDate, endDate)
 	if err != nil {
 		utils.ErrorResponse(c, err)
 		return

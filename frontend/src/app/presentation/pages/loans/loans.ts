@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { TableLocal } from '../../../core/helpers/components/table';
+import { DateRangeFilter, TableLocal } from '../../../core/helpers/components/table';
 import { GetAllLoanUseCase } from '../../../core/usecase/loans/get-all-loan.usecase';
 import { DefaultParams } from '../../../core/domain/dto/base.dto';
 import { Subject, takeUntil } from 'rxjs';
@@ -77,12 +77,18 @@ export class LoansComponent implements OnInit, OnDestroy {
       search: { fn: () => this.onSearch(payload), reload: true },
       page: { fn: () => this.onPageChange(payload), reload: true },
       create: { fn: () => this.onCreate(), reload: false },
+      datefilter: { fn: () => this.onDateFilter(payload), reload: true },
     };
     const handler = handlers[type];
     if (handler) {
       handler.fn();
       if (handler.reload) this.GetAllLoan();
     }
+  }
+
+  onDateFilter($event: DateRangeFilter) {
+    this.params.start_date = $event.startDate;
+    this.params.end_date = $event.endDate;
   }
 
   OnHandleContext(e: { action: string; row: Loan }) {

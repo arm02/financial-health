@@ -12,7 +12,7 @@ import {
   ExpensesDeleteResponse,
   ExpensesResponse,
 } from '../../../core/domain/entities/expenses.entities';
-import { TableLocal } from '../../../core/helpers/components/table';
+import { DateRangeFilter, TableLocal } from '../../../core/helpers/components/table';
 import { CreateExpensesDTO } from '../../../core/domain/dto/expenses.dto';
 import {
   ContextAction,
@@ -90,12 +90,18 @@ export class ExpensesComponent implements OnInit, OnDestroy {
       page: { fn: () => this.onPageChange(payload), reload: true },
       create: { fn: () => this.onCreate(), reload: false },
       simplecreate: { fn: () => this.onCreateSimple(), reload: false },
+      datefilter: { fn: () => this.onDateFilter(payload), reload: true },
     };
     const handler = handlers[type];
     if (handler) {
       handler.fn();
       if (handler.reload) this.GetAllExpenses();
     }
+  }
+
+  onDateFilter($event: DateRangeFilter) {
+    this.params.start_date = $event.startDate;
+    this.params.end_date = $event.endDate;
   }
 
   OnHandleContext(e: { action: string; row: Expenses }) {

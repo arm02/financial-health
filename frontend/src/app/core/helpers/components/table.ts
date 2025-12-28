@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { LoaderBarLocal } from './loader';
 import { ContextAction, SortTable, TableColumn } from '../../domain/entities/table.entities';
 import { MatIconModule } from '@angular/material/icon';
+
+export interface DateRangeFilter {
+  startDate: string;
+  endDate: string;
+}
 
 @Component({
   selector: 'app-table',
@@ -13,28 +18,44 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <div class="app-table">
       <div class="table-header">
-        @if (create) {
-        <div class="table-action">
-          <button class="btn-primary" (click)="onCreate.emit()">Create New</button>
-        </div>
-        }@if (simpleCreate) {
-        <div class="table-action">
-          <button class="btn-primary" (click)="onSimpleCreate.emit()">Simple Create</button>
-        </div>
-        } @if (showSearch) {
-        <div class="search">
-          <input
-            type="text"
-            class="search-input"
-            [formControl]="query"
-            [placeholder]="placeholder"
-            aria-label="Search table"
-          />
-          @if (query.value) {
-          <button class="clear" (click)="query.setValue('')" aria-label="Clear search">✕</button>
+        <div>
+          @if (showDateFilter) {
+          <div class="date-filter">
+            <div class="date-field">
+              <label>From</label>
+              <input type="date" [(ngModel)]="startDate" (change)="onDateFilterChange()" />
+            </div>
+            <div class="date-field">
+              <label>To</label>
+              <input type="date" [(ngModel)]="endDate" (change)="onDateFilterChange()" />
+            </div>
+          </div>
           }
         </div>
-        }
+        <div class="table-header-right">
+          @if (create) {
+          <div class="table-action">
+            <button class="btn-primary" (click)="onCreate.emit()">Create New</button>
+          </div>
+          }@if (simpleCreate) {
+          <div class="table-action">
+            <button class="btn-primary" (click)="onSimpleCreate.emit()">Simple Create</button>
+          </div>
+          } @if (showSearch) {
+          <div class="search">
+            <input
+              type="text"
+              class="search-input"
+              [formControl]="query"
+              [placeholder]="placeholder"
+              aria-label="Search table"
+            />
+            @if (query.value) {
+            <button class="clear" (click)="query.setValue('')" aria-label="Clear search">✕</button>
+            }
+          </div>
+          }
+        </div>
       </div>
 
       <div class="table-wrap" role="table" aria-label="Data Table">
@@ -139,7 +160,7 @@ import { MatIconModule } from '@angular/material/icon';
   `,
   styleUrls: ['../../../../styles/table.scss'],
 })
-export class TableLocal implements AfterViewInit {
+export class TableLocal implements AfterViewInit, OnInit {
   @Input() columns: TableColumn[] = [];
   @Input() data: any[] = [];
   @Input() showSearch = false;
@@ -153,6 +174,8 @@ export class TableLocal implements AfterViewInit {
   @Input() pagination: boolean = true;
   @Input() contextMenuData: ContextAction[] = [];
   @Input() showContextMenu: boolean = false;
+  @Input() showDateFilter: boolean = false;
+  @Input() defaultDateRange: 'today' | 'week' | 'month' = 'today';
 
   @Output() onSort = new EventEmitter<SortTable>();
   @Output() onSearch = new EventEmitter<string>();
@@ -160,10 +183,14 @@ export class TableLocal implements AfterViewInit {
   @Output() onCreate = new EventEmitter<any>();
   @Output() onSimpleCreate = new EventEmitter<any>();
   @Output() onContextAction = new EventEmitter<{ action: string; row: any }>();
+  @Output() onDateFilter = new EventEmitter<DateRangeFilter>();
 
   query = new FormControl('');
   sortKey: string | null = null;
   sortDir: 'asc' | 'desc' = 'asc';
+
+  startDate: string = '';
+  endDate: string = '';
 
   contextMenu = {
     visible: false,
@@ -176,6 +203,41 @@ export class TableLocal implements AfterViewInit {
     document.addEventListener('click', () => {
       this.contextMenu.visible = false;
     });
+  }
+
+  ngOnInit(): void {
+    if (this.showDateFilter) {
+      this.setDefaultDateRange();
+    }
+  }
+
+  setDefaultDateRange(): void {
+    const today = new Date();
+    if (this.defaultDateRange === 'today') {
+      this.startDate = this.formatDate(today);
+      this.endDate = this.formatDate(today);
+    } else if (this.defaultDateRange === 'week') {
+      const weekAgo = new Date(today);
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      this.startDate = this.formatDate(weekAgo);
+      this.endDate = this.formatDate(today);
+    } else if (this.defaultDateRange === 'month') {
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      this.startDate = this.formatDate(firstDay);
+      this.endDate = this.formatDate(lastDay);
+    }
+    this.onDateFilter.emit({ startDate: this.startDate, endDate: this.endDate });
+  }
+
+  formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  onDateFilterChange(): void {
+    if (this.startDate && this.endDate) {
+      this.onDateFilter.emit({ startDate: this.startDate, endDate: this.endDate });
+    }
   }
 
   ngAfterViewInit(): void {

@@ -34,7 +34,7 @@ func (u *ExpensesUseCase) CreateExpenses(ctx context.Context, exp *domain.Expens
 	return u.expRepo.Create(ctx, exp)
 }
 
-func (u *ExpensesUseCase) GetAllExpenses(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*domain.RowsList[domain.Expenses], error) {
+func (u *ExpensesUseCase) GetAllExpenses(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query, startDate, endDate string) (*domain.RowsList[domain.Expenses], error) {
 	if page <= 0 {
 		page = 1
 	}
@@ -42,7 +42,7 @@ func (u *ExpensesUseCase) GetAllExpenses(ctx context.Context, userID int64, page
 		limit = 10
 	}
 
-	expenses, total, err := u.expRepo.GetAll(ctx, userID, page, limit, sortBy, sortType, query)
+	expenses, total, err := u.expRepo.GetAll(ctx, userID, page, limit, sortBy, sortType, query, startDate, endDate)
 	if err != nil {
 		return nil, err
 	}

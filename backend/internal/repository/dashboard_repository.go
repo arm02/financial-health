@@ -162,7 +162,7 @@ func (r *DashboardRepositoryImpl) GetDailySummary(ctx context.Context, userID in
 			WHERE date < DATE(?)
 		)
 		SELECT
-			DATE_FORMAT(d.date, '%Y-%m-%d') AS label,
+			DATE_FORMAT(d.date, '%b %d') AS label,
 			COALESCE((
 				SELECT CAST(SUM(t.amount) AS SIGNED)
 				FROM transactions t

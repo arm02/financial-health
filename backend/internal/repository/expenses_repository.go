@@ -22,7 +22,7 @@ func (r *ExpensesRepositoryImpl) Create(ctx context.Context, exp *domain.Expense
 	return err
 }
 
-func (r *ExpensesRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle string) ([]domain.Expenses, int64, error) {
+func (r *ExpensesRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle, startDate, endDate string) ([]domain.Expenses, int64, error) {
 	offset := (page - 1) * limit
 
 	allowedSortColumns := map[string]bool{
@@ -46,10 +46,18 @@ func (r *ExpensesRepositoryImpl) GetAll(ctx context.Context, userID int64, page,
         WHERE user_id = ?`
 
 	args := []interface{}{userID}
+	countArgs := []interface{}{userID}
 
 	if searchTitle != "" {
 		query += " AND title LIKE ?"
 		args = append(args, "%"+searchTitle+"%")
+		countArgs = append(countArgs, "%"+searchTitle+"%")
+	}
+
+	if startDate != "" && endDate != "" {
+		query += " AND DATE(created_at) BETWEEN ? AND ?"
+		args = append(args, startDate, endDate)
+		countArgs = append(countArgs, startDate, endDate)
 	}
 
 	query += fmt.Sprintf(" ORDER BY %s %s LIMIT ? OFFSET ?", sortBy, sortType)
@@ -74,10 +82,11 @@ func (r *ExpensesRepositoryImpl) GetAll(ctx context.Context, userID int64, page,
 	}
 
 	countQuery := `SELECT COUNT(*) FROM expenses WHERE user_id = ?`
-	countArgs := []interface{}{userID}
 	if searchTitle != "" {
 		countQuery += " AND title LIKE ?"
-		countArgs = append(countArgs, "%"+searchTitle+"%")
+	}
+	if startDate != "" && endDate != "" {
+		countQuery += " AND DATE(created_at) BETWEEN ? AND ?"
 	}
 
 	var total int64

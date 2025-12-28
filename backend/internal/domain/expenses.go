@@ -16,7 +16,7 @@ type Expenses struct {
 
 type ExpensesUseCase interface {
 	CreateExpenses(ctx context.Context, trx *Expenses) error
-	GetAllExpenses(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) (*RowsList[Expenses], error)
+	GetAllExpenses(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query, startDate, endDate string) (*RowsList[Expenses], error)
 	GetDetailExpenses(ctx context.Context, userID int64, expId int64) (*Expenses, error)
 	DeleteExpenses(ctx context.Context, userID, trxID int64) (string, error)
 	UpdateExpenses(ctx context.Context, trx *Expenses) error
@@ -24,7 +24,7 @@ type ExpensesUseCase interface {
 
 type ExpensesRepository interface {
 	Create(ctx context.Context, trx *Expenses) error
-	GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query string) ([]Expenses, int64, error)
+	GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, query, startDate, endDate string) ([]Expenses, int64, error)
 	GetByID(ctx context.Context, trxID int64) (*Expenses, error)
 	Delete(ctx context.Context, trxID int64) (string, error)
 	Update(ctx context.Context, trx *Expenses) error

@@ -4,6 +4,8 @@
   [loader]="loader()"
   [showSearch]="true"
   [simpleCreate]="true"
+  [showDateFilter]="true"
+  [defaultDateRange]="'today'"
   placeholder="Search Transactions..."
   [total]="totalRows"
   [page]="params.page || 1"
@@ -15,6 +17,7 @@
   (onPageChange)="OnTableChange('page', $event)"
   (onCreate)="OnTableChange('create', $event)"
   (onSimpleCreate)="OnTableChange('simplecreate', $event)"
+  (onDateFilter)="OnTableChange('datefilter', $event)"
   (onContextAction)="OnHandleContext($event)"
 >
 </app-table>

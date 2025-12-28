@@ -61,8 +61,10 @@ func (h *TransactionHandler) GetAllTransaction(c *gin.Context) {
 	sortType := c.DefaultQuery("sort_type", "DESC")
 	query := c.DefaultQuery("query", "")
 	tipe := c.DefaultQuery("tipe", "")
+	startDate := c.DefaultQuery("start_date", "")
+	endDate := c.DefaultQuery("end_date", "")
 
-	result, err := h.TrxUsecase.GetAllTransaction(c.Request.Context(), userID, page, limit, sortBy, sortType, query, tipe)
+	result, err := h.TrxUsecase.GetAllTransaction(c.Request.Context(), userID, page, limit, sortBy, sortType, query, tipe, startDate, endDate)
 	if err != nil {
 		utils.ErrorResponse(c, err)
 		return

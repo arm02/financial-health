@@ -5,4 +5,6 @@ export interface DefaultParams {
   sort_type?: string;
   query?: string;
   tipe?: string;
+  start_date?: string;
+  end_date?: string;
 }

@@ -33,7 +33,7 @@ func (r *LoanRepositoryImpl) CreateDetail(ctx context.Context, detail *domain.Lo
 	return err
 }
 
-func (r *LoanRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle string) ([]domain.Loan, int64, error) {
+func (r *LoanRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle, startDate, endDate string) ([]domain.Loan, int64, error) {
 	offset := (page - 1) * limit
 
 	allowedSortColumns := map[string]bool{
@@ -66,6 +66,11 @@ func (r *LoanRepositoryImpl) GetAll(ctx context.Context, userID int64, page, lim
 		args = append(args, "%"+searchTitle+"%")
 	}
 
+	if startDate != "" && endDate != "" {
+		query += " AND DATE(start_date) BETWEEN ? AND ?"
+		args = append(args, startDate, endDate)
+	}
+
 	query += fmt.Sprintf(" ORDER BY %s %s LIMIT ? OFFSET ?", sortBy, sortType)
 	args = append(args, limit, offset)
 
@@ -92,6 +97,10 @@ func (r *LoanRepositoryImpl) GetAll(ctx context.Context, userID int64, page, lim
 	if searchTitle != "" {
 		countQuery += " AND title LIKE ?"
 		countArgs = append(countArgs, "%"+searchTitle+"%")
+	}
+	if startDate != "" && endDate != "" {
+		countQuery += " AND DATE(start_date) BETWEEN ? AND ?"
+		countArgs = append(countArgs, startDate, endDate)
 	}
 
 	var total int64

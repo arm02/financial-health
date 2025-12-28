@@ -22,7 +22,7 @@ func (r *TransactionRepositoryImpl) Create(ctx context.Context, trx *domain.Tran
 	return err
 }
 
-func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle string, tipe string) ([]domain.Transaction, int64, error) {
+func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, page, limit int, sortBy, sortType, searchTitle, tipe, startDate, endDate string) ([]domain.Transaction, int64, error) {
 	offset := (page - 1) * limit
 
 	allowedSortColumns := map[string]bool{
@@ -46,11 +46,12 @@ func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, pa
         WHERE user_id = ?`
 
 	args := []interface{}{userID}
+	countArgs := []interface{}{userID}
 
 	if tipe != "" {
 		tipeArr := strings.Split(tipe, ",")
 		placeholders := strings.Repeat("?,", len(tipeArr))
-		placeholders = placeholders[:len(placeholders)-1] // buang koma terakhir
+		placeholders = placeholders[:len(placeholders)-1]
 		query += fmt.Sprintf(" AND type IN (%s)", placeholders)
 		for _, t := range tipeArr {
 			args = append(args, t)
@@ -60,6 +61,13 @@ func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, pa
 	if searchTitle != "" {
 		query += " AND title LIKE ?"
 		args = append(args, "%"+searchTitle+"%")
+		countArgs = append(countArgs, "%"+searchTitle+"%")
+	}
+
+	if startDate != "" && endDate != "" {
+		query += " AND DATE(transaction_date) BETWEEN ? AND ?"
+		args = append(args, startDate, endDate)
+		countArgs = append(countArgs, startDate, endDate)
 	}
 
 	query += fmt.Sprintf(" ORDER BY %s %s LIMIT ? OFFSET ?", sortBy, sortType)
@@ -84,10 +92,11 @@ func (r *TransactionRepositoryImpl) GetAll(ctx context.Context, userID int64, pa
 	}
 
 	countQuery := `SELECT COUNT(*) FROM transactions WHERE user_id = ?`
-	countArgs := []interface{}{userID}
 	if searchTitle != "" {
 		countQuery += " AND title LIKE ?"
-		countArgs = append(countArgs, "%"+searchTitle+"%")
+	}
+	if startDate != "" && endDate != "" {
+		countQuery += " AND DATE(transaction_date) BETWEEN ? AND ?"
 	}
 
 	var total int64

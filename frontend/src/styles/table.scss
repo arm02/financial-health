@@ -6,10 +6,17 @@
 
   .table-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: var(--space-md);
     gap: var(--space-sm);
+    flex-wrap: wrap;
+
+    &-right {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
 
     .title {
       flex: 1;
@@ -18,13 +25,49 @@
       color: var(--color-text);
     }
 
+    .date-filter {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+
+      .date-field {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        label {
+          font-size: 10px;
+          color: var(--color-text-muted);
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+        }
+
+        input[type="date"] {
+          padding: 6px 10px;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-md);
+          font-size: 12px;
+          color: var(--color-text);
+          background: var(--color-surface);
+          cursor: pointer;
+          min-width: 130px;
+
+          &:focus {
+            outline: none;
+            border-color: var(--color-accent);
+          }
+        }
+      }
+    }
+
     .search {
       display: flex;
       align-items: center;
     }
 
     .search-input {
-      padding: 6px 10px;
+      padding: 8px 10px;
       border-radius: var(--radius-md);
       border: 1px solid var(--color-border);
       background: var(--color-surface);
@@ -188,7 +231,7 @@
     color: var(--color-text);
     transition: background 0.1s ease;
 
-    & > mat-icon {
+    &>mat-icon {
       font-size: 14px;
       width: 14px;
       height: 14px;
@@ -209,20 +252,40 @@
     .table-header {
       flex-direction: column;
       gap: var(--space-sm);
+      align-items: stretch;
 
-      & > .search {
-        width: 100%;
+      &-right {
+        flex-direction: column;
+
+        &>.search {
+          width: 100%;
+
+        }
+
+        .search-input {
+          width: 100%;
+        }
       }
 
-      .search-input {
+      .date-filter {
         width: 100%;
+        justify-content: space-between;
+
+        .date-field {
+          flex: 1;
+
+          input[type="date"] {
+            width: 100%;
+            min-width: unset;
+          }
+        }
       }
     }
 
     .table-action {
       width: 100%;
 
-      & > button {
+      &>button {
         width: 100%;
       }
     }
