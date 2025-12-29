@@ -3,6 +3,7 @@ import { HttpDashboardRepository } from '../../../data/repository/http-dashboard
 import { HttpLoanRepository } from '../../../data/repository/http-loan.repository';
 import { HttpTransactionRepository } from '../../../data/repository/http-transaction.repository';
 import { HttpAnalyticsRepository } from '../../../data/repository/http-analytics.repository';
+import { HttpTodoRepository } from '../../../data/repository/http-todo.repository';
 import { AuthRepository } from '../../repository/auth.repository';
 import { DashboardRepository } from '../../repository/dashboard.repository';
 import { HttpExpensesRepository } from '../../../data/repository/http-expenses.repository';
@@ -10,6 +11,7 @@ import { ExpensesRepository } from '../../repository/expenses.repository';
 import { LoanRepository } from '../../repository/loan.repository';
 import { TransactionRepository } from '../../repository/transaction.repository';
 import { AnalyticsRepository } from '../../repository/analytics.repository';
+import { TodoRepository } from '../../repository/todo.repository';
 
 export const HttpProvider = [
   {
@@ -35,5 +37,9 @@ export const HttpProvider = [
   {
     provide: AnalyticsRepository,
     useClass: HttpAnalyticsRepository,
+  },
+  {
+    provide: TodoRepository,
+    useClass: HttpTodoRepository,
   },
 ];

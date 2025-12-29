@@ -47,6 +47,9 @@ func InitializeApp(db *sql.DB) *App {
 	analyticsRepo := repository.NewAnalyticsRepository(db)
 	analyticsUseCase := usecase.NewAnalyticsUseCase(analyticsRepo)
 
+	todoRepo := repository.NewTodoRepository(db)
+	todoUseCase := usecase.NewTodoUseCase(todoRepo)
+
 	routes.RegisterRoutes(&routes.RouteConfig{
 		Router:             router,
 		UserUsecase:        userUseCase,
@@ -55,6 +58,7 @@ func InitializeApp(db *sql.DB) *App {
 		DashboardUseCase:   dashboardUseCase,
 		ExpensesUseCase:    expensesUseCase,
 		AnalyticsUseCase:   analyticsUseCase,
+		TodoUseCase:        todoUseCase,
 		AuthMiddleware:     middleware.JWTMiddleware(),
 	})
 

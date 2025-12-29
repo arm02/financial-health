@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SIDEBAR_MENU } from '../../../../data/collection/layouts/sidebar-menu.collection';
+import {
+  SIDEBAR_MENU,
+  SIDEBAR_MENU_RESPONSIVE,
+} from '../../../../data/collection/layouts/sidebar-menu.collection';
 import { MatIconModule } from '@angular/material/icon';
 import { NgClass } from '@angular/common';
 
@@ -12,7 +15,7 @@ import { NgClass } from '@angular/common';
 })
 export class Sidebar implements OnInit {
   sidebarList = structuredClone(SIDEBAR_MENU);
-  sidebarListResponsive = structuredClone(SIDEBAR_MENU);
+  sidebarListResponsive = structuredClone(SIDEBAR_MENU_RESPONSIVE);
 
   ngOnInit(): void {
     this.mappingSidebarListResponsive();
@@ -20,11 +23,10 @@ export class Sidebar implements OnInit {
 
   mappingSidebarListResponsive = () => {
     const data = this.sidebarListResponsive;
-    const middleIndex = Math.floor(data.length / 2); 
+    const middleIndex = Math.floor(data.length / 2);
 
     [data[0], data[middleIndex]] = [data[middleIndex], data[0]];
 
     this.sidebarListResponsive = data;
-
-  }
+  };
 }

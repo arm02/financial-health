@@ -15,6 +15,7 @@ type RouteConfig struct {
 	DashboardUseCase   domain.DashboardUseCase
 	ExpensesUseCase    domain.ExpensesUseCase
 	AnalyticsUseCase   domain.AnalyticsUseCase
+	TodoUseCase        domain.TodoUseCase
 	AuthMiddleware     gin.HandlerFunc
 }
 
@@ -25,6 +26,7 @@ func RegisterRoutes(cfg *RouteConfig) {
 	dashboardHandler := http.NewDashboardnHandler(cfg.DashboardUseCase)
 	expensesHandler := http.NewExpensesHandler(cfg.ExpensesUseCase)
 	analyticsHandler := http.NewAnalyticsHandler(cfg.AnalyticsUseCase)
+	todoHandler := http.NewTodoHandler(cfg.TodoUseCase)
 
 	api := cfg.Router.Group("/api/v1")
 	{
@@ -67,5 +69,13 @@ func RegisterRoutes(cfg *RouteConfig) {
 
 		analyticsGroup := protected.Group("/analytics")
 		analyticsGroup.GET("/health", analyticsHandler.GetFinancialHealth)
+
+		todosGroup := protected.Group("/todos")
+		todosGroup.POST("/create", todoHandler.Create)
+		todosGroup.GET("/all", todoHandler.GetAll)
+		todosGroup.GET("/:id", todoHandler.GetByID)
+		todosGroup.PUT("/:id", todoHandler.Update)
+		todosGroup.DELETE("/:id", todoHandler.Delete)
+		todosGroup.PATCH("/:id/toggle", todoHandler.ToggleStatus)
 	}
 }

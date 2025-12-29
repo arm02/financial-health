@@ -28,6 +28,10 @@ export const PAGES_ROUTES: Routes = [
         path: 'analytics',
         loadComponent: () => import('./analytics/analytics').then((m) => m.AnalyticsComponent),
       },
+      {
+        path: 'todos',
+        loadComponent: () => import('./todos/todos').then((m) => m.TodosComponent),
+      },
     ],
   },
 ];

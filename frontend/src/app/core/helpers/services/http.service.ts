@@ -56,4 +56,11 @@ export class HttpService {
       withCredentials: true,
     });
   }
+
+  Patch<T>(url: string, body: any, headers?: Record<string, string>): Observable<T> {
+    return this.http.patch<T>(`${this.API_URL}/${url}`, body, {
+      headers: this.getHeaders(headers),
+      withCredentials: true,
+    });
+  }
 }
